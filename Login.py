@@ -1,14 +1,24 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QFont
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QComboBox, QLineEdit, QPushButton
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 import sys
 
-class LoginView(QWidget):
-    def __init__(self):
-        QWidget.__init__(self)
-        self.setGeometry(300, 300, 450, 450)
-        self.setWindowTitle('CEIC Libros - Log in')
+
+# ===================== CLASE ventanaLogin =========================
+
+class ventanaLogin(QMainWindow):
+    def __init__(self, parent=None):
+        super(ventanaLogin, self).__init__(parent)
+        
+        self.setWindowTitle("CEIC LIRBOS")
+        self.setWindowIcon(QIcon("static/icono_CEIC.png"))
+        self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.MSWindowsFixedSizeDialogHint)
+        self.setFixedSize(400, 320)
+
+        paleta = QPalette()
+        paleta.setColor(QPalette.Background, QColor(243, 243, 243))
+        self.setPalette(paleta)
 
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
@@ -17,53 +27,104 @@ class LoginView(QWidget):
         self.db.setPassword("AQUI VAN SUS CLAVES DE POSTGRES")
         self.db.open()
 
-        #Esta es el logo del CEIC
-        self.logo = QPixmap('LogoCEIC.png')
-        self.logo = self.logo.scaled(250, 250)#, Qt.KeepAspectRatio)
-        self.logoLabel = QLabel(self)
-        self.logoLabel.setStyleSheet('color: white')
-        self.logoLabel.setPixmap(self.logo)
-        self.logoLabel.setAlignment(Qt.AlignCenter)
-        self.imageLayout = QHBoxLayout()
-        self.imageLayout.addWidget(self.logoLabel)
+        self.initUI()
 
-        #Aquí pongo el usuario
-        self.userLabel = QLabel('Usuario       ')
-        self.username = QLineEdit(self)
-        self.userLayout = QHBoxLayout()
-        self.userLayout.addWidget(self.userLabel)
-        self.userLayout.addWidget(self.username)
+    def initUI(self):
 
-        #Aquí pongo lo relacionado con el password
-        self.passwordLabel = QLabel('Contraseña')
-        self.password = QLineEdit(self)
-        self.passwordLayout = QHBoxLayout()
-        self.passwordLayout.addWidget(self.passwordLabel)
-        self.passwordLayout.addWidget(self.password)
+      # ==================== FRAME ENCABEZADO ====================
 
-        #Botón de aceptar
-        self.accept = QPushButton("Aceptar")
+        paleta = QPalette()
+        paleta.setColor(QPalette.Background, QColor(70,130,180))
 
-        #Layout de la parte donde el usuario rellena la información
-        self.formLayout = QVBoxLayout()
-        self.formLayout.addLayout(self.userLayout)
-        self.formLayout.addLayout(self.passwordLayout)
-        self.formLayout.addWidget(self.accept)
+        frame = QFrame(self)
+        frame.setFrameShape(QFrame.NoFrame)
+        frame.setFrameShadow(QFrame.Sunken)
+        frame.setAutoFillBackground(True)
+        frame.setPalette(paleta)
+        frame.setFixedWidth(400)
+        frame.setFixedHeight(84)
+        frame.move(0, 0)
 
-        #Todo en el mismo layout
-        self.layout = QVBoxLayout()
-        self.layout.addLayout(self.imageLayout)
-        self.layout.addLayout(self.formLayout)
+        labelIcono = QLabel(frame)
+        labelIcono.setFixedWidth(40)
+        labelIcono.setFixedHeight(40)
+        labelIcono.setPixmap(QPixmap("static/icono_CEIC.png").scaled(40, 40, Qt.KeepAspectRatio,
+                                                         Qt.SmoothTransformation))
+        labelIcono.move(55, 25)
 
-        #Muestro el layout
-        self.setLayout(self.layout)
+        fuenteTitulo = QFont()
+        fuenteTitulo.setPointSize(23)
+        fuenteTitulo.setBold(True)
 
-        self.accept.clicked.connect(self.acceptInfo)
-        self.username.textChanged[str].connect(self.check_disable) #Avisa cuando algo dentro del recambio cambia
-        self.password.textChanged[str].connect(self.check_disable)
+        labelTitulo = QLabel("<font color='white'>CEIC Libros</font>", frame)
+        labelTitulo.setFont(fuenteTitulo)
+        labelTitulo.move(105, 20)
 
-    @pyqtSlot()
-    def acceptInfo(self):
+      # ===================== WIDGETS LOGIN ======================
+
+        labelUsuario = QLabel("Usuario", self)
+        labelUsuario.move(60, 120)
+
+        frameUsuario = QFrame(self)
+        frameUsuario.setFrameShape(QFrame.StyledPanel)
+        frameUsuario.setFixedWidth(280)
+        frameUsuario.setFixedHeight(28)
+        frameUsuario.move(60, 146)
+
+        imagenUsuario = QLabel(frameUsuario)
+        imagenUsuario.setPixmap(QPixmap("static/usuario.png").scaled(20, 20, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        imagenUsuario.move(10, 4)
+
+        self.username = QLineEdit(frameUsuario)
+        self.username.setFrame(False)
+        self.username.setTextMargins(8, 0, 4, 1)
+        self.username.setFixedWidth(238)
+        self.username.setFixedHeight(26)
+        self.username.move(40, 1)
+
+        # ========================================================
+
+        labelContrasenia = QLabel("Contraseña", self)
+        labelContrasenia.move(60, 174)
+
+        frameContrasenia = QFrame(self)
+        frameContrasenia.setFrameShape(QFrame.StyledPanel)
+        frameContrasenia.setFixedWidth(280)
+        frameContrasenia.setFixedHeight(28)
+        frameContrasenia.move(60, 200)
+
+        imagenContrasenia = QLabel(frameContrasenia)
+        imagenContrasenia.setPixmap(QPixmap("static/contraseña.png").scaled(20, 20, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        imagenContrasenia.move(10, 4)
+
+        self.password = QLineEdit(frameContrasenia)
+        self.password.setFrame(False)
+        self.password.setEchoMode(QLineEdit.Password)
+        self.password.setTextMargins(8, 0, 4, 1)
+        self.password.setFixedWidth(238)
+        self.password.setFixedHeight(26)
+        self.password.move(40, 1)
+
+      # ================== WIDGETS QPUSHBUTTON ===================
+
+        buttonLogin = QPushButton("Iniciar sesión", self)
+        buttonLogin.setFixedWidth(135)
+        buttonLogin.setFixedHeight(28)
+        buttonLogin.move(60, 256)
+
+        buttonCancelar = QPushButton("Cancelar", self)
+        buttonCancelar.setFixedWidth(135)
+        buttonCancelar.setFixedHeight(28)
+        buttonCancelar.move(205, 256)
+
+      # ==================== SEÑALES BOTONES =====================
+
+        buttonLogin.clicked.connect(self.Login)
+        buttonCancelar.clicked.connect(self.close)
+
+  # ======================= FUNCIONES ============================
+
+    def Login(self):
         inputUsername = self.username.text()
         inputPassword = self.password.text()
 
@@ -80,17 +141,20 @@ class LoginView(QWidget):
         else:
             print("No es nadie")
 
-    @pyqtSlot()
-    def check_disable(self):
-        if not self.username.text() or not self.password.text():
-            self.accept.setEnabled(False)
-        else:
-            self.accept.setEnabled(True)
+
+# ================================================================
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    
+    aplicacion = QApplication(sys.argv)
 
-    form = LoginView()
-    form.show()
-    sys.exit(app.exec_())
+    fuente = QFont()
+    fuente.setPointSize(10)
+    fuente.setFamily("Bahnschrift Light")
 
+    aplicacion.setFont(fuente)
+    
+    ventana = ventanaLogin()
+    ventana.show()
+    
+    sys.exit(aplicacion.exec_())
