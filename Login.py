@@ -14,7 +14,7 @@ class LoginView(QWidget):
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaCEIC")
         self.db.setUserName("postgres")
-        self.db.setPassword("AQUI VAN SUS CLAVES DE POSTGRES")
+        self.db.setPassword("Tranc0nReloj-7aha")
         self.db.open()
 
         #Esta es el logo del CEIC
@@ -26,6 +26,9 @@ class LoginView(QWidget):
         self.logoLabel.setAlignment(Qt.AlignCenter)
         self.imageLayout = QHBoxLayout()
         self.imageLayout.addWidget(self.logoLabel)
+
+        self.softwareName = QLabel('CEIC Libros')
+        self.softwareName.setAlignment(Qt.AlignCenter)
 
         #Aquí pongo el usuario
         self.userLabel = QLabel('Usuario       ')
@@ -46,6 +49,7 @@ class LoginView(QWidget):
 
         #Layout de la parte donde el usuario rellena la información
         self.formLayout = QVBoxLayout()
+        self.formLayout.addWidget(self.softwareName)
         self.formLayout.addLayout(self.userLayout)
         self.formLayout.addLayout(self.passwordLayout)
         self.formLayout.addWidget(self.accept)
