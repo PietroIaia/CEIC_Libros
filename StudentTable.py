@@ -3,10 +3,9 @@
 #Desarrollado por Forward
 #Responsable del módulo: Diego Peña, 15-11095
 #Fecha de inicio: 21-10-19, Apróx 8:20 am, Hora de Venezuela
-#Última modifcación: 21-10-19, 22:00, Hora de Venezuela
+#Última modifcación: 22-10-19, 19:13, Hora de Venezuela
 
-#Actualización: Esto estaba en gestionEstudiante.py, pero lo moví para la modularidad del código
-#to do: Terminar validaciones.
+#Actualización: Clear está listo
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
@@ -41,6 +40,11 @@ class StudentTable(QTableWidget):
     def setTableColors(self):
         for i in range(self.rowCount()):
             self.setItem(i, 0, QTableWidgetItem())
+            self.item(i, 0).setBackground(QColor(224, 255, 255))
+
+    def clear(self):
+        for i in range(self.rowCount()):
+            self.item(i, 0).setText("")
             self.item(i, 0).setBackground(QColor(224, 255, 255))
 
     def getFields(self):

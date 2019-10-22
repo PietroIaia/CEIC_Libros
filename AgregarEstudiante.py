@@ -1,3 +1,10 @@
+#CEIC Libros
+#Tabla de estudiantes
+#Desarrollado por Forward
+#Responsable del módulo: Diego Peña, 15-11095
+#Fecha de inicio: 22-10-19, Apróx a las 10:00 am hora de Venezuela, quizás antes, pero después de la 8:30
+#Última modifcación: 22-10-19, 19:14 pm, Hora de Venezuela
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize

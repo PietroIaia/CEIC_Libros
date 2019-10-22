@@ -3,11 +3,10 @@
 #Desarrollado por Forward
 #Responsable del módulo: Diego Peña, 15-11095
 #Fecha de inicio: 19-10-19, Apróx a las 10:00 am hora de Venezuela
-#Última modifcación: 21-10-19, 21:58 pm, Hora de Venezuela
+#Última modifcación: 22-10-19, 19:14 pm, Hora de Venezuela
 
-#Actualización: Ya actualiza. Muestra botones de confirmar y cancelar eliminación si se marca eliminar
+#Actualización: Lo fundamental está listo y la interfaz es 100% funcional, estable y presentable
 #To do:
-#- Hacer eliminación y agregar
 #- Color a las casillas de multa si la multa existe
 
 from PyQt5.QtWidgets import *
@@ -36,7 +35,7 @@ class gestionEstudiante(QWidget):
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaCEIC")
         self.db.setUserName("postgres")
-        self.db.setPassword(clave generica)
+        self.db.setPassword("Tranc0nReloj-7aha")
         self.db.open()
 
         #Regex del carnet
@@ -139,8 +138,8 @@ class gestionEstudiante(QWidget):
         self.cancel.clicked.connect(self.cancelUpdate)
         self.guardar.clicked.connect(self.saveUpdate)
         self.eliminar.clicked.connect(self.deleteRequest)
-        #self.confirm.clicked.connect(self.confirmDelete)
-        #self.deleteCancel.clicked.connect(self.cancelDelete)
+        self.confirm.clicked.connect(self.confirmDelete)
+        self.deleteCancel.clicked.connect(self.cancelDelete)
         self.nuevo.clicked.connect(self.addStudent)
         self.carnet.textChanged[str].connect(self.check_disable)
 
@@ -234,22 +233,49 @@ class gestionEstudiante(QWidget):
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.modificar.setEnabled(False)
+        self.eliminar.setEnabled(False)
         self.confirm.setEnabled(True)
         self.deleteCancel.setEnabled(True)
         self.confirm.show()
         self.deleteCancel.show()
 
     @pyqtSlot()
-    def deleteConfirm(self):
-        return
+    def confirmDelete(self):
+        if (int(self.table.item(7, 0).text()) != 0):
+            ErrorPrompt("Error en la eliminación", "El estudiante posee libros sin devolver, no se puede eliminar")
+        else:
+            queryText = "DELETE FROM Estudiante WHERE carnet = \'" + self.table.item(0, 0).text() + "\' RETURNING carnet"
+            self.query = QSqlQuery()
+            self.query.exec_(queryText)
+
+            if self.query.first():
+                InfoPrompt("Eliminación exitosa", "El estudiante ha sido eliminado del sistema")
+                self.search.setEnabled(True)
+                self.nuevo.setEnabled(True)
+                self.confirm.setEnabled(False)
+                self.deleteCancel.setEnabled(False)
+                self.confirm.hide()
+                self.deleteCancel.hide()
+                self.table.clear()
+                self.carnet.setText("")
+            else:
+                ErrorPrompt("Error en la eliminación", "El estudiante posee libros sin devolver, no se puede eliminar")
+
+    @pyqtSlot()
+    def cancelDelete(self):
+        self.search.setEnabled(True)
+        self.nuevo.setEnabled(True)
+        self.modificar.setEnabled(True)
+        self.eliminar.setEnabled(True)
+        self.confirm.setEnabled(False)
+        self.deleteCancel.setEnabled(False)
+        self.confirm.hide()
+        self.deleteCancel.hide()
 
     @pyqtSlot()
     def addStudent(self):
-        print("Hey Hey Hey")
         self.form = AgregarEstudiante()
         self.form.show()
-
-        
 
     @pyqtSlot()
     def check_disable(self):

@@ -3,7 +3,7 @@
 #Desarrollado por Forward
 #Responsable del módulo: Diego Peña, 15-11095
 #Fecha de inicio: 21-10-19, 16:48 am, Hora de Venezuela
-#Última modifcación: 21-10-19, 22:00, Hora de Venezuela
+#Última modifcación: 22-10-19, entrelas 10:00am y las 14:00pm, Hora de Venezuela
 
 #Detalles de la manera actual, no se permiten correos o tlfs nulos pero la base de datos si los permite
 #Tampoco se permiten apellidos con apóstrofes, sorry Connan O'Brian

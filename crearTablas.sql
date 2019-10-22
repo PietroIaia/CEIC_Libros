@@ -32,6 +32,37 @@ CREATE TABLE Estudiante(
     book_debt FLOAT8 CHECK(book_debt >= 0.0) DEFAULT 0.00
 );
 
+CREATE TABLE Book(
+	book_id INT4 PRIMARY KEY CHECK(book_id <= 9999 AND book_id >= 0),
+	authors VARCHAR(100),
+	title VARCHAR(100),
+	quantity INT4,
+	quantity_lent INT4, 
+	loan_duration INT4 DEFAULT 7 --Recordar cambiar esto luego de hablar con el CEIC
+);
+
+CREATE TABLE Book_copy(
+	copy_id INT4 CHECK(copy_id <= 99 AND copy_id >= 0), 
+	book_id INT4,
+	edition INT4 DEFAULT NULL,
+	ed_year INT4 DEFAULT NULL,
+	ed_language VARCHAR(32) DEFAULT NULL,
+	PRIMARY KEY(book_id, copy_id)
+);
+
+CREATE TABLE Loan(
+	carnet CHAR(8) REFERENCES Estudiante(carnet),
+	book_id INT4,
+	copy_id INT4,
+	lender VARCHAR(32) REFERENCES CEIC_User(username),
+	receiver VARCHAR(32) REFERENCES CEIC_User(username),
+	start_time timestamptz,
+	estimated_return_time timestamptz,
+	return_time timestamptz,
+	FOREIGN KEY(book_id, copy_id) REFERENCES Book_Copy(book_id, copy_id),
+	PRIMARY KEY(carnet, book_id, copy_id, start_time)
+);
+
 CREATE INDEX user_index ON CEIC_User(username, password_);
 
 INSERT INTO CEIC_User(username, password_, first_name, last_name, email, permission_mask, last_login, creation_date)
