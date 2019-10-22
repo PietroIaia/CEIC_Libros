@@ -1,12 +1,12 @@
 #CEIC Libros
 #Tabla de estudiantes
-#Autor: Diego Peña, 15-11095
+#Desarrollado por Forward
+#Responsable del módulo: Diego Peña, 15-11095
 #Fecha de inicio: 19-10-19, Apróx a las 10:00 am hora de Venezuela
-#Última modifcación: 21-10-19, 11:00 am, Hora de Venezuela
+#Última modifcación: 21-10-19, 21:58 pm, Hora de Venezuela
 
-#Actualización: La interfaz está prácticamente lista, consulta funciona bien, actualización va por la mitad
+#Actualización: Ya actualiza. Muestra botones de confirmar y cancelar eliminación si se marca eliminar
 #To do:
-#- Terminar modificación
 #- Hacer eliminación y agregar
 #- Color a las casillas de multa si la multa existe
 
@@ -15,7 +15,7 @@ from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from StudentTable import StudentTable
-from Prompt import ErrorPrompt, InfoPrompt
+from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 import sys
 import re
 
@@ -34,7 +34,7 @@ class gestionEstudiante(QWidget):
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaCEIC")
         self.db.setUserName("postgres")
-        self.db.setPassword("Tranc0nReloj-7aha")
+        self.db.setPassword(clave generica)
         self.db.open()
 
         #Regex del carnet
@@ -60,23 +60,36 @@ class gestionEstudiante(QWidget):
 
         #Tabla donde aparecerán los datos
         self.table = StudentTable() #Tablas
-        #self.tableConfig()
 
-        #Botones de agregar, modificar
+        #Botones de agregar, modificar, cancelar y confirmar (Acciones)
         self.modificar = QPushButton("Modificar")
-        self.guardar = QPushButton("Guardar Modificación")
+        self.guardar = QPushButton("Guardar modificación")
+        self.cancel = QPushButton("Cancelar modificación")
         self.eliminar = QPushButton("Eliminar estudiante")
+        self.confirm = QPushButton("Confirmar eliminación")
+        self.deleteCancel = QPushButton("Cancelar eliminación")
+        self.confirm.hide()
+        self.deleteCancel.hide()
         self.modificar.setStyleSheet('background-color: PowderBlue')
+        self.cancel.setStyleSheet('background-color: PowderBlue')
         self.guardar.setStyleSheet('background-color: PowderBlue')
         self.eliminar.setStyleSheet('background-color: PowderBlue')
+        self.confirm.setStyleSheet('background-color: Red; color: white')
+        self.deleteCancel.setStyleSheet('background-color: Red; color: white')
         self.actionsLayout = QVBoxLayout()
         self.actionsLayout.addWidget(self.modificar)
         self.actionsLayout.addWidget(self.guardar)
+        self.actionsLayout.addWidget(self.cancel)
         self.actionsLayout.addWidget(self.eliminar)
+        self.actionsLayout.addWidget(self.confirm)
+        self.actionsLayout.addWidget(self.deleteCancel)
         self.actionsLayout.addStretch()
         self.modificar.setEnabled(False)
         self.guardar.setEnabled(False)
+        self.cancel.setEnabled(False)
         self.eliminar.setEnabled(False)
+        self.confirm.setEnabled(False)
+        self.deleteCancel.setEnabled(False)
 
         #Ponemos la tabla y los botones en un mismo LAyout
         self.tableLayout = QHBoxLayout()
@@ -92,7 +105,7 @@ class gestionEstudiante(QWidget):
         self.infoLayout.addWidget(self.carnetLabel)
         self.infoLayout.addWidget(self.carnet)
 
-        #botones
+        #botones de consulta y agregar
         self.search = QPushButton("Consultar")
         self.nuevo = QPushButton("Agregar nuevo estudiante")
         self.search.setStyleSheet('background-color: PowderBlue')
@@ -115,22 +128,29 @@ class gestionEstudiante(QWidget):
 
         self.search.clicked.connect(self.consulta)
         self.modificar.clicked.connect(self.update)
+        self.cancel.clicked.connect(self.cancelUpdate)
         self.guardar.clicked.connect(self.saveUpdate)
+        self.eliminar.clicked.connect(self.deleteRequest)
+        #self.confirm.clicked.connect(self.confirmDelete)
         self.carnet.textChanged[str].connect(self.check_disable)
 
+    @pyqtSlot()
     def consulta(self):
         inputCarnet = self.carnet.text()
 
         if (self.carnetPattern.match(inputCarnet) is None):
             ErrorPrompt("Error de formato", "Error: Ese no es el formato de un carnet")
             return
-            
-        queryText = "SELECT * FROM Estudiante WHERE carnet = '" + inputCarnet + "';"
+
+        self.consultaAux(inputCarnet)
+
+    def consultaAux(self, carnetBuscado):
+        queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 
         if self.query.first():
-            self.currentStudent = inputCarnet
+            self.currentStudent = carnetBuscado
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
             for i in range(self.table.rowCount() - 1):
                 if (i < 8):
@@ -138,8 +158,10 @@ class gestionEstudiante(QWidget):
                 else:
                     self.table.item(i, 0).setText(str(round(self.query.value(i), 2)))
             self.table.item(9, 0).setText(str(round(self.query.value(i) / 18500, 2)))
+            self.table.item(9, 0).setFlags(Qt.ItemIsEnabled)
             self.modificar.setEnabled(True)
-            self.guardar.setEnabled(True)
+            self.eliminar.setEnabled(True)
+            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         else:
             ErrorPrompt("ENE Piso 3", "Error ENE_Piso3: Estudiante Not Found")
 
@@ -151,6 +173,8 @@ class gestionEstudiante(QWidget):
         self.nuevo.setEnabled(False)
         self.eliminar.setEnabled(False)
         self.modificar.setEnabled(False)
+        self.guardar.setEnabled(True)
+        self.cancel.setEnabled(True)
         InfoPrompt("Modificación activada", "Se ha activado el modo modificación")
 
     @pyqtSlot()
@@ -159,7 +183,52 @@ class gestionEstudiante(QWidget):
 
         if not correct:
             return
-            
+
+        values = self.table.getValues()
+        #queryText = "UPDATE Estudiante SET carnet = :car, first_name = :fn, last_name = :ln, CI = :ci, phone = :num, \
+        #    email = :mail, days_blocked"
+        queryText = "UPDATE Estudiante SET " + values + " WHERE carnet = \'" + self.table.item(0, 0).text() + "\' returning carnet"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
+
+        if self.query.first():
+            InfoPrompt("Actualización completada", "La información del estudiante ha sido actualizada exitosamente")
+            self.table.item(9, 0).setText(str(round(float(self.table.item(8, 0).text()) / 18500, 2)))
+            self.search.setEnabled(True)
+            self.nuevo.setEnabled(True)
+            self.eliminar.setEnabled(True)
+            self.modificar.setEnabled(True)
+            self.guardar.setEnabled(False)
+            self.cancel.setEnabled(False)
+            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        else:
+            ErrorPrompt("Error", "Alguno de los siguientes campos fue mal llenado: Carnet, CI o Libros prestados actualmente")
+
+    @pyqtSlot()
+    def cancelUpdate(self):
+        InfoPrompt("Modificación cancelada", "Los cambios hechos no fueron guardados")
+        self.consultaAux(self.currentStudent)
+        self.search.setEnabled(True)
+        self.nuevo.setEnabled(True)
+        self.eliminar.setEnabled(True)
+        self.modificar.setEnabled(True)
+        self.guardar.setEnabled(False)
+        self.cancel.setEnabled(False)
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+    @pyqtSlot()
+    def deleteRequest(self):
+        ConfirmPrompt("Eliminación de estudiante", "Se ha solicitado eliminar estudiante. Marque botón deeliminación para\
+            confirmar")
+        self.search.setEnabled(False)
+        self.nuevo.setEnabled(False)
+        self.modificar.setEnabled(False)
+        self.confirm.setEnabled(True)
+        self.deleteCancel.setEnabled(True)
+        self.confirm.show()
+        self.deleteCancel.show()
+        
+
     @pyqtSlot()
     def check_disable(self):
         if not self.carnet.text():

@@ -1,8 +1,9 @@
 #CEIC Libros
 #Tabla de estudiantes
-#Autor: Diego Peña, 15-11095
+#Desarrollado por Forward
+#Responsable del módulo: Diego Peña, 15-11095
 #Fecha de inicio: 21-10-19, Apróx 8:20 am, Hora de Venezuela
-#Última modifcación: 21-10-19, 10:57 am, Hora de Venezuela
+#Última modifcación: 21-10-19, 22:00, Hora de Venezuela
 
 #Actualización: Esto estaba en gestionEstudiante.py, pero lo moví para la modularidad del código
 #to do: Terminar validaciones.
@@ -11,6 +12,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from Prompt import ErrorPrompt
+from validationFunctions import checkCarnet, checkName, checkCI, checkPhone, checkEmail, checkDays, checkBooks,checkDebt
 
 class StudentTable(QTableWidget):
     def __init__(self):
@@ -46,18 +48,36 @@ class StudentTable(QTableWidget):
         correct = True
         for i in range(10):
             if i == 0:
-                correct = self.checkCarnet(carnetPattern)
+                correct = checkCarnet(self.item(0, 0).text())
             elif i == 1 or i == 2:
-                correct = self.checkName(i)
+                correct = checkName(self.item(i, 0).text(), i)
+            elif i == 3:
+                correct = checkCI(self.item(3, 0).text())
+            elif i == 4:
+                correct = checkPhone(self.item(4, 0).text())
+            elif i == 5:
+                correct = checkEmail(self.item(5, 0).text())
+            elif i == 6:
+                correct = checkDays(self.item(6, 0).text())
+            elif i == 7:
+                correct = checkBooks(self.item(7,0).text())
+            else:
+                correct = checkDebt(self.item(8, 0).text())
 
             if not correct:
                 return False
 
         return True
-    
-    def checkCarnet(self, carnetPattern):
-        if carnetPattern.match(self.item(0, 0).text()) is None:
-            ErrorPrompt("Error de formato", "Error: Ese no es el formato de un carnet")
-            return False
-        else:
-            return True
+
+    def getValues(self):
+        updateRequest = "carnet = \'" + self.item(0, 0).text() + "\', "
+        updateRequest += "first_name = \'" + self.item(1, 0).text() + "\', "
+        updateRequest += "last_name = \'" + self.item(2, 0).text() + "\', "
+        updateRequest += "CI = " + self.item(3,0).text() + ", "
+        updateRequest += "phone = " + self.item(4,0).text() + ", "
+        updateRequest += "email = \'" + self.item(5,0).text() + "\', "
+        updateRequest += "days_blocked = " + self.item(6,0).text() + ", "
+        updateRequest += "current_Books = " + self.item(7,0).text() + ", "
+        updateRequest += "book_debt = " + self.item(8,0).text()
+
+        return updateRequest

@@ -1,8 +1,9 @@
 #CEIC Libros
 #Tabla de estudiantes
-#Autor: Diego Peña, 15-11095
+#Desarrollado por Forward
+##Responsable del módulo: Diego Peña, 15-11095
 #Fecha de inicio: 21-10-19, Apróx 9:00 am, Hora de Venezuela
-#Última modifcación: 21-10-19, 11:03 am, Hora de Venezuela
+#Última modifcación: 21-10-19, 22:00, Hora de Venezuela
 
 #actualización: Estos son los prompts de error e información que puede desplegar el sistema
 #to do: De momento nada
@@ -32,3 +33,12 @@ class InfoPrompt(Prompt):
         self.msg.setIcon(QMessageBox.Information)
         self.msg.setStandardButtons(QMessageBox.Ok)
         self.msg.exec_()
+
+class ConfirmPrompt(Prompt):
+
+    def __init__(self, title, message):
+        super().__init__(title, message)
+        self.msg.setIcon(QMessageBox.Warning)
+        self.msg.setStandardButtons(QMessageBox.Ok)
+        self.msg.exec_()
+        
