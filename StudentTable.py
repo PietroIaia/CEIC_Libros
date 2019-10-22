@@ -12,7 +12,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from Prompt import ErrorPrompt
-from validationFunctions import checkCarnet, checkName, checkCI, checkPhone, checkEmail, checkDays, checkBooks,checkDebt
 
 class StudentTable(QTableWidget):
     def __init__(self):
@@ -44,30 +43,12 @@ class StudentTable(QTableWidget):
             self.setItem(i, 0, QTableWidgetItem())
             self.item(i, 0).setBackground(QColor(224, 255, 255))
 
-    def verification(self, carnetPattern):
-        correct = True
+    def getFields(self):
+        fields = []
         for i in range(10):
-            if i == 0:
-                correct = checkCarnet(self.item(0, 0).text())
-            elif i == 1 or i == 2:
-                correct = checkName(self.item(i, 0).text(), i)
-            elif i == 3:
-                correct = checkCI(self.item(3, 0).text())
-            elif i == 4:
-                correct = checkPhone(self.item(4, 0).text())
-            elif i == 5:
-                correct = checkEmail(self.item(5, 0).text())
-            elif i == 6:
-                correct = checkDays(self.item(6, 0).text())
-            elif i == 7:
-                correct = checkBooks(self.item(7,0).text())
-            else:
-                correct = checkDebt(self.item(8, 0).text())
+            fields.append(self.item(i, 0).text())
 
-            if not correct:
-                return False
-
-        return True
+        return fields
 
     def getValues(self):
         updateRequest = "carnet = \'" + self.item(0, 0).text() + "\', "

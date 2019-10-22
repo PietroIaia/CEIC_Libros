@@ -16,6 +16,8 @@ from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from StudentTable import StudentTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
+from validationFunctions import verification
+from AgregarEstudiante import AgregarEstudiante
 import sys
 import re
 
@@ -46,7 +48,7 @@ class gestionEstudiante(QWidget):
 
         #Título
         self.title = QLabel("Gestión de estudiantes")
-        self.title.setStyleSheet('background-color: DodgerBlue')
+        #self.title.setStyleSheet('background-color: DodgerBlue')
         self.title.setStyleSheet('color: white')
         self.title.setFont(self.titleFont)
 
@@ -70,12 +72,16 @@ class gestionEstudiante(QWidget):
         self.deleteCancel = QPushButton("Cancelar eliminación")
         self.confirm.hide()
         self.deleteCancel.hide()
+
+        #Colores de los botones
         self.modificar.setStyleSheet('background-color: PowderBlue')
         self.cancel.setStyleSheet('background-color: PowderBlue')
         self.guardar.setStyleSheet('background-color: PowderBlue')
         self.eliminar.setStyleSheet('background-color: PowderBlue')
         self.confirm.setStyleSheet('background-color: Red; color: white')
         self.deleteCancel.setStyleSheet('background-color: Red; color: white')
+        
+        #Configuración del layout
         self.actionsLayout = QVBoxLayout()
         self.actionsLayout.addWidget(self.modificar)
         self.actionsLayout.addWidget(self.guardar)
@@ -84,6 +90,8 @@ class gestionEstudiante(QWidget):
         self.actionsLayout.addWidget(self.confirm)
         self.actionsLayout.addWidget(self.deleteCancel)
         self.actionsLayout.addStretch()
+
+        #Desactivar botones
         self.modificar.setEnabled(False)
         self.guardar.setEnabled(False)
         self.cancel.setEnabled(False)
@@ -132,6 +140,8 @@ class gestionEstudiante(QWidget):
         self.guardar.clicked.connect(self.saveUpdate)
         self.eliminar.clicked.connect(self.deleteRequest)
         #self.confirm.clicked.connect(self.confirmDelete)
+        #self.deleteCancel.clicked.connect(self.cancelDelete)
+        self.nuevo.clicked.connect(self.addStudent)
         self.carnet.textChanged[str].connect(self.check_disable)
 
     @pyqtSlot()
@@ -179,7 +189,8 @@ class gestionEstudiante(QWidget):
 
     @pyqtSlot()
     def saveUpdate(self):
-        correct = self.table.verification(self.carnetPattern)
+        fields = self.table.getFields()
+        correct = verification(fields, 10)
 
         if not correct:
             return
@@ -227,6 +238,17 @@ class gestionEstudiante(QWidget):
         self.deleteCancel.setEnabled(True)
         self.confirm.show()
         self.deleteCancel.show()
+
+    @pyqtSlot()
+    def deleteConfirm(self):
+        return
+
+    @pyqtSlot()
+    def addStudent(self):
+        print("Hey Hey Hey")
+        self.form = AgregarEstudiante()
+        self.form.show()
+
         
 
     @pyqtSlot()

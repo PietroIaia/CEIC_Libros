@@ -57,3 +57,28 @@ def checkDebt(debt):
     pattern  = re.compile(r"[0-9]+\.[0-9]{1,2}")
     return checkPattern(debt, pattern, "Deuda inválida", "La cifra de la deuda es inválida")
 
+def verification(fields, checkUntil):
+    correct = True
+    for i in range(checkUntil):
+        if i == 0:
+            correct = checkCarnet(fields[i])
+        elif i == 1 or i == 2:
+            correct = checkName(fields[i], i)
+        elif i == 3:
+            correct = checkCI(fields[i])
+        elif i == 4:
+            correct = checkPhone(fields[i])
+        elif i == 5:
+            correct = checkEmail(fields[i])
+        elif i == 6:
+            correct = checkDays(fields[i])
+        elif i == 7:
+            correct = checkBooks(fields[i])
+        else:
+            correct = checkDebt(fields[i])
+
+        if not correct:
+            return False
+
+        return True
+

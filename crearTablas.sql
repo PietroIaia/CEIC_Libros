@@ -35,7 +35,7 @@ CREATE TABLE Estudiante(
 CREATE INDEX user_index ON CEIC_User(username, password_);
 
 INSERT INTO CEIC_User(username, password_, first_name, last_name, email, permission_mask, last_login, creation_date)
-VALUES('Admin', crypt('prueba1', gen_salt('bf', 8)), 'Alan', 'Turing', 'ImitationGame@gmail.com', 1, now(), now())
+VALUES('Admin', crypt('prueba1', gen_salt('bf', 8)), 'Alan', 'Turing', 'ImitationGame@gmail.com', 1, now(), now());
 
 INSERT INTO Estudiante(carnet, first_name, last_name, CI, phone, email)
 VALUES('15-11095', 'Diego', 'Peña', 26122418, 04242486353, 'djpg98@gmail.com');
