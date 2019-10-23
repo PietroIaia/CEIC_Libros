@@ -18,7 +18,10 @@ class AgregarEstudiante(QWidget):
     def __init__(self):
         #Inicialización de la ventana
         super().__init__()
-        self.setGeometry(200, 0, 600, 600)
+        self.setGeometry(200, 100, 600, 500)
+        #print(self.MinimumSize())
+        self.setMinimumSize(QSize(600, 500))
+        self.setMaximumSize(QSize(600, 500))
         self.setWindowTitle("Gestión de estudiantes")
         self.setStyleSheet('background-color: LightSkyBlue')
 
