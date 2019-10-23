@@ -14,6 +14,7 @@ from gestionEstudiantes import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1031, 748)
         MainWindow.setMinimumSize(QtCore.QSize(1031, 748))
@@ -88,14 +89,14 @@ class Ui_MainWindow(object):
         self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_2.setStyleSheet("QPushButton:hover#pushButton_2\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_2\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -179,14 +180,14 @@ class Ui_MainWindow(object):
         self.pushButton_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_3.setStyleSheet("QPushButton:hover#pushButton_3\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_3\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -267,14 +268,14 @@ class Ui_MainWindow(object):
         self.pushButton_4.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_4.setStyleSheet("QPushButton:hover#pushButton_4\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_4\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -355,14 +356,14 @@ class Ui_MainWindow(object):
         self.pushButton_5.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_5.setStyleSheet("QPushButton:hover#pushButton_5\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_5\n"
 "{\n"
-"    border-radius:30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -443,14 +444,14 @@ class Ui_MainWindow(object):
         self.pushButton_6.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_6.setStyleSheet("QPushButton:hover#pushButton_6\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_6\n"
 "{\n"
-"    border-radius:30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -531,14 +532,14 @@ class Ui_MainWindow(object):
         self.pushButton_7.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_7.setStyleSheet("QPushButton:hover#pushButton_7\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_7\n"
 "{\n"
-"    border-radius:30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -619,14 +620,14 @@ class Ui_MainWindow(object):
         self.pushButton_8.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_8.setStyleSheet("QPushButton:hover#pushButton_8\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_8\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -707,14 +708,14 @@ class Ui_MainWindow(object):
         self.pushButton_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_1.setStyleSheet("QPushButton:hover#pushButton_1\n"
 "{\n"
-"    border-radius: 30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(100, 100, 100);\n"
 "    color: #E9F2E6;                        "
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_1\n"
 "{\n"
-"    border-radius:30px;\n"
+"    border-radius: 0px;\n"
 "    background-color: rgb(110, 110, 110);\n"
 "    color: #E9F2E6;                        "
 "}\n"
@@ -730,7 +731,7 @@ class Ui_MainWindow(object):
         self.pushButton_1.setFlat(True)
         self.pushButton_1.setObjectName("pushButton_1")
         self.pushButton_22 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_22.setGeometry(QtCore.QRect(10, 665, 171, 51))
+        self.pushButton_22.setGeometry(QtCore.QRect(0, 672, 191, 51))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -778,19 +779,19 @@ class Ui_MainWindow(object):
         self.pushButton_22.setAutoFillBackground(False)
         self.pushButton_22.setStyleSheet("QPushButton:hover#pushButton_22\n"
 "{\n"
-"    border-radius: 25px;\n"
+"    border-radius: 0px;\n"
 "    background-color: #C20000;\n"
 "}\n"
 "\n"
 "QPushButton:pressed#pushButton_22\n"
 "{\n"
-"    border-radius:25px;\n"
+"    border-radius: 0px;\n"
 "    background-color: #C20000;\n"    
 "}\n"
 "\n"
 "QPushButton\n"
 "{\n"
-"    border-radius: 25px;\n"
+"    border-radius: 0px;\n"
 "    background-color: #F10000;\n"
 "    color: #FFFFFF;             "
 "}")
@@ -810,11 +811,13 @@ class Ui_MainWindow(object):
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
         self.stackedWidget.setGeometry(QtCore.QRect(190, -1, 841, 724))
         self.stackedWidget.setObjectName("stackedWidget")
-        self.page = gestionEstudiante()
-        self.stackedWidget.addWidget(self.page)
+        self.ventana_gestion_estudiante = gestionEstudiante()
+        # Index: 0
+        self.stackedWidget.addWidget(self.ventana_gestion_estudiante)
         self.stackedWidget.setStyleSheet("background-color: LightSkyBlue")
-        #self.page_2 = Ui_MainWindow()
-        #self.stackedWidget.addWidget(self.page_2)
+        # Index: 1
+        self.page_2 = QtWidgets.QWidget()
+        self.stackedWidget.addWidget(self.page_2)
 
 
         self.gridFrame.raise_()
@@ -839,6 +842,11 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        self.pushButton_1.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
+
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
