@@ -1,59 +1,49 @@
 #CEIC Libros
-#Tabla de estudiantes
+#Gestion de usuarios
 #Desarrollado por Forward
-#Responsable del módulo: Diego Peña, 15-11095
-#Fecha de inicio: 19-10-19, Apróx a las 10:00 am hora de Venezuela
-#Última modifcación: 22-10-19, 19:14 pm, Hora de Venezuela
-
-#Actualización: Lo fundamental está listo y la interfaz es 100% funcional, estable y presentable
-#To do:
-#- Color a las casillas de multa si la multa existe
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from StudentTable import StudentTable
+from UserTable import UserTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from validationFunctions import verification
-from AgregarEstudiante import AgregarEstudiante
+from validationFunctionsUsuarios import verification
+from AgregarUsuario import AgregarUsuario
+from PyQt5.QtCore import *
 import sys
 import re
 
-class gestionEstudiante(QWidget):
+class gestionUsuarios(QWidget):
 
     def __init__(self):
 
         #Inicialización de la ventana
         super().__init__()
         self.setGeometry(200, 0, 600, 600)
-        self.setWindowTitle("Gestión de estudiantes")
+        self.setWindowTitle("Gestión de usuarios")
         self.setStyleSheet('background-color: LightSkyBlue')
 
         # LO QUITE DE AQUI Y LO PUSE EN EL MENU.PY !!!!!!!!!!!!!!!!!!!!!!!! (No lo quito por completo hasta que se hagan las pruebas)
         #Base de datos
         #self.db = QSqlDatabase.addDatabase("QPSQL")
         #self.db.setHostName("localhost")
-        #self.db.setDatabaseName("pruebaCEIC")
+        #self.db.setDatabaseName("prueba")
         #self.db.setUserName("postgres")
-        #self.db.setPassword("Tranc0nReloj-7aha")
+        #self.db.setPassword("blak")
         #self.db.open()
-
-        #Regex del carnet
-        self.carnetPattern = re.compile(r"\d{2}\-\d{5}")
 
         #Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
         self.instFont = QFont("Serif", 12)
 
         #Título
-        self.title = QLabel("Gestión de estudiantes")
-        #self.title.setStyleSheet('background-color: DodgerBlue')
+        self.title = QLabel("Gestión de usuarios")
         self.title.setStyleSheet('color: white')
         self.title.setFont(self.titleFont)
 
         #Instrucciones
-        self.instrucciones = QLabel("Ingrese el carnet del estudiante a consultar, ingresar o modificar")
+        self.instrucciones = QLabel("Ingrese el username del usuario a consultar, ingresar o modificar")
         self.instrucciones.setStyleSheet('background-color: white')
         self.instrucciones.setFont(self.instFont)
         self.instrucciones.setFrameShape(QFrame.StyledPanel)
@@ -61,7 +51,7 @@ class gestionEstudiante(QWidget):
         self.instrucciones.setLineWidth(0)
 
         #Tabla donde aparecerán los datos
-        self.table = StudentTable() #Tablas
+        self.table = UserTable() #Tablas
 
         #Botones de agregar, modificar, cancelar y confirmar (Acciones)
         self.modificar = QPushButton("Modificar")
@@ -104,18 +94,18 @@ class gestionEstudiante(QWidget):
         self.tableLayout.addWidget(self.table)
         self.tableLayout.addLayout(self.actionsLayout)
 
-        #carnet del estudiante
-        self.currentStudent = "" #GUarda el valor del carnet del estudiante actualmente mostrado en pantalla
-        self.carnetLabel = QLabel("Número de carnet: ")
-        self.carnet = QLineEdit(self)
-        self.carnet.setStyleSheet('background-color: white')
+        #username de usuario
+        self.currentUser = "" #GUarda el valor del username del usuario actualmente mostrado en pantalla
+        self.UserLabel = QLabel("Nombre de usuario: ")
+        self.User = QLineEdit(self)
+        self.User.setStyleSheet('background-color: white')
         self.infoLayout = QHBoxLayout()
-        self.infoLayout.addWidget(self.carnetLabel)
-        self.infoLayout.addWidget(self.carnet)
+        self.infoLayout.addWidget(self.UserLabel)
+        self.infoLayout.addWidget(self.User)
 
         #botones de consulta y agregar
         self.search = QPushButton("Consultar")
-        self.nuevo = QPushButton("Agregar nuevo estudiante")
+        self.nuevo = QPushButton("Agregar nuevo usuario")
         self.search.setStyleSheet('background-color: PowderBlue')
         self.nuevo.setStyleSheet('background-color: PowderBlue')
         self.searchLayout = QVBoxLayout()
@@ -139,41 +129,54 @@ class gestionEstudiante(QWidget):
         self.cancel.clicked.connect(self.cancelUpdate)
         self.guardar.clicked.connect(self.saveUpdate)
         self.eliminar.clicked.connect(self.deleteRequest)
-        self.confirm.clicked.connect(self.confirmDelete)
+        self.confirm.clicked.connect(self.deleteConfirm)
         self.deleteCancel.clicked.connect(self.cancelDelete)
         self.nuevo.clicked.connect(self.addStudent)
-        self.carnet.textChanged[str].connect(self.check_disable)
+        self.User.textChanged[str].connect(self.check_disable)
 
-    @pyqtSlot()
+
     def consulta(self):
-        inputCarnet = self.carnet.text()
-
-        if (self.carnetPattern.match(inputCarnet) is None):
-            ErrorPrompt("Error de formato", "Error: Ese no es el formato de un carnet")
-            return
-
-        self.consultaAux(inputCarnet)
-
-    def consultaAux(self, carnetBuscado):
-        queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
+        inputUser = self.User.text()
+        queryText = "SELECT * FROM CEIC_User WHERE username = '" + inputUser + "';"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 
         if self.query.first():
-            self.currentStudent = carnetBuscado
+            self.currentUser = inputUser
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
-            for i in range(self.table.rowCount() - 1):
-                if (i < 8):
+            for i in range(self.table.rowCount()):
+                if (i < 6):
                     self.table.item(i, 0).setText(str(self.query.value(i)))
                 else:
-                    self.table.item(i, 0).setText(str(round(self.query.value(i), 2)))
-            self.table.item(9, 0).setText(str(round(self.query.value(i) / 18500, 2)))
-            self.table.item(9, 0).setFlags(Qt.ItemIsEnabled)
+                    auxiliar = QDateTime.toString(self.query.value(i)).split()
+                    self.table.item(i, 0).setText(str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3]))
+
             self.modificar.setEnabled(True)
             self.eliminar.setEnabled(True)
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         else:
-            ErrorPrompt("ENE Piso 3", "Error ENE_Piso3: Estudiante Not Found")
+            ErrorPrompt("Error", "El usuario no existe, ingrese otro nombre de usuario ")
+
+    def consultaAux(self,inputUser):
+        queryText = "SELECT * FROM CEIC_User WHERE username = '" + inputUser + "';"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
+
+        if self.query.first():
+            self.currentUser = inputUser
+            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+            for i in range(self.table.rowCount()):
+                if (i < 6):
+                    self.table.item(i, 0).setText(str(self.query.value(i)))
+                else:
+                    auxiliar = QDateTime.toString(self.query.value(i)).split()
+                    self.table.item(i, 0).setText(str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3]))
+
+            self.modificar.setEnabled(True)
+            self.eliminar.setEnabled(True)
+            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        else:
+            ErrorPrompt("Error", "El usuario no existe, ingrese otro nombre de usuario ")
 
     @pyqtSlot()
     def update(self):
@@ -190,35 +193,47 @@ class gestionEstudiante(QWidget):
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
-        correct = verification(fields, 10)
+        correct = verification(fields, 6)
 
         if not correct:
             return
 
         values = self.table.getValues()
-        #queryText = "UPDATE Estudiante SET carnet = :car, first_name = :fn, last_name = :ln, CI = :ci, phone = :num, \
-        #    email = :mail, days_blocked"
-        queryText = "UPDATE Estudiante SET " + values + " WHERE carnet = \'" + self.table.item(0, 0).text() + "\' returning carnet"
-        self.query = QSqlQuery()
-        self.query.exec_(queryText)
+        valorUser = self.table.item(0, 0).text()
+        puede = 1
+        puede2 = 1
+        if valorUser != self.User.text():
+            puede2 = 0
+        queryText2 = "SELECT * FROM CEIC_User WHERE username = '" + valorUser + "';"
+        self.query2 = QSqlQuery()
+        self.query2.exec_(queryText2)
 
-        if self.query.first():
-            InfoPrompt("Actualización completada", "La información del estudiante ha sido actualizada exitosamente")
-            self.table.item(9, 0).setText(str(round(float(self.table.item(8, 0).text()) / 18500, 2)))
-            self.search.setEnabled(True)
-            self.nuevo.setEnabled(True)
-            self.eliminar.setEnabled(True)
-            self.modificar.setEnabled(True)
-            self.guardar.setEnabled(False)
-            self.cancel.setEnabled(False)
-            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        if self.query2.first():
+            puede = 0;
+
+        if puede ==1 or (puede == 0 and puede2 == 1):
+            queryText = "UPDATE CEIC_User SET " + values + " WHERE username = \'" + self.table.item(0, 0).text() + "\' returning username"
+            self.query = QSqlQuery()
+            self.query.exec_(queryText)
+
+            if self.query.first():
+                InfoPrompt("Actualización completada", "La información del usuario ha sido actualizada exitosamente")
+                self.search.setEnabled(True)
+                self.nuevo.setEnabled(True)
+                self.eliminar.setEnabled(True)
+                self.modificar.setEnabled(True)
+                self.guardar.setEnabled(False)
+                self.cancel.setEnabled(False)
+                self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            else:
+                ErrorPrompt("Error", "Alguno de los siguientes campos no fue llenado correctamente: Nombre de usuario, permisos o correo")
         else:
-            ErrorPrompt("Error", "Alguno de los siguientes campos fue mal llenado: Carnet, CI o Libros prestados actualmente")
+            ErrorPrompt("Error", "El nombre de usuario coincide con uno ya existente, por favor ingrese otro nombre")
 
     @pyqtSlot()
     def cancelUpdate(self):
         InfoPrompt("Modificación cancelada", "Los cambios hechos no fueron guardados")
-        self.consultaAux(self.currentStudent)
+        self.consultaAux(self.currentUser)
         self.search.setEnabled(True)
         self.nuevo.setEnabled(True)
         self.eliminar.setEnabled(True)
@@ -229,45 +244,40 @@ class gestionEstudiante(QWidget):
 
     @pyqtSlot()
     def deleteRequest(self):
-        ConfirmPrompt("Eliminación de estudiante", "Se ha solicitado eliminar estudiante. Marque botón deeliminación para\
-            confirmar")
+        ConfirmPrompt("Eliminación de usuario", "Se ha solicitado eliminar usuario. Marque el botón de confirmar eliminación para eliminar el usuario o el boton de cancelar eliminacion para regresar")
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.modificar.setEnabled(False)
-        self.eliminar.setEnabled(False)
         self.confirm.setEnabled(True)
         self.deleteCancel.setEnabled(True)
         self.confirm.show()
         self.deleteCancel.show()
 
     @pyqtSlot()
-    def confirmDelete(self):
-        if (int(self.table.item(7, 0).text()) != 0):
-            ErrorPrompt("Error en la eliminación", "El estudiante posee libros sin devolver, no se puede eliminar")
-        else:
-            queryText = "DELETE FROM Estudiante WHERE carnet = \'" + self.table.item(0, 0).text() + "\' RETURNING carnet"
-            self.query = QSqlQuery()
-            self.query.exec_(queryText)
-
-            if self.query.first():
-                InfoPrompt("Eliminación exitosa", "El estudiante ha sido eliminado del sistema")
-                self.search.setEnabled(True)
-                self.nuevo.setEnabled(True)
-                self.confirm.setEnabled(False)
-                self.deleteCancel.setEnabled(False)
-                self.confirm.hide()
-                self.deleteCancel.hide()
-                self.table.clear()
-                self.carnet.setText("")
-            else:
-                ErrorPrompt("Error en la eliminación", "El estudiante posee libros sin devolver, no se puede eliminar")
+    def deleteConfirm(self):
+        inputUser = self.User.text()
+        queryText = "DELETE FROM CEIC_User WHERE username = '" + inputUser + "';"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
+        self.search.setEnabled(True)
+        self.nuevo.setEnabled(True)
+        self.modificar.setEnabled(False)
+        self.eliminar.setEnabled(False)
+        self.confirm.hide()
+        self.deleteCancel.hide()
+        for i in range(self.table.rowCount()):
+                if (i < 6):
+                    self.table.item(i, 0).setText(str(""))
+                else:
+                    self.table.item(i, 0).setText(str(""))
+        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.User.clear()
 
     @pyqtSlot()
     def cancelDelete(self):
         self.search.setEnabled(True)
         self.nuevo.setEnabled(True)
         self.modificar.setEnabled(True)
-        self.eliminar.setEnabled(True)
         self.confirm.setEnabled(False)
         self.deleteCancel.setEnabled(False)
         self.confirm.hide()
@@ -275,12 +285,14 @@ class gestionEstudiante(QWidget):
 
     @pyqtSlot()
     def addStudent(self):
-        self.form = AgregarEstudiante()
+        self.form = AgregarUsuario()
         self.form.show()
+
+        
 
     @pyqtSlot()
     def check_disable(self):
-        if not self.carnet.text():
+        if not self.User.text():
             self.search.setEnabled(False)
             self.modificar.setEnabled(False)
             self.guardar.setEnabled(False)
@@ -292,6 +304,6 @@ class gestionEstudiante(QWidget):
 #if __name__ == '__main__':
 #    app = QApplication(sys.argv)
 
-#    estudiante = gestionEstudiante()
+#    estudiante = gestionUsuarios()
 #    estudiante.show()
 #    sys.exit(app.exec_())

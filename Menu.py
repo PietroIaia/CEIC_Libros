@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 from gestionEstudiantes import *
+from gestionUsuarios import *
 
 
 class Ui_MainWindow(object):
@@ -21,6 +22,15 @@ class Ui_MainWindow(object):
         MainWindow.setMaximumSize(QtCore.QSize(1031, 748))
         MainWindow.setStyleSheet("background-color: rgb(235, 235, 235);\n"
 "")
+        # Conexion a la base de datos
+        self.db = QSqlDatabase.addDatabase("QPSQL")
+        self.db.setHostName("localhost")
+        self.db.setDatabaseName("pruebaCEIC")
+        self.db.setUserName("postgres")
+        self.db.setPassword("Tranc0nReloj-7aha")
+        self.db.open()
+
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
@@ -813,11 +823,12 @@ class Ui_MainWindow(object):
         self.stackedWidget.setObjectName("stackedWidget")
         self.ventana_gestion_estudiante = gestionEstudiante()
         # Index: 0
+        self.ventana_gestion_estudiante = gestionEstudiante()
         self.stackedWidget.addWidget(self.ventana_gestion_estudiante)
         self.stackedWidget.setStyleSheet("background-color: LightSkyBlue")
         # Index: 1
-        self.page_2 = QtWidgets.QWidget()
-        self.stackedWidget.addWidget(self.page_2)
+        self.ventana_gestion_usuarios = gestionUsuarios()
+        self.stackedWidget.addWidget(self.ventana_gestion_usuarios)
 
 
         self.gridFrame.raise_()
@@ -843,8 +854,11 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.pushButton_1.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+
+        ###################### Conexiones de Botones
+
         self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
+        self.pushButton_7.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
 
 
 

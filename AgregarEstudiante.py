@@ -19,7 +19,6 @@ class AgregarEstudiante(QWidget):
         #Inicialización de la ventana
         super().__init__()
         self.setGeometry(200, 100, 600, 500)
-        #print(self.MinimumSize())
         self.setMinimumSize(QSize(600, 500))
         self.setMaximumSize(QSize(600, 500))
         self.setWindowTitle("Gestión de estudiantes")
@@ -133,9 +132,9 @@ class AgregarEstudiante(QWidget):
 
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
+#if __name__ == '__main__':
+#    app = QApplication(sys.argv)
 
-    form = AgregarEstudiante()
-    form.show()
-    sys.exit(app.exec_())
+#    form = AgregarEstudiante()
+#    form.show()
+#    sys.exit(app.exec_())
