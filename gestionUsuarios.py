@@ -165,6 +165,8 @@ class gestionUsuarios(QWidget):
     def update(self):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+        self.table.item(5, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Ultima conexion"
+        self.table.item(6, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Fecha de creacion"
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.eliminar.setEnabled(False)

@@ -12,7 +12,7 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Tables import BooksTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from validationFunctions import verification_books
-#from AgregarLibro import AgregarLibro                               # Falta crear agregarLibro.py
+from AgregarLibro import AgregarLibro                               # Falta crear agregarLibro.py
 import sys
 import re
 
@@ -162,6 +162,7 @@ class gestionLibros(QWidget):
     def update(self):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+        self.table.item(5, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Cantidad prestada"
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.eliminar.setEnabled(False)
@@ -174,19 +175,18 @@ class gestionLibros(QWidget):
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
-        correct = verification(fields, 7)
+        correct = verification_books(fields, 7)
 
         if not correct:
             return
 
         values = self.table.getValues()
-        queryText = "UPDATE Book SET " + values + " WHERE book_id = \'" + self.table.item(0, 0).text() + "\' returning book_id"
+        queryText = "UPDATE Book SET " + values + " WHERE book_id = '" + self.table.item(0, 0).text() + "' returning book_id"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 
         if self.query.first():
             InfoPrompt("Actualización completada", "La información del Libro ha sido actualizada exitosamente")
-            self.table.item(9, 0).setText(str(round(float(self.table.item(8, 0).text()) / 18500, 2)))
             self.search.setEnabled(True)
             self.nuevo.setEnabled(True)
             self.eliminar.setEnabled(True)
@@ -195,7 +195,7 @@ class gestionLibros(QWidget):
             self.cancel.setEnabled(False)
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         else:
-            ErrorPrompt("Error", "Alguno de los siguientes campos fue mal llenado: Carnet, CI o Libros prestados actualmente")
+            ErrorPrompt("Error", "La informacion del libro no pudo ser modificado")
 
     @pyqtSlot()
     def cancelUpdate(self):
@@ -225,15 +225,15 @@ class gestionLibros(QWidget):
     ############################# FALTA IMPLEMENTAR ESTO ################################################################################
     @pyqtSlot()
     def confirmDelete(self):
-        if (int(self.table.item(7, 0).text()) != 0):
+        if (int(self.table.item(5, 0).text()) != 0):
             ErrorPrompt("Error en la eliminación", "Una copia del libro esta siendo prestada a un estudiante, no se puede eliminar")
         else:
-            queryText = "DELETE FROM Estudiante WHERE carnet = \'" + self.table.item(0, 0).text() + "\' RETURNING carnet"
+            queryText = "DELETE FROM Book WHERE book_id = \'" + self.table.item(0, 0).text() + "\' RETURNING book_id"
             self.query = QSqlQuery()
             self.query.exec_(queryText)
 
             if self.query.first():
-                InfoPrompt("Eliminación exitosa", "El estudiante ha sido eliminado del sistema")
+                InfoPrompt("Eliminación exitosa", "El libro ha sido eliminado del sistema")
                 self.search.setEnabled(True)
                 self.nuevo.setEnabled(True)
                 self.confirm.setEnabled(False)
@@ -243,7 +243,7 @@ class gestionLibros(QWidget):
                 self.table.clear()
                 self.carnet.setText("")
             else:
-                ErrorPrompt("Error en la eliminación", "El estudiante no pudo ser eliminado")
+                ErrorPrompt("Error en la eliminación", "El libro no pudo ser eliminado")
 
     @pyqtSlot()
     def cancelDelete(self):

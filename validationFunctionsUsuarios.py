@@ -23,11 +23,12 @@ def checkUsername(username):
 
 # Funcion para verificar si el nombre y el apellido del usuario estan escrito correctamente
 def checkName(name, firstOrLast):
-    if firstOrLast == 2: #Estamos validando un nombre
-        pattern = re.compile(r"^[a-zA-ZñÑáÁéÉíÍóÓúÚ]+$")
+    if firstOrLast == 1: #Estamos validando un nombre
+        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ]+")
         ubicacion = "Caracter inválido en el nombre"
     else: #Estamos validando un apellido
-        pattern = re.compile(r"^[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+$")
+        print(name)
+        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+")
         ubicacion = "Caracter inválido en el apellido"
     return checkPattern(name, pattern, "Caracter inválido", ubicacion)
 
@@ -56,11 +57,10 @@ def verification(fields, checkUntil):
             correct = checkUsername(fields[i])
         elif i == 1 or i == 2:
             correct = checkName(fields[i], i)
-        elif i == 4:
-            correct = checkPermisos(fields[i])
-            print(fields[i])
         elif i == 3:
             correct = checkEmail(fields[i])
+        elif i == 4:
+            correct = checkPermisos(fields[i])
 
         if not correct:
             return False

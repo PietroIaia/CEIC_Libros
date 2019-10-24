@@ -114,15 +114,15 @@ def verification_books(fields, checkUntil):
     for i in range(checkUntil):
         if i == 0:
             correct = checkTitle(fields[i])
-        elif i == 1 or i == 2:
-            correct = checkAuthor(fields[i], i)
-        elif i == 3:
+        elif i == 1:
+            correct = checkAuthor(fields[i])
+        elif i == 2:
             correct = checkISBN(fields[i])
-        elif i == 4:
+        elif i == 3:
             correct = checkQuantity(fields[i])
-        elif i == 5:
+        elif i == 4:
             correct = checkQuantityLent(fields[i])
-        elif i == 6:
+        elif i == 5:
             correct = checkLoanDuration(fields[i])
 
         if not correct:

@@ -170,6 +170,10 @@ class gestionEstudiante(QWidget):
     def update(self):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+        self.table.item(6, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Dias bloqueado"
+        self.table.item(7, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Libros prestdos actaulmente"
+        self.table.item(8, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Deuda Bs."
+        self.table.item(9, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Deuda USD."
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.eliminar.setEnabled(False)

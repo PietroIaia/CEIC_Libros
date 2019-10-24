@@ -51,7 +51,7 @@ class AgregarUsuario(QWidget):
         self.emailLabel = QLabel("Correo electronico")
         self.emailInput = QLineEdit(self)
         self.permisosLabel = QLabel("Permisos")
-        self.permisosInput = QSpinBox(self)
+        self.permisosInput = QLineEdit(self)
 
         #CSS
         self.userInput.setStyleSheet('background-color: white')
@@ -91,16 +91,19 @@ class AgregarUsuario(QWidget):
 
     @pyqtSlot()
     def agregarUsuario(self):
-        fields = [self.userInput.text(), self.contraseñaInput.text(), self.nombreInput.text(), self.apellidoInput.text(),\
-            self.emailInput.text(), self.permisosInput.text()]
+        fields = [self.userInput.text(), self.nombreInput.text(), self.apellidoInput.text(), self.emailInput.text(), self.permisosInput.text()]
 
-        correct = verification(fields, 6)
+        correct = verification(fields, 5)
 
         if not correct:
             return
 
         ultima_conexion = str(datetime.datetime.now())
         fecha_de_creacion = str(datetime.datetime.now())
+        if(fields[4] == "Administrador"):
+            fields[4] = 1
+        elif(fields[4] == "Usuario"):
+            fields[4] = 0
 
         puede = 1
         queryText2 = "SELECT * FROM CEIC_User WHERE username = '" + fields[0] + "';"
@@ -115,11 +118,11 @@ class AgregarUsuario(QWidget):
             self.query.prepare("INSERT INTO CEIC_User (username, password_, first_name, last_name, email, permission_mask, last_login, creation_date) VALUES(:username, crypt(:password, gen_salt('bf', 8)), \
                 :fname, :lname, :email, :permisos, :last_login, :creation_date ) RETURNING username")
             self.query.bindValue(0, fields[0])
-            self.query.bindValue(1, fields[1])
-            self.query.bindValue(2, fields[2])
-            self.query.bindValue(3, fields[3])
-            self.query.bindValue(4, fields[4])
-            self.query.bindValue(5, fields[5])
+            self.query.bindValue(1, self.contraseñaInput.text())
+            self.query.bindValue(2, fields[1])
+            self.query.bindValue(3, fields[2])
+            self.query.bindValue(4, fields[3])
+            self.query.bindValue(5, fields[4])
             self.query.bindValue(":last_login", ultima_conexion)
             self.query.bindValue(":creation_date", fecha_de_creacion)
 

@@ -81,7 +81,7 @@ class BooksTable(QTableWidget):
         self.setColumnCount(1) #Columnas
         self.setRowCount(7)
         self.setHorizontalHeaderLabels(["Información del Libro"])
-        self.setVerticalHeaderLabels(["ID", "Titulo", "Autores", "ISBN", "Cantidad", "Cantidad prestada", "Terminos del prestamo"]) #Header
+        self.setVerticalHeaderLabels(["ID", "Titulo", "Autores", "ISBN", "Cantidad", "Cantidad prestada", "Duracion del prestamo en dias"]) #Header
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
@@ -112,7 +112,7 @@ class BooksTable(QTableWidget):
 
     def getFields(self):
         fields = []
-        for i in range(10):
+        for i in range(7):
             fields.append(self.item(i, 0).text())
 
         return fields
@@ -121,10 +121,10 @@ class BooksTable(QTableWidget):
         updateRequest = "book_id = \'" + self.item(0, 0).text() + "\', "
         updateRequest += "title = \'" + self.item(1, 0).text() + "\', "
         updateRequest += "authors = \'" + self.item(2, 0).text() + "\', "
-        updateRequest += "isbn = " + self.item(3,0).text() + ", "
-        updateRequest += "quantity = " + self.item(4,0).text() + ", "
+        updateRequest += "isbn = \'" + self.item(3,0).text() + "\', "
+        updateRequest += "quantity = \'" + self.item(4,0).text() + "\', "
         updateRequest += "quantity_lent = \'" + self.item(5,0).text() + "\', "
-        updateRequest += "loan_duration = " + self.item(6,0).text() + ", "
+        updateRequest += "loan_duration = \'" + self.item(6,0).text() +"\'"
 
         return updateRequest
 
@@ -138,7 +138,7 @@ class UserTable(QTableWidget):
         self.setColumnCount(1) #Columnas
         self.setRowCount(7)
         self.setHorizontalHeaderLabels(["Información del usuario"])
-        self.setVerticalHeaderLabels(['nombre_de_usuario', 'nombre', 'apellido', 'correo_electronico', 'permisos', 'ultima_conexion', 'fecha_de_creacion']) #Header
+        self.setVerticalHeaderLabels(['Nombre de usuario', 'Nombre', 'Apellido', 'Email', 'Permisos', 'Ultima conexion', 'Fecha de creacion']) #Header
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
