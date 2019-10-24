@@ -15,6 +15,10 @@ from gestionLibros import *
 
 
 class Ui_MainWindow(object):
+
+    # Obtenemos el rol del usuario
+    global perm_mask
+
     def setupUi(self, MainWindow):
 
         MainWindow.setObjectName("MainWindow")
@@ -22,7 +26,7 @@ class Ui_MainWindow(object):
         MainWindow.setMinimumSize(QtCore.QSize(1031, 748))
         MainWindow.setMaximumSize(QtCore.QSize(1031, 748))
         MainWindow.setStyleSheet("background-color: rgb(235, 235, 235);\n"
-"")
+"")     
         # Conexion a la base de datos
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
@@ -862,6 +866,15 @@ class Ui_MainWindow(object):
         self.pushButton_2.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
         self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
         self.pushButton_7.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(2))
+        self.pushButton_22.clicked.connect(lambda: sys.exit(sys.exit(app.exec_())))
+
+        ##################### Permisos
+        if(perm_mask == 0):
+            self.pushButton_7.setEnabled(False)
+            self.pushButton_7.setStyleSheet("QPushButton\n"
+"{\n"
+"    color: #B5B5B5\n"
+"}")
 
 
 
@@ -888,7 +901,10 @@ class Ui_MainWindow(object):
         self.pushButton_22.setText(_translate("MainWindow", "Cerrar Sesión"))
 
 if __name__ == '__main__':
-
+    # Este sera el rol del usuario
+    perm_mask = int(sys.argv[1])
+    
+    # Inicializamos la MainWindow
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

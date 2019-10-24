@@ -2,7 +2,9 @@ from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QFont
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QComboBox, QLineEdit, QPushButton
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from datetime import datetime
 import sys
+import os
 
 
 # ===================== CLASE ventanaLogin =========================
@@ -127,17 +129,27 @@ class ventanaLogin(QMainWindow):
     def Login(self):
         inputUsername = self.username.text()
         inputPassword = self.password.text()
+        perm_mask = -1
 
         condition = "username = \'" + inputUsername + "\' AND password_ = crypt(\'" + inputPassword + "\', password_);"
 
         self.query = QSqlQuery()
+        # Obtenemos el rol del usuario
         self.query.exec_("SELECT permission_mask FROM CEIC_User WHERE " + condition)
-        #print("SELECT permission_mask FROM CEIC_User WHERE " + condition)
+
         if self.query.first():
+            # Si es Admin
             if self.query.value(0) == 1:
-                print("Es un administrador")
+                perm_mask = 1
+            # Si es User
             else:
-                print("Solo es un usuario")
+                perm_mask = 0
+
+            # Hace update del last_login del user
+            update_last_login = "UPDATE CEIC_User SET last_login='"+str(datetime.now())+"' WHERE username='"+inputUsername+"';"
+            self.query.exec_(update_last_login)
+            os.system("Menu.py "+str(perm_mask))
+
         else:
             print("No es nadie")
 
