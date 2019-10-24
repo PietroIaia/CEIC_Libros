@@ -138,8 +138,13 @@ class ventanaLogin(QMainWindow):
                 print("Es un administrador")
             else:
                 print("Solo es un usuario")
+            self.closeMyApp_OpenNewApp()
         else:
             print("No es nadie")
+    
+
+    def closeMyApp_OpenNewApp(self): 
+      os.system("Menu.py")
 
 
 # ================================================================

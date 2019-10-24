@@ -11,6 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 from gestionEstudiantes import *
 from gestionUsuarios import *
+from gestionLibros import *
 
 
 class Ui_MainWindow(object):
@@ -821,12 +822,14 @@ class Ui_MainWindow(object):
         self.stackedWidget = QtWidgets.QStackedWidget(self.centralwidget)
         self.stackedWidget.setGeometry(QtCore.QRect(190, -1, 841, 724))
         self.stackedWidget.setObjectName("stackedWidget")
-        self.ventana_gestion_estudiante = gestionEstudiante()
+        self.stackedWidget.setStyleSheet("background-color: LightSkyBlue")
         # Index: 0
+        self.ventana_gestion_libros = gestionLibros()
+        self.stackedWidget.addWidget(self.ventana_gestion_libros)
+        # Index: 1
         self.ventana_gestion_estudiante = gestionEstudiante()
         self.stackedWidget.addWidget(self.ventana_gestion_estudiante)
-        self.stackedWidget.setStyleSheet("background-color: LightSkyBlue")
-        # Index: 1
+        # Index: 2
         self.ventana_gestion_usuarios = gestionUsuarios()
         self.stackedWidget.addWidget(self.ventana_gestion_usuarios)
 
@@ -856,9 +859,9 @@ class Ui_MainWindow(object):
 
 
         ###################### Conexiones de Botones
-
-        self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
-        self.pushButton_7.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        self.pushButton_2.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
+        self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        self.pushButton_7.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(2))
 
 
 

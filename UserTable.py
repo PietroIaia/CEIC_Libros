@@ -38,6 +38,11 @@ class UserTable(QTableWidget):
             self.setItem(i, 0, QTableWidgetItem())
             self.item(i, 0).setBackground(QColor(224, 255, 255))
 
+    def clear(self):
+        for i in range(self.rowCount()):
+            self.item(i, 0).setText("")
+            self.item(i, 0).setBackground(QColor(224, 255, 255))
+
     def getFields(self):
         fields = []
         for i in range(8):

@@ -82,3 +82,50 @@ def verification(fields, checkUntil):
 
         return True
 
+
+#####################################################
+#               Validadores de libros               #
+#####################################################
+def checkTitle(title):
+    return True
+
+def checkAuthor(name):
+    pattern = re.compile(r"^(?![\s.]+$)[a-zA-Z\s.]*$")
+    return checkPattern(name, pattern, "Caracter inválido", "Caracter invalido en nombre de autores")
+
+def checkISBN(ISBN):
+    pattern = re.compile(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")             # Revisar aqui si no funciona http://regexlib.com/Search.aspx?k=ISBN
+    return checkPattern(ISBN, pattern, "Error de formato", "Número ISBN invalido")
+
+def checkQuantity(number):
+    pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
+    return checkPattern(number, pattern, "Error de formato", "Número ISBN invalido")
+
+def checkQuantityLent(number):
+    pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
+    return checkPattern(number, pattern, "Error de formato", "Número ISBN invalido")
+
+def checkLoanDuration(number):
+    pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
+    return checkPattern(number, pattern, "Error de formato", "Número ISBN invalido")
+
+def verification_books(fields, checkUntil):
+    correct = True
+    for i in range(checkUntil):
+        if i == 0:
+            correct = checkTitle(fields[i])
+        elif i == 1 or i == 2:
+            correct = checkAuthor(fields[i], i)
+        elif i == 3:
+            correct = checkISBN(fields[i])
+        elif i == 4:
+            correct = checkQuantity(fields[i])
+        elif i == 5:
+            correct = checkQuantityLent(fields[i])
+        elif i == 6:
+            correct = checkLoanDuration(fields[i])
+
+        if not correct:
+            return False
+
+        return True

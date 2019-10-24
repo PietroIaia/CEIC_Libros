@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from UserTable import UserTable
+from Tables import UserTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from validationFunctionsUsuarios import verification
 from AgregarUsuario import AgregarUsuario
@@ -57,7 +57,7 @@ class gestionUsuarios(QWidget):
         self.modificar = QPushButton("Modificar")
         self.guardar = QPushButton("Guardar modificación")
         self.cancel = QPushButton("Cancelar modificación")
-        self.eliminar = QPushButton("Eliminar estudiante")
+        self.eliminar = QPushButton("Eliminar Usuario")
         self.confirm = QPushButton("Confirmar eliminación")
         self.deleteCancel = QPushButton("Cancelar eliminación")
         self.confirm.hide()
@@ -131,7 +131,7 @@ class gestionUsuarios(QWidget):
         self.eliminar.clicked.connect(self.deleteRequest)
         self.confirm.clicked.connect(self.deleteConfirm)
         self.deleteCancel.clicked.connect(self.cancelDelete)
-        self.nuevo.clicked.connect(self.addStudent)
+        self.nuevo.clicked.connect(self.addUser)
         self.User.textChanged[str].connect(self.check_disable)
 
 
@@ -284,10 +284,9 @@ class gestionUsuarios(QWidget):
         self.deleteCancel.hide()
 
     @pyqtSlot()
-    def addStudent(self):
+    def addUser(self):
         self.form = AgregarUsuario()
         self.form.show()
-
         
 
     @pyqtSlot()

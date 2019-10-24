@@ -34,8 +34,9 @@ CREATE TABLE Estudiante(
 
 CREATE TABLE Book(
 	book_id INT4 PRIMARY KEY CHECK(book_id <= 9999 AND book_id >= 0),
-	authors VARCHAR(100),
 	title VARCHAR(100),
+	authors VARCHAR(100),
+	isbn VARCHAR(100),
 	quantity INT4,
 	quantity_lent INT4, 
 	loan_duration INT4 DEFAULT 7 --Recordar cambiar esto luego de hablar con el CEIC
