@@ -148,6 +148,10 @@ class ventanaLogin(QMainWindow):
             # Hace update del last_login del user
             update_last_login = "UPDATE CEIC_User SET last_login='"+str(datetime.now())+"' WHERE username='"+inputUsername+"';"
             self.query.exec_(update_last_login)
+
+            # Cerramos el Login
+            self.close()
+            # Abrimos el MainWindow
             os.system("Menu.py "+str(perm_mask))
 
         else:
