@@ -12,9 +12,9 @@ class UserTable(QTableWidget):
     def __init__(self):
         super().__init__()
         self.setColumnCount(1) #Columnas
-        self.setRowCount(8)
+        self.setRowCount(7)
         self.setHorizontalHeaderLabels(["Información del usuario"])
-        self.setVerticalHeaderLabels(['nombre_de_usuario', 'contraseña', 'nombre', 'apellido', 'correo_electronico', 'permisos', 'ultima_conexion', 'fecha_de_creacion']) #Header
+        self.setVerticalHeaderLabels(['nombre_de_usuario', 'nombre', 'apellido', 'correo_electronico', 'permisos', 'ultima_conexion', 'fecha_de_creacion']) #Header
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
@@ -45,17 +45,16 @@ class UserTable(QTableWidget):
 
     def getFields(self):
         fields = []
-        for i in range(8):
+        for i in range(7):
             fields.append(self.item(i, 0).text())
 
         return fields
 
     def getValues(self):
         updateRequest = "username = \'" + self.item(0, 0).text() + "\', "
-        updateRequest += "password_ = \'" + self.item(1, 0).text() + "\', "
-        updateRequest += "first_name = \'" + self.item(2, 0).text() + "\', "
-        updateRequest += "last_name = \'" + self.item(3,0).text() + "\', "
-        updateRequest += "email = \'" + self.item(4,0).text() + "\', "
-        updateRequest += "permission_mask = " + self.item(5,0).text()
+        updateRequest += "first_name = \'" + self.item(1, 0).text() + "\', "
+        updateRequest += "last_name = \'" + self.item(2,0).text() + "\', "
+        updateRequest += "email = \'" + self.item(3,0).text() + "\', "
+        updateRequest += "permission_mask = " + self.item(4,0).text()
 
         return updateRequest

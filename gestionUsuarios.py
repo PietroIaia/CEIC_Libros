@@ -8,7 +8,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Tables import UserTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from validationFunctionsUsuarios import verification
+from validationFunctionsUsuarios import verification, checkUsername
 from AgregarUsuario import AgregarUsuario
 from PyQt5.QtCore import *
 import sys
@@ -128,28 +128,15 @@ class gestionUsuarios(QWidget):
 
     def consulta(self):
         inputUser = self.User.text()
-        queryText = "SELECT * FROM CEIC_User WHERE username = '" + inputUser + "';"
-        self.query = QSqlQuery()
-        self.query.exec_(queryText)
 
-        if self.query.first():
-            self.currentUser = inputUser
-            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
-            for i in range(self.table.rowCount()):
-                if (i < 6):
-                    self.table.item(i, 0).setText(str(self.query.value(i)))
-                else:
-                    auxiliar = QDateTime.toString(self.query.value(i)).split()
-                    self.table.item(i, 0).setText(str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3]))
-
-            self.modificar.setEnabled(True)
-            self.eliminar.setEnabled(True)
-            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        if(checkUsername(inputUser)):
+            self.consultaAux(inputUser)
         else:
-            ErrorPrompt("Error", "El usuario no existe, ingrese otro nombre de usuario ")
+            ErrorPrompt("Error de usuario", "El username no sigue el patrón correspondiente")
 
     def consultaAux(self,inputUser):
-        queryText = "SELECT * FROM CEIC_User WHERE username = '" + inputUser + "';"
+        queryText = "SELECT username, first_name, last_name, email, permission_mask, last_login,\
+            creation_date FROM CEIC_User WHERE username = '" + inputUser + "';"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 
@@ -157,8 +144,13 @@ class gestionUsuarios(QWidget):
             self.currentUser = inputUser
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
             for i in range(self.table.rowCount()):
-                if (i < 6):
+                if (i < 4):
                     self.table.item(i, 0).setText(str(self.query.value(i)))
+                elif i == 4:
+                    if int(self.query.value(i)) == 0:
+                        self.table.item(i, 0).setText("Usuario")
+                    else:
+                        self.table.item(i, 0).setText("Administrador")
                 else:
                     auxiliar = QDateTime.toString(self.query.value(i)).split()
                     self.table.item(i, 0).setText(str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3]))
@@ -184,7 +176,7 @@ class gestionUsuarios(QWidget):
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
-        correct = verification(fields, 6)
+        correct = verification(fields, 5)
 
         if not correct:
             return
@@ -256,11 +248,7 @@ class gestionUsuarios(QWidget):
         self.eliminar.setEnabled(False)
         self.confirm.hide()
         self.deleteCancel.hide()
-        for i in range(self.table.rowCount()):
-                if (i < 6):
-                    self.table.item(i, 0).setText(str(""))
-                else:
-                    self.table.item(i, 0).setText(str(""))
+        self.table.clear()
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.User.clear()
 
@@ -291,9 +279,9 @@ class gestionUsuarios(QWidget):
             self.search.setEnabled(True)
                 
 
-#if __name__ == '__main__':
-#    app = QApplication(sys.argv)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
 
-#    estudiante = gestionUsuarios()
-#    estudiante.show()
-#    sys.exit(app.exec_())
+    estudiante = gestionUsuarios()
+    estudiante.show()
+    sys.exit(app.exec_())

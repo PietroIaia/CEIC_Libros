@@ -32,8 +32,8 @@ def checkName(name, firstOrLast):
     return checkPattern(name, pattern, "Caracter inválido", ubicacion)
 
 # Funcion para verificar la contraseña
-def checkContraseña(contraseña):
-    return True
+#def checkContraseña(contraseña):
+#    return True
 
 # Funcion para verificar si el permiso del usuario esta en el rango [0,1]
 def checkPermisos(permisos):
@@ -54,13 +54,11 @@ def verification(fields, checkUntil):
     for i in range(checkUntil):
         if i == 0:
             correct = checkUsername(fields[i])
-        elif i == 1:
-            correct = checkContraseña(fields[i])
-        elif i == 2 or i == 3:
+        elif i == 1 or i == 2:
             correct = checkName(fields[i], i)
-        elif i == 5:
-            correct = checkPermisos(fields[i])
         elif i == 4:
+            correct = checkPermisos(fields[i])
+        elif i == 3:
             correct = checkEmail(fields[i])
 
         if not correct:
