@@ -21,24 +21,15 @@ class gestionUsuarios(QWidget):
         #Inicialización de la ventana
         super().__init__()
         self.setGeometry(200, 0, 600, 600)
-        self.setWindowTitle("Gestión de usuarios")
+        self.setWindowTitle("Gestión de Usuarios")
         self.setStyleSheet('background-color: LightSkyBlue')
-
-        # LO QUITE DE AQUI Y LO PUSE EN EL MENU.PY !!!!!!!!!!!!!!!!!!!!!!!! (No lo quito por completo hasta que se hagan las pruebas)
-        #Base de datos
-        #self.db = QSqlDatabase.addDatabase("QPSQL")
-        #self.db.setHostName("localhost")
-        #self.db.setDatabaseName("prueba")
-        #self.db.setUserName("postgres")
-        #self.db.setPassword("blak")
-        #self.db.open()
 
         #Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
         self.instFont = QFont("Serif", 12)
 
         #Título
-        self.title = QLabel("Gestión de usuarios")
+        self.title = QLabel("Gestión de Usuarios")
         self.title.setStyleSheet('color: white')
         self.title.setFont(self.titleFont)
 

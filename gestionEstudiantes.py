@@ -27,17 +27,8 @@ class gestionEstudiante(QWidget):
         #Inicialización de la ventana
         super().__init__()
         self.setGeometry(200, 0, 600, 600)
-        self.setWindowTitle("Gestión de estudiantes")
+        self.setWindowTitle("Gestión de Estudiantes")
         self.setStyleSheet('background-color: LightSkyBlue')
-
-        # LO QUITE DE AQUI Y LO PUSE EN EL MENU.PY !!!!!!!!!!!!!!!!!!!!!!!! (No lo quito por completo hasta que se hagan las pruebas)
-        #Base de datos
-        #self.db = QSqlDatabase.addDatabase("QPSQL")
-        #self.db.setHostName("localhost")
-        #self.db.setDatabaseName("pruebaCEIC")
-        #self.db.setUserName("postgres")
-        #self.db.setPassword("Tranc0nReloj-7aha")
-        #self.db.open()
 
         #Regex del carnet
         self.carnetPattern = re.compile(r"\d{2}\-\d{5}")
@@ -47,7 +38,7 @@ class gestionEstudiante(QWidget):
         self.instFont = QFont("Serif", 12)
 
         #Título
-        self.title = QLabel("Gestión de estudiantes")
+        self.title = QLabel("Gestión de Estudiantes")
         self.title.setStyleSheet('background-color: DodgerBlue')
         self.title.setStyleSheet('color: white')
         self.title.setFont(self.titleFont)

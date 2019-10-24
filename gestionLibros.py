@@ -270,10 +270,3 @@ class gestionLibros(QWidget):
             self.eliminar.setEnabled(False)
         else:
             self.search.setEnabled(True)
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    Libro = gestionLibros()
-    Libro.show()
-    sys.exit(app.exec_())

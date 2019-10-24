@@ -27,9 +27,9 @@ class AgregarEstudiante(QWidget):
         #Base de datos
         self.db = QSqlDatabase.database('qt_sql_default_connection')
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaCEIC")
+        self.db.setDatabaseName("pruebaceic")
         self.db.setUserName("postgres")
-        self.db.setPassword("Tranc0nReloj-7aha")
+        self.db.setPassword("postgres")                                        # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
         #Creación de fonts para las letras
@@ -132,9 +132,9 @@ class AgregarEstudiante(QWidget):
 
 
 
-#if __name__ == '__main__':
-#    app = QApplication(sys.argv)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
 
-#    form = AgregarEstudiante()
-#    form.show()
-#    sys.exit(app.exec_())
+    form = AgregarEstudiante()
+    form.show()
+    sys.exit(app.exec_())
