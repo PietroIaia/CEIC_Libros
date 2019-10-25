@@ -104,10 +104,7 @@ class AgregarEstudiante(QWidget):
         if not correct:
             return
 
-        print("Probando2")
-
         self.query = QSqlQuery()
-        print("Probando")
         self.query.prepare("INSERT INTO Estudiante(carnet, first_name, last_name, CI, phone, email) VALUES(:carnet, :fname, \
             :lname, :CI, :phone, :email ) RETURNING carnet")
         self.query.bindValue(0, fields[0])

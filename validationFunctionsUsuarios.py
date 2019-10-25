@@ -24,11 +24,10 @@ def checkUsername(username):
 # Funcion para verificar si el nombre y el apellido del usuario estan escrito correctamente
 def checkName(name, firstOrLast):
     if firstOrLast == 1: #Estamos validando un nombre
-        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ]+")
+        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ]+$")
         ubicacion = "Caracter inválido en el nombre"
     else: #Estamos validando un apellido
-        print(name)
-        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+")
+        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+$")
         ubicacion = "Caracter inválido en el apellido"
     return checkPattern(name, pattern, "Caracter inválido", ubicacion)
 

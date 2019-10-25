@@ -95,7 +95,7 @@ def checkTitle(title):
     return checkPattern(title, pattern, "Caracter inválido", "Caracter invalido en nombre de autores")
 
 def checkAuthor(name):
-    pattern = re.compile(r"^(?![\s.]+$)[a-zA-Z\s.]*$")
+    pattern = re.compile(r"^(?![\s.]+$)[a-zA-Z\s.,]*$")
     return checkPattern(name, pattern, "Caracter inválido", "Caracter invalido en nombre de autores")
 
 def checkISBN(ISBN):
