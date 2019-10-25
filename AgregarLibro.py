@@ -94,10 +94,9 @@ class AgregarLibro(QWidget):
         if not correct:
             return
 
-        print("Probando2")
 
         self.query = QSqlQuery()
-        print("Probando")
+        print(self.titleBookInput.text())
         self.query.prepare("INSERT INTO Book(book_id, title, authors, isbn, quantity) VALUES(:ID, :title, \
             :authors, :ISBN, :quantity) RETURNING book_id")
         self.query.bindValue(0, int(fields[0]))
@@ -117,13 +116,3 @@ class AgregarLibro(QWidget):
     @pyqtSlot()
     def closeWindow(self):
         self.close()
-
-
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    form = AgregarLibro()
-    form.show()
-    sys.exit(app.exec_())

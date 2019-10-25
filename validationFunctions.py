@@ -24,10 +24,10 @@ def checkCarnet(carnet):
 
 def checkName(name, firstOrLast):
     if firstOrLast == 1: #Estamos validando un nombre
-        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ]+")
+        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ]+$")
         ubicacion = "Caracter inválido en el nombre"
     else: #Estamos validando un apellido
-        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+")
+        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+$")
         ubicacion = "Caracter inválido en el apellido"
     return checkPattern(name, pattern, "Caracter inválido", ubicacion)
 
@@ -80,14 +80,19 @@ def verification(fields, checkUntil):
         if not correct:
             return False
 
-        return True
+    return True
 
 
 #####################################################
 #               Validadores de libros               #
 #####################################################
+def checkIdBook(number):
+    pattern = re.compile(r"[0-9]{4}") #Cambiar a 11 si le pongo un 0  adelante a los números
+    return checkPattern(number, pattern, "Error de formato", "Id de Libro invalido")
+
 def checkTitle(title):
-    return True
+    pattern = re.compile(r"^(?![\s.]+$)[a-zA-Z0-9\s.,]*$")
+    return checkPattern(title, pattern, "Caracter inválido", "Caracter invalido en nombre de autores")
 
 def checkAuthor(name):
     pattern = re.compile(r"^(?![\s.]+$)[a-zA-Z\s.]*$")
@@ -99,33 +104,35 @@ def checkISBN(ISBN):
 
 def checkQuantity(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
-    return checkPattern(number, pattern, "Error de formato", "Número ISBN invalido")
+    return checkPattern(number, pattern, "Error de formato", "Cantidad de libros invalida")
 
 def checkQuantityLent(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
-    return checkPattern(number, pattern, "Error de formato", "Número ISBN invalido")
+    return checkPattern(number, pattern, "Error de formato", "Cantidad de libros prestados invalida")
 
 def checkLoanDuration(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
-    return checkPattern(number, pattern, "Error de formato", "Número ISBN invalido")
+    return checkPattern(number, pattern, "Error de formato", "Numero de dias invalido")
 
 def verification_books(fields, checkUntil):
     correct = True
     for i in range(checkUntil):
         if i == 0:
-            correct = checkTitle(fields[i])
+            correct = checkIdBook(fields[i])
         elif i == 1:
-            correct = checkAuthor(fields[i])
+            correct = checkTitle(fields[i])
         elif i == 2:
-            correct = checkISBN(fields[i])
+            correct = checkAuthor(fields[i])
         elif i == 3:
-            correct = checkQuantity(fields[i])
+            correct = checkISBN(fields[i])
         elif i == 4:
-            correct = checkQuantityLent(fields[i])
+            correct = checkQuantity(fields[i])
         elif i == 5:
+            correct = checkQuantityLent(fields[i])
+        elif i == 6:
             correct = checkLoanDuration(fields[i])
 
         if not correct:
             return False
 
-        return True
+    return True

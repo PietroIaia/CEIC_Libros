@@ -171,10 +171,10 @@ class gestionLibros(QWidget):
         self.cancel.setEnabled(True)
         InfoPrompt("Modificación activada", "Se ha activado el modo modificación")
 
-    ############################# FALTA IMPLEMENTAR ESTO ################################################################################
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
+        print(fields)
         correct = verification_books(fields, 7)
 
         if not correct:
@@ -222,7 +222,6 @@ class gestionLibros(QWidget):
         self.confirm.show()
         self.deleteCancel.show()
 
-    ############################# FALTA IMPLEMENTAR ESTO ################################################################################
     @pyqtSlot()
     def confirmDelete(self):
         if (int(self.table.item(5, 0).text()) != 0):
@@ -241,7 +240,7 @@ class gestionLibros(QWidget):
                 self.confirm.hide()
                 self.deleteCancel.hide()
                 self.table.clear()
-                self.carnet.setText("")
+                self.titulo.setText("")
             else:
                 ErrorPrompt("Error en la eliminación", "El libro no pudo ser eliminado")
 
