@@ -96,7 +96,6 @@ class AgregarLibro(QWidget):
 
 
         self.query = QSqlQuery()
-        print(self.titleBookInput.text())
         self.query.prepare("INSERT INTO Book(book_id, title, authors, isbn, quantity) VALUES(:ID, :title, \
             :authors, :ISBN, :quantity) RETURNING book_id")
         self.query.bindValue(0, int(fields[0]))

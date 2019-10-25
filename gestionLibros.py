@@ -174,7 +174,6 @@ class gestionLibros(QWidget):
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
-        print(fields)
         correct = verification_books(fields, 7)
 
         if not correct:
