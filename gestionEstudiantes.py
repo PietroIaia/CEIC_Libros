@@ -22,10 +22,11 @@ import re
 
 class gestionEstudiante(QWidget):
 
-    def __init__(self):
+    def __init__(self, perm_mask):
 
         #Inicialización de la ventana
         super().__init__()
+        self.permission = perm_mask
         self.setGeometry(200, 0, 600, 600)
         self.setWindowTitle("Gestión de Estudiantes")
         self.setStyleSheet('background-color: LightSkyBlue')
@@ -224,6 +225,10 @@ class gestionEstudiante(QWidget):
 
     @pyqtSlot()
     def deleteRequest(self):
+        if (self.permission != 1):
+            ErrorPrompt("Se necesitan permisos adicionales", "Usted no dispone de los permisos necesarios para esta acción")
+            return
+    
         ConfirmPrompt("Eliminación de estudiante", "Se ha solicitado eliminar estudiante. Marque botón de eliminación para\
             confirmar")
         self.search.setEnabled(False)

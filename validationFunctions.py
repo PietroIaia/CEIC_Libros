@@ -87,15 +87,18 @@ def verification(fields, checkUntil):
 #               Validadores de libros               #
 #####################################################
 def checkIdBook(number):
-    pattern = re.compile(r"[0-9]{4}") #Cambiar a 11 si le pongo un 0  adelante a los números
-    return checkPattern(number, pattern, "Error de formato", "Id de Libro invalido")
+    if int(number) < 0 or int(number) > 9999: 
+        ErrorPrompt("Código inválido", "Ese código de libro no es válido")
+        return False
+    else:
+        return True
 
 def checkTitle(title):
-    pattern = re.compile(r"^(?![\s.]+$)[a-zA-Z0-9\s.,]*$")
-    return checkPattern(title, pattern, "Caracter inválido", "Caracter invalido en nombre de autores")
+    pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ \.,]+$")
+    return checkPattern(title, pattern, "Caracter inválido", "Caracter invalido en el título")
 
 def checkAuthor(name):
-    pattern = re.compile(r"^(?![\s.]+$)[a-zA-Z\s.,]*$")
+    pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ \.,]+$")
     return checkPattern(name, pattern, "Caracter inválido", "Caracter invalido en nombre de autores")
 
 def checkISBN(ISBN):
@@ -124,7 +127,8 @@ def verification_books(fields, checkUntil):
         elif i == 2:
             correct = checkAuthor(fields[i])
         elif i == 3:
-            correct = checkISBN(fields[i])
+            #correct = checkISBN(fields[i])
+            correct = True
         elif i == 4:
             correct = checkQuantity(fields[i])
         elif i == 5:

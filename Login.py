@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QComboBox, QLineEdit, QPushButton
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from datetime import datetime
+from Prompt import ErrorPrompt
 import sys
 import os
 
@@ -24,9 +25,9 @@ class ventanaLogin(QMainWindow):
 
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaceic")                         
+        self.db.setDatabaseName("pruebaCEIC")                         
         self.db.setUserName("postgres")
-        self.db.setPassword("postgres")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("Tranc0nReloj-7aha")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
         self.initUI()
@@ -152,10 +153,10 @@ class ventanaLogin(QMainWindow):
             # Cerramos el Login
             self.close()
             # Abrimos el MainWindow
-            os.system("Menu.py "+str(perm_mask))
+            os.system("python3 Menu.py "+str(perm_mask))
 
         else:
-            print("No es nadie")
+            ErrorPrompt("Error", "Nombre de usuario o contraseña incorrectos")
 
 
 # ================================================================

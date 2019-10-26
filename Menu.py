@@ -30,9 +30,9 @@ class Ui_MainWindow(object):
         # Conexion a la base de datos
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaceic")
+        self.db.setDatabaseName("pruebaCEIC")
         self.db.setUserName("postgres")
-        self.db.setPassword("postgres")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("Tranc0nReloj-7aha")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
 
@@ -831,7 +831,7 @@ class Ui_MainWindow(object):
         self.ventana_gestion_libros = gestionLibros()
         self.stackedWidget.addWidget(self.ventana_gestion_libros)
         # Index: 1
-        self.ventana_gestion_estudiante = gestionEstudiante()
+        self.ventana_gestion_estudiante = gestionEstudiante(perm_mask)
         self.stackedWidget.addWidget(self.ventana_gestion_estudiante)
         # Index: 2
         self.ventana_gestion_usuarios = gestionUsuarios()
