@@ -165,6 +165,7 @@ class gestionUsuarios(QWidget):
     def update(self):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+        self.table.item(0, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Username"
         self.table.item(5, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Ultima conexion"
         self.table.item(6, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Fecha de creacion"
         self.search.setEnabled(False)
@@ -184,36 +185,21 @@ class gestionUsuarios(QWidget):
             return
 
         values = self.table.getValues()
-        valorUser = self.table.item(0, 0).text()
-        puede = 1
-        puede2 = 1
-        if valorUser != self.User.text():
-            puede2 = 0
-        queryText2 = "SELECT * FROM CEIC_User WHERE username = '" + valorUser + "';"
-        self.query2 = QSqlQuery()
-        self.query2.exec_(queryText2)
+        queryText = "UPDATE CEIC_User SET " + values + " WHERE username = '" + self.table.item(0, 0).text() + "' returning username"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
 
-        if self.query2.first():
-            puede = 0;
-
-        if puede ==1 or (puede == 0 and puede2 == 1):
-            queryText = "UPDATE CEIC_User SET " + values + " WHERE username = \'" + self.table.item(0, 0).text() + "\' returning username"
-            self.query = QSqlQuery()
-            self.query.exec_(queryText)
-
-            if self.query.first():
-                InfoPrompt("Actualización completada", "La información del usuario ha sido actualizada exitosamente")
-                self.search.setEnabled(True)
-                self.nuevo.setEnabled(True)
-                self.eliminar.setEnabled(True)
-                self.modificar.setEnabled(True)
-                self.guardar.setEnabled(False)
-                self.cancel.setEnabled(False)
-                self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-            else:
-                ErrorPrompt("Error", "Alguno de los siguientes campos no fue llenado correctamente: Nombre de usuario, permisos o correo")
+        if self.query.first():
+            InfoPrompt("Actualización completada", "La información del Usuario ha sido actualizada exitosamente")
+            self.search.setEnabled(True)
+            self.nuevo.setEnabled(True)
+            self.eliminar.setEnabled(True)
+            self.modificar.setEnabled(True)
+            self.guardar.setEnabled(False)
+            self.cancel.setEnabled(False)
+            self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         else:
-            ErrorPrompt("Error", "El nombre de usuario coincide con uno ya existente, por favor ingrese otro nombre")
+            ErrorPrompt("Error", "La informacion del Usuario no pudo ser modificada")
 
     @pyqtSlot()
     def cancelUpdate(self):
@@ -274,9 +260,6 @@ class gestionUsuarios(QWidget):
     def check_disable(self):
         if not self.User.text():
             self.search.setEnabled(False)
-            self.modificar.setEnabled(False)
-            self.guardar.setEnabled(False)
-            self.eliminar.setEnabled(False)
         else:
             self.search.setEnabled(True)
                 

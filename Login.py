@@ -14,7 +14,7 @@ class ventanaLogin(QMainWindow):
     def __init__(self, parent=None):
         super(ventanaLogin, self).__init__(parent)
         
-        self.setWindowTitle("CEIC LIRBOS")
+        self.setWindowTitle("CEIC LIBROS")
         self.setWindowIcon(QIcon("static/icono_CEIC.png"))
         self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.MSWindowsFixedSizeDialogHint)
         self.setFixedSize(400, 320)
@@ -25,9 +25,9 @@ class ventanaLogin(QMainWindow):
 
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaCEIC")                         
+        self.db.setDatabaseName("pruebaceic")                         
         self.db.setUserName("postgres")
-        self.db.setPassword("Tranc0nReloj-7aha")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("postgres")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
         self.initUI()
@@ -153,7 +153,7 @@ class ventanaLogin(QMainWindow):
             # Cerramos el Login
             self.close()
             # Abrimos el MainWindow
-            os.system("python3 Menu.py "+str(perm_mask))
+            os.system("py Menu.py "+str(perm_mask))
 
         else:
             ErrorPrompt("Error", "Nombre de usuario o contraseña incorrectos")

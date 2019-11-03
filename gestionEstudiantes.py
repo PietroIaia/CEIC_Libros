@@ -171,6 +171,7 @@ class gestionEstudiante(QWidget):
     def update(self):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+        self.table.item(0, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Carnet"
         self.table.item(6, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Dias bloqueado"
         self.table.item(7, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Libros prestdos actaulmente"
         self.table.item(8, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Deuda Bs."
@@ -282,9 +283,6 @@ class gestionEstudiante(QWidget):
     def check_disable(self):
         if not self.carnet.text():
             self.search.setEnabled(False)
-            self.modificar.setEnabled(False)
-            self.guardar.setEnabled(False)
-            self.eliminar.setEnabled(False)
         else:
             self.search.setEnabled(True)
                 

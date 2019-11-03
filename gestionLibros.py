@@ -162,6 +162,7 @@ class gestionLibros(QWidget):
     def update(self):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+        self.table.item(0, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "ID"
         self.table.item(5, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Cantidad prestada"
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
@@ -263,8 +264,5 @@ class gestionLibros(QWidget):
     def check_disable(self):
         if not self.titulo.text():
             self.search.setEnabled(False)
-            self.modificar.setEnabled(False)
-            self.guardar.setEnabled(False)
-            self.eliminar.setEnabled(False)
         else:
             self.search.setEnabled(True)
