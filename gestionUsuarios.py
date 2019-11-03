@@ -8,7 +8,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Tables import UserTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from validationFunctions import verification_user, checkUsername
+from validationFunctions import verification_users, checkUsername
 from AgregarUsuario import AgregarUsuario
 from PyQt5.QtCore import *
 import sys
@@ -179,7 +179,7 @@ class gestionUsuarios(QWidget):
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
-        correct = verification(fields, 5)
+        correct = verification_users(fields, 5)
 
         if not correct:
             return
