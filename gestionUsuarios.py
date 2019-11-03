@@ -8,7 +8,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Tables import UserTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from validationFunctionsUsuarios import verification, checkUsername
+from validationFunctions import verification_user, checkUsername
 from AgregarUsuario import AgregarUsuario
 from PyQt5.QtCore import *
 import sys

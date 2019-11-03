@@ -15,7 +15,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Tables import StudentTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from validationFunctions import verification
+from validationFunctions import verification_estudiantes
 from AgregarEstudiante import AgregarEstudiante
 import sys
 import re
@@ -187,7 +187,7 @@ class gestionEstudiante(QWidget):
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
-        correct = verification(fields, 10)
+        correct = verification_estudiantes(fields, 10)
 
         if not correct:
             return

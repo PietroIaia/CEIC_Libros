@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from validationFunctionsUsuarios import verification
+from validationFunctions import verification_users
 from Prompt import InfoPrompt, ErrorPrompt
 import sys
 import datetime 
@@ -93,7 +93,7 @@ class AgregarUsuario(QWidget):
     def agregarUsuario(self):
         fields = [self.userInput.text(), self.nombreInput.text(), self.apellidoInput.text(), self.emailInput.text(), self.permisosInput.text()]
 
-        correct = verification(fields, 5)
+        correct = verification_users(fields, 5)
 
         if not correct:
             return

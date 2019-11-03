@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from validationFunctions import verification
+from validationFunctions import verification_estudiantes
 from Prompt import InfoPrompt, ErrorPrompt
 import sys
 
@@ -99,7 +99,7 @@ class AgregarEstudiante(QWidget):
         fields = [self.carnetInput.text(), self.fnameInput.text(), self.lnameInput.text(), self.CIInput.text(),\
             self.phoneInput.text(), self.emailInput.text()]
 
-        correct = verification(fields, 6)
+        correct = verification_estudiantes(fields, 6)
 
         if not correct:
             return
