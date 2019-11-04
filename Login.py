@@ -156,7 +156,7 @@ class ventanaLogin(QMainWindow):
             os.system("py Menu.py "+str(perm_mask))
 
         else:
-            ErrorPrompt("Error", "Nombre de usuario o contraseña incorrectos")
+            ErrorPrompt("Error", "Nombre de usuario o contraseña incorrectos!")
 
 
 # ================================================================
