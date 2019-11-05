@@ -103,6 +103,7 @@ class gestionUsuarios(QWidget):
         self.searchLayout.addLayout(self.infoLayout)
         self.searchLayout.addWidget(self.search)
         self.searchLayout.addWidget(self.nuevo)
+        self.search.setEnabled(False)
 
         #Layout del texto
         self.textLayout = QVBoxLayout()

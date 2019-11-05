@@ -34,7 +34,6 @@ class AgregarEstudiante(QWidget):
 
         #Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
-        #self.instFont = QFont("Serif", 12)
 
         #Título
         self.title = QLabel("Agregar nuevo estudiante")
@@ -66,10 +65,6 @@ class AgregarEstudiante(QWidget):
         #Botones
         self.agregar = QPushButton("Agregar")
         self.cancelar = QPushButton("Cancelar")
-
-        #Layout del título
-        #self.titleLayout = QVBoxLayout()
-        #self.titleLayout.addWidget(self.title)
 
         #LAyout
         self.layout = QVBoxLayout()
