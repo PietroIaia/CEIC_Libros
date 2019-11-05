@@ -135,6 +135,14 @@ class BooksTable(QTableWidget):
 class UserTable(QTableWidget):
     def __init__(self):
         super().__init__()
+        # Creamos el ComboBox para los permisos
+        comboBox = QComboBox()
+        comboBox.insertItem(0, "Usuario")
+        comboBox.insertItem(1, "Administrador")
+        comboBox.insertItem(2, "")                                     #El segundo item es el default
+        comboBox.setCurrentIndex(2)
+        comboBox.model().item(2).setEnabled(False)                     #lo ponemos disabled para que el usuario no pueda clickearlo
+        # Creamos la tabla
         self.setColumnCount(1) #Columnas
         self.setRowCount(7)
         self.setHorizontalHeaderLabels(["Información del usuario"])
@@ -145,7 +153,9 @@ class UserTable(QTableWidget):
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())
+        self.setCellWidget(4, 0, comboBox)
         self.setTableColors()
+        self.cellWidget(4, 0).setEnabled(False)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def getQTableWidgetSize(self):
@@ -161,16 +171,21 @@ class UserTable(QTableWidget):
         for i in range(self.rowCount()):
             self.setItem(i, 0, QTableWidgetItem())
             self.item(i, 0).setBackground(QColor(224, 255, 255))
+        self.cellWidget(4, 0).setStyleSheet('background-color: rgb(224, 255, 255); border: 0px')
 
     def clear(self):
         for i in range(self.rowCount()):
             self.item(i, 0).setText("")
             self.item(i, 0).setBackground(QColor(224, 255, 255))
+        self.cellWidget(4, 0).setCurrentIndex(2)
 
     def getFields(self):
         fields = []
         for i in range(7):
-            fields.append(self.item(i, 0).text())
+            if(i == 4):
+                fields.append(str(self.cellWidget(4, 0).currentText()))
+            else:
+                fields.append(self.item(i, 0).text())
 
         return fields
 

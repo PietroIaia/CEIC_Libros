@@ -149,9 +149,9 @@ class gestionUsuarios(QWidget):
                     self.table.item(i, 0).setText(str(self.query.value(i)))
                 elif i == 4:
                     if int(self.query.value(i)) == 0:
-                        self.table.item(i, 0).setText("Usuario")
+                        self.table.cellWidget(i, 0).setCurrentIndex(0)
                     else:
-                        self.table.item(i, 0).setText("Administrador")
+                        self.table.cellWidget(i, 0).setCurrentIndex(1)
                 else:
                     auxiliar = QDateTime.toString(self.query.value(i)).split()
                     self.table.item(i, 0).setText(str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3]))
@@ -166,6 +166,7 @@ class gestionUsuarios(QWidget):
     def update(self):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
+        self.table.cellWidget(4, 0).setEnabled(True)
         self.table.item(0, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Username"
         self.table.item(5, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Ultima conexion"
         self.table.item(6, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Fecha de creacion"
@@ -199,6 +200,7 @@ class gestionUsuarios(QWidget):
             self.guardar.setEnabled(False)
             self.cancel.setEnabled(False)
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            self.table.cellWidget(4, 0).setEnabled(False)
         else:
             ErrorPrompt("Error", "La informacion del Usuario no pudo ser modificada")
 
@@ -213,6 +215,7 @@ class gestionUsuarios(QWidget):
         self.guardar.setEnabled(False)
         self.cancel.setEnabled(False)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.cellWidget(4, 0).setEnabled(False)
 
     @pyqtSlot()
     def deleteRequest(self):
@@ -239,6 +242,7 @@ class gestionUsuarios(QWidget):
         self.deleteCancel.hide()
         self.table.clear()
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table.cellWidget(4, 0).setEnabled(False)
         self.User.clear()
 
     @pyqtSlot()
