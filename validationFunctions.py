@@ -97,7 +97,7 @@ def checkIdBook(number):
         return True
 
 def checkTitle(title):
-    pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ \.,]+$")
+    pattern = re.compile(r"[a-zA-Z0-9ñÑáÁéÉíÍóÓúÚ \.,]+$")
     return checkPattern(title, pattern, "Caracter inválido", "Caracter inválido en el título")
 
 def checkAuthor(name):
