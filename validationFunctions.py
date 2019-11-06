@@ -35,13 +35,13 @@ def checkName(name, firstOrLast):
     return checkPattern(name, pattern, "Caracter inválido", ubicacion)
 
 def checkCI(number):
-    pattern = re.compile(r"[0-9]{6,8}") 
+    pattern = re.compile(r"^[0-9]{6,8}$") 
     #Si este sistema perdura hasta que las cédulas tengan más de 8 dígitos, cambiar el 8 por el 9
     #y por favor avisarm porque wow, no debió llegar tan lejos
     return checkPattern(number, pattern, "Error de formato", "Formato de cédula inválido")
 
 def checkPhone(number):
-    pattern = re.compile(r"[0-9]{10}") #Cambiar a 11 si le pongo un 0  adelante a los números
+    pattern = re.compile(r"^[0-9]{10,11}$") 
     return checkPattern(number, pattern, "Error de formato", "Número de teléfono inválido")
 
 def checkEmail(address):
@@ -49,11 +49,11 @@ def checkEmail(address):
     return checkPattern(address, pattern, "Email inválido", "Dirección de correo inválida")
 
 def checkDays(days):
-    pattern = re.compile(r"[0-9]{1,3}")
+    pattern = re.compile(r"^[0-9]{1,3}$")
     return checkPattern(days, pattern, "Número de días inválidos", "Número de días inválidos")
 
 def checkBooks(bookNo):
-    pattern = re.compile(r"[0-9]{1}")
+    pattern = re.compile(r"^[0-9]{2}$")
     return checkPattern(bookNo, pattern, "Número de libros inválido", "Número de libros inválido")
 
 def checkDebt(debt):
@@ -90,11 +90,8 @@ def verification_estudiantes(fields, checkUntil):
 #               Validadores de libros               #
 #####################################################
 def checkIdBook(number):
-    if int(number) < 0 or int(number) > 9999: 
-        ErrorPrompt("Código inválido", "Ese código de libro no es válido")
-        return False
-    else:
-        return True
+    pattern = re.compile(r"^[0-9]{4}$")
+    return checkPattern(number, pattern, "Código inválido", "Ese código de libro no es válido")
 
 def checkTitle(title):
     pattern = re.compile(r"[a-zA-Z0-9ñÑáÁéÉíÍóÓúÚ \.,]+$")
