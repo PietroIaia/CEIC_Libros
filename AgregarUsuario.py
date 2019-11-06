@@ -99,6 +99,10 @@ class AgregarUsuario(QWidget):
 
     @pyqtSlot()
     def agregarUsuario(self):
+        if(self.contraseñaInput.text() == "" or self.confirmContraseñaInput.text() == ""):
+            ErrorPrompt("Error", "No puede dejar el campo de contraseñas en blanco!")
+            return
+
         if(self.contraseñaInput.text() == self.confirmContraseñaInput.text()):
 
             if(self.permisosInput.isChecked()):

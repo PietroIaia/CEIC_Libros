@@ -22,7 +22,7 @@ def checkPattern(name, pattern, title, message):
         return True
 
 def checkCarnet(carnet):
-    pattern = re.compile(r"\d{2}\-\d{5}")
+    pattern = re.compile(r"^[0-9]{2}\-[0-9]{5}$")
     return checkPattern(carnet, pattern, "Error de formato", "Formato de carnet inválido")
 
 def checkName(name, firstOrLast):
@@ -90,7 +90,7 @@ def verification_estudiantes(fields, checkUntil):
 #               Validadores de libros               #
 #####################################################
 def checkIdBook(number):
-    pattern = re.compile(r"^[0-9]{4}$")
+    pattern = re.compile(r"^[0-9]{3,4}$")
     return checkPattern(number, pattern, "Código inválido", "Ese código de libro no es válido")
 
 def checkTitle(title):
