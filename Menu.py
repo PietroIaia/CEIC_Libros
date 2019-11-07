@@ -122,7 +122,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("Menu/books-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("static/books-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_2.setIcon(icon)
         self.pushButton_2.setIconSize(QtCore.QSize(45, 40))
         self.pushButton_2.setAutoDefault(False)
@@ -213,7 +213,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("Menu/students-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("static/students-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_3.setIcon(icon1)
         self.pushButton_3.setIconSize(QtCore.QSize(50, 50))
         self.pushButton_3.setFlat(True)
@@ -301,7 +301,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("Menu/préstamos-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("static/préstamos-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_4.setIcon(icon2)
         self.pushButton_4.setIconSize(QtCore.QSize(45, 45))
         self.pushButton_4.setFlat(True)
@@ -389,7 +389,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("Menu/fines-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap("static/fines-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_5.setIcon(icon3)
         self.pushButton_5.setIconSize(QtCore.QSize(50, 50))
         self.pushButton_5.setFlat(True)
@@ -477,7 +477,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("Menu/banned-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(QtGui.QPixmap("static/banned-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_6.setIcon(icon4)
         self.pushButton_6.setIconSize(QtCore.QSize(45, 45))
         self.pushButton_6.setFlat(True)
@@ -565,7 +565,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("Menu/admin-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(QtGui.QPixmap("static/admin-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_7.setIcon(icon5)
         self.pushButton_7.setIconSize(QtCore.QSize(40, 40))
         self.pushButton_7.setFlat(True)
@@ -653,7 +653,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("Menu/about-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon6.addPixmap(QtGui.QPixmap("static/about-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_8.setIcon(icon6)
         self.pushButton_8.setIconSize(QtCore.QSize(45, 45))
         self.pushButton_8.setFlat(True)
@@ -741,7 +741,7 @@ class Ui_MainWindow(object):
 "    color: #666666\n"
 "}")
         icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("Menu/home-page-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon7.addPixmap(QtGui.QPixmap("static/home-page-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_1.setIcon(icon7)
         self.pushButton_1.setIconSize(QtCore.QSize(50, 50))
         self.pushButton_1.setFlat(True)
