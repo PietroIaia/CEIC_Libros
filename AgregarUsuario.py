@@ -4,7 +4,7 @@
 
 # Importamos las librerias a utilizar
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QFont, QPixmap, QColor
+from PyQt5.QtGui import QFont, QPixmap, QColor, QIcon
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from validationFunctions import verification_users
@@ -21,6 +21,7 @@ class AgregarUsuario(QWidget):
         self.setMinimumSize(QSize(600, 550))
         self.setMaximumSize(QSize(600, 550))
         self.setWindowTitle("Gestión de usuarios")
+        self.setWindowIcon(QIcon("static/icono_CEIC.png"))
         self.setStyleSheet('background-color: LightSkyBlue')
 
         #Base de datos

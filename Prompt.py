@@ -9,6 +9,7 @@
 #to do: De momento nada
 
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
 
 class Prompt(QMessageBox):
 
@@ -17,6 +18,7 @@ class Prompt(QMessageBox):
         self.msg = QMessageBox()
         self.msg.setText(message)
         self.msg.setWindowTitle(title)
+        self.msg.setWindowIcon(QIcon("static/icono_CEIC.png"))
 
 class ErrorPrompt(Prompt):
 

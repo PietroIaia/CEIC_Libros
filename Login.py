@@ -14,7 +14,7 @@ class ventanaLogin(QMainWindow):
     def __init__(self, parent=None):
         super(ventanaLogin, self).__init__(parent)
         
-        self.setWindowTitle("CEIC LIBROS")
+        self.setWindowTitle("CEIC Libros")
         self.setWindowIcon(QIcon("static/icono_CEIC.png"))
         self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.MSWindowsFixedSizeDialogHint)
         self.setFixedSize(400, 320)

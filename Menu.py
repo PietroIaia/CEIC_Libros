@@ -23,6 +23,7 @@ class Ui_MainWindow(object):
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1031, 748)
+        MainWindow.setWindowIcon(QtGui.QIcon("static/icono_CEIC.png"))
         MainWindow.setMinimumSize(QtCore.QSize(1031, 748))
         MainWindow.setMaximumSize(QtCore.QSize(1031, 748))
         MainWindow.setStyleSheet("background-color: rgb(235, 235, 235);\n"
@@ -880,7 +881,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "CEIC Libros"))
         self.pushButton_2.setToolTip(_translate("MainWindow", "<html><head/><body><p>Libros</p></body></html>"))
         self.pushButton_2.setText(_translate("MainWindow", "            Libros"))
         self.pushButton_3.setToolTip(_translate("MainWindow", "<html><head/><body><p>Estudiantes</p></body></html>"))

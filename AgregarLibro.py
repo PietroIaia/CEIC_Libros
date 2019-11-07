@@ -6,7 +6,7 @@
 #Última modifcación: 22-10-19, 19:14 pm, Hora de Venezuela
 
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QFont, QPixmap, QColor
+from PyQt5.QtGui import QFont, QPixmap, QColor, QIcon
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from validationFunctions import verification_books
@@ -22,6 +22,7 @@ class AgregarLibro(QWidget):
         self.setMinimumSize(QSize(600, 500))
         self.setMaximumSize(QSize(600, 500))
         self.setWindowTitle("Gestión de libros")
+        self.setWindowIcon(QIcon("static/icono_CEIC.png"))
         self.setStyleSheet('background-color: LightSkyBlue')
 
         #Base de datos
