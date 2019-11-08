@@ -16,13 +16,14 @@ import re
 
 class gestionUsuarios(QWidget):
 
-    def __init__(self):
+    def __init__(self, loggedUser):
 
         #Inicialización de la ventana
         super().__init__()
         self.setGeometry(200, 0, 600, 600)
         self.setWindowTitle("Gestión de Usuarios")
         self.setStyleSheet('background-color: LightSkyBlue')
+        self.old_perm_mask = ""
 
         #Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
@@ -119,7 +120,7 @@ class gestionUsuarios(QWidget):
         self.search.clicked.connect(self.consulta)
         self.modificar.clicked.connect(self.update)
         self.cancel.clicked.connect(self.cancelUpdate)
-        self.guardar.clicked.connect(self.saveUpdate)
+        self.guardar.clicked.connect(lambda: self.saveUpdate(loggedUser))
         self.eliminar.clicked.connect(self.deleteRequest)
         self.confirm.clicked.connect(self.deleteConfirm)
         self.deleteCancel.clicked.connect(self.cancelDelete)
@@ -152,6 +153,7 @@ class gestionUsuarios(QWidget):
                         self.table.cellWidget(i, 0).setCurrentIndex(0)
                     else:
                         self.table.cellWidget(i, 0).setCurrentIndex(1)
+                    self.old_perm_mask = str(self.table.cellWidget(4, 0).currentText())
                 else:
                     auxiliar = QDateTime.toString(self.query.value(i)).split()
                     self.table.item(i, 0).setText(str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3]))
@@ -179,16 +181,25 @@ class gestionUsuarios(QWidget):
         InfoPrompt("Modificación activada", "Se ha activado el modo modificación")
 
     @pyqtSlot()
-    def saveUpdate(self):
+    def saveUpdate(self, loggedUser):
         fields = self.table.getFields()
-        correct = verification_users(fields, 5)
+        self.query = QSqlQuery()
 
+        if(self.old_perm_mask != fields[4]):
+            Input = QInputDialog()
+            input_logged_user_password = Input.getText(self, "Ingresar Contraseña", "Contraseña:")
+            queryText = "SELECT * FROM CEIC_User WHERE username = '" + loggedUser + "' and password_ = crypt(\'" + input_logged_user_password[0] + "\', password_);"
+            self.query.exec_(queryText)
+            if(not self.query.first()):
+                ErrorPrompt("Error", "Contraseña Invalida!")
+                return
+            
+        correct = verification_users(fields, 5)
         if not correct:
             return
 
         values = self.table.getValues()
         queryText = "UPDATE CEIC_User SET " + values + " WHERE username = '" + self.table.item(0, 0).text() + "' returning username"
-        self.query = QSqlQuery()
         self.query.exec_(queryText)
 
         if self.query.first():

@@ -153,7 +153,7 @@ class ventanaLogin(QMainWindow):
             # Cerramos el Login
             self.close()
             # Abrimos el MainWindow
-            os.system("py Menu.py "+str(perm_mask))
+            os.system("py Menu.py " + str(inputUsername) + " " + str(perm_mask))
 
         else:
             ErrorPrompt("Error de Login", "Nombre de usuario o contraseña incorrectos!")

@@ -18,6 +18,7 @@ class Ui_MainWindow(object):
 
     # Obtenemos el rol del usuario
     global perm_mask
+    global username
 
     def setupUi(self, MainWindow):
 
@@ -835,7 +836,7 @@ class Ui_MainWindow(object):
         self.ventana_gestion_estudiante = gestionEstudiante(perm_mask)
         self.stackedWidget.addWidget(self.ventana_gestion_estudiante)
         # Index: 2
-        self.ventana_gestion_usuarios = gestionUsuarios()
+        self.ventana_gestion_usuarios = gestionUsuarios(username)
         self.stackedWidget.addWidget(self.ventana_gestion_usuarios)
 
 
@@ -867,7 +868,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
         self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
         self.pushButton_7.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(2))
-        self.pushButton_22.clicked.connect(lambda: sys.exit(sys.exit(app.exec_())))
+        self.pushButton_22.clicked.connect(lambda: sys.exit(app.exec_()))
 
         ##################### Permisos
         if(perm_mask == 0):
@@ -903,7 +904,8 @@ class Ui_MainWindow(object):
 
 if __name__ == '__main__':
     # Este sera el rol del usuario
-    perm_mask = int(sys.argv[1])
+    perm_mask = int(sys.argv[2])
+    username = str(sys.argv[1])
     
     # Inicializamos la MainWindow
     app = QtWidgets.QApplication(sys.argv)

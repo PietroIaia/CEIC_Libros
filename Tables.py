@@ -194,7 +194,7 @@ class UserTable(QTableWidget):
         updateRequest += "first_name = \'" + self.item(1, 0).text() + "\', "
         updateRequest += "last_name = \'" + self.item(2,0).text() + "\', "
         updateRequest += "email = \'" + self.item(3,0).text() + "\', "
-        if (self.item(4, 0).text() == "Administrador"):
+        if (str(self.cellWidget(4, 0).currentText()) == "Administrador"):
             updateRequest += "permission_mask = 1"
         else:
             updateRequest += "permission_mask = 0"
