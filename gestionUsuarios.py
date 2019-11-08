@@ -22,7 +22,18 @@ class gestionUsuarios(QWidget):
         super().__init__()
         self.setGeometry(200, 0, 600, 600)
         self.setWindowTitle("Gestión de Usuarios")
-        self.setStyleSheet('background-color: LightSkyBlue')
+        self.setStyleSheet("* \n"
+        "{\n"
+        "background-color: LightSkyBlue;\n"
+        "}\n"
+        "QLineEdit\n"
+        "{\n"
+        "background-color: white;\n"
+        "}\n"
+        "QPushButton\n"
+        "{\n"
+        "background-color: PowderBlue;\n"
+        "}")
         self.old_perm_mask = ""
 
         #Creación de fonts para las letras
@@ -90,7 +101,6 @@ class gestionUsuarios(QWidget):
         self.currentUser = "" #GUarda el valor del username del usuario actualmente mostrado en pantalla
         self.UserLabel = QLabel("Nombre de usuario: ")
         self.User = QLineEdit(self)
-        self.User.setStyleSheet('background-color: white')
         self.infoLayout = QHBoxLayout()
         self.infoLayout.addWidget(self.UserLabel)
         self.infoLayout.addWidget(self.User)
