@@ -12,6 +12,7 @@ import sys
 from gestionEstudiantes import *
 from gestionUsuarios import *
 from gestionLibros import *
+from prestamos import prestamos
 
 
 class Ui_MainWindow(object):
@@ -838,6 +839,9 @@ class Ui_MainWindow(object):
         # Index: 2
         self.ventana_gestion_usuarios = gestionUsuarios(username)
         self.stackedWidget.addWidget(self.ventana_gestion_usuarios)
+        # Index: 3
+        self.ventana_prestamos = prestamos()
+        self.stackedWidget.addWidget(self.ventana_prestamos)
 
 
         self.gridFrame.raise_()
@@ -867,6 +871,7 @@ class Ui_MainWindow(object):
         ###################### Conexiones de Botones
         self.pushButton_2.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(0))
         self.pushButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(1))
+        self.pushButton_4.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(3))
         self.pushButton_7.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(2))
         self.pushButton_22.clicked.connect(lambda: sys.exit(app.exec_()))
 
