@@ -220,7 +220,8 @@ class prestamos(QWidget):
                     self.query2.exec_(queryText)
                     i = 0
                     while(True):
-                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query2.value(0)))
+                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(1)))
+                        self.tabla_libros_prestamos.item(i, 1).setText(str(self.query2.value(0)))
                         i += 1
                         if(not self.query2.next()):
                             break
@@ -251,14 +252,16 @@ class prestamos(QWidget):
                 # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
                 if(str(Libro) in self.Libros_prestamo.keys() and self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
                     self.Libros_prestamo[str(Libro)] += 1
-                    self.tabla_libros_prestamos.item(i, 0).setText(str(Libro))
+                    self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
+                    self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
                 # Si el libro no esta en el diccionario, se agrega
                 elif(str(Libro) not in self.Libros_prestamo.keys()):
                     self.Libros_prestamo[str(Libro)] = 0
                     # Si se estan prestando menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
                     if(self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
                         self.Libros_prestamo[str(Libro)] = 1
-                        self.tabla_libros_prestamos.item(i, 0).setText(str(Libro))
+                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
+                        self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
                 else:
                     ErrorPrompt("Error", "No existen mas ejemplares disponibles de este libro")
             else:

@@ -207,15 +207,16 @@ class UserTable(QTableWidget):
 class Books_Loan_Table(QTableWidget):
     def __init__(self, place):
         super().__init__(place)
-        self.setColumnCount(2) #Columnas
+        self.setColumnCount(3) #Columnas
         self.setRowCount(7)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(61)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
-        self.setHorizontalHeaderLabels(["Título", ""])
-        self.setColumnWidth(0, 440)
-        self.setColumnWidth(1, 10)
+        self.setHorizontalHeaderLabels(["ID", "Título", ""])
+        self.setColumnWidth(0, 30)
+        self.setColumnWidth(1, 390)
+        self.setColumnWidth(2, 10)
         self.setStyleSheet("background-color:  Silver")
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())
