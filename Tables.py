@@ -201,3 +201,85 @@ class UserTable(QTableWidget):
 
         return updateRequest
 
+###################################################
+#           Tabla de Libros en prestamo           #
+###################################################
+class Books_Loan_Table(QTableWidget):
+    def __init__(self, place):
+        super().__init__(place)
+        self.setColumnCount(2) #Columnas
+        self.setRowCount(7)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
+        self.verticalHeader().hide()
+        self.verticalHeader().setDefaultSectionSize(61)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.setHorizontalHeaderLabels(["Título", ""])
+        self.setColumnWidth(0, 440)
+        self.setColumnWidth(1, 10)
+        self.setStyleSheet("background-color:  Silver")
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setTableColors()
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+    
+    def getQTableWidgetSize(self):
+        w = 0
+        for i in range(self.columnCount()):
+            w += self.columnWidth(i)  # seems to include gridline (on my machine)
+        return QSize(w+23, 430)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.setItem(i, j, QTableWidgetItem())
+                self.item(i, j).setBackground(QColor(224, 255, 255))
+
+    def clear(self):
+        for i in range(self.rowCount()):
+            self.item(i, 0).setText("")
+            self.item(i, 0).setBackground(QColor(224, 255, 255))
+
+###################################################
+#           Tabla de Prestamos Activos            #
+###################################################
+class Active_Loan_Table(QTableWidget):
+    def __init__(self, place):
+        super().__init__(place)
+        self.setColumnCount(5) #Columnas
+        self.setRowCount(5)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
+        self.verticalHeader().hide()
+        self.verticalHeader().setDefaultSectionSize(40)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.setHorizontalHeaderLabels(["Carnet", "Nombre", "Apellido", "Tiempo restante", "Libros"])
+        self.setColumnWidth(0, 120)
+        self.setColumnWidth(1, 150)
+        self.setColumnWidth(2, 150)
+        self.setColumnWidth(3, 100)
+        self.setColumnWidth(4, 245)
+        self.setStyleSheet("background-color:  Silver")
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setTableColors()
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+    
+    def getQTableWidgetSize(self):
+        w = 0
+        for i in range(self.columnCount()):
+            w += self.columnWidth(i)  # seems to include gridline (on my machine)
+        return QSize(w+23, 220)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.setItem(i, j, QTableWidgetItem())
+                self.item(i, j).setBackground(QColor(224, 255, 255))
+
+    def clear(self):
+        for i in range(self.rowCount()):
+            self.item(i, 0).setText("")
+            self.item(i, 0).setBackground(QColor(224, 255, 255))

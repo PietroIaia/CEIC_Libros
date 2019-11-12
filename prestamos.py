@@ -3,6 +3,7 @@ from PyQt5.QtGui import QFont, QPixmap, QColor, QPalette
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
+from Tables import Books_Loan_Table, Active_Loan_Table
 import sys
 
 
@@ -23,9 +24,10 @@ class prestamos(QWidget):
         self.titleFont = QFont("Serif", 20)
         self.instFont = QFont("Serif", 12)
         self.subFont = QFont("Serif", 10)
+        self.btnFont = QFont("Serif", 9)
 
         # Título
-        self.title = QLabel("Prestamos", self)
+        self.title = QLabel("Préstamos", self)
         self.title.setStyleSheet('background-color: DodgerBlue')
         self.title.setStyleSheet('color: white')
         self.title.setFont(self.titleFont)
@@ -35,7 +37,7 @@ class prestamos(QWidget):
         self.frame_form_prestamo = QFrame(self)
         self.frame_form_prestamo.setFrameShape(QFrame.StyledPanel)
         self.frame_form_prestamo.setFixedWidth(275)
-        self.frame_form_prestamo.setFixedHeight(370)
+        self.frame_form_prestamo.setFixedHeight(430)
         self.frame_form_prestamo.setStyleSheet("QFrame \n"
         "{\n"
         "background-color: white;\n"
@@ -102,7 +104,7 @@ class prestamos(QWidget):
         self.apellido.move(85, 145)
 
         # Prestamo activo de estudiante
-        self.prestamoLabel = QLabel("Prestamo ", self.frame_form_prestamo)
+        self.prestamoLabel = QLabel("Préstamo ", self.frame_form_prestamo)
         self.prestamoLabel.move(10, 177)
         self.prestamoLabel.setFont(self.subFont)
         self.prestamo = QLineEdit(self.frame_form_prestamo)
@@ -115,7 +117,7 @@ class prestamos(QWidget):
 
         # Deuda de estudiante
         self.deudaLabel = QLabel("Deuda ", self.frame_form_prestamo)
-        self.deudaLabel.move(10, 205)
+        self.deudaLabel.move(10, 207)
         self.deudaLabel.setFont(self.subFont)
         self.deuda = QLineEdit(self.frame_form_prestamo)
         self.deuda.setReadOnly(True)
@@ -124,6 +126,60 @@ class prestamos(QWidget):
         self.deuda.setFixedHeight(25)
         self.deuda.setTextMargins(5, 0, 0, 0)
         self.deuda.move(85, 205)
+
+        # Renovar prestamo
+        self.button_renovar = QPushButton("Renovar Préstamo", self.frame_form_prestamo)
+        self.button_renovar.setFixedWidth(180)
+        self.button_renovar.setFixedHeight(28)
+        self.button_renovar.move(55, 240)
+        self.button_renovar.setFont(self.btnFont)
+        self.button_renovar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+
+        # Subtitulo estudiante
+        self.sub_libro = QLabel("Libro", self.frame_form_prestamo)
+        self.sub_libro.setStyleSheet('color: #858585')
+        self.sub_libro.setFont(self.subFont)
+        self.sub_libro.move(120, 277)
+
+        # Libro a prestar
+        self.libroLabel = QLabel("Libro ", self.frame_form_prestamo)
+        self.libroLabel.move(10, 307)
+        self.libroLabel.setFont(self.subFont)
+        self.libro = QLineEdit(self.frame_form_prestamo)
+        self.libro.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+        self.libro.setFixedWidth(150)
+        self.libro.setFixedHeight(25)
+        self.libro.setTextMargins(5, 0, 0, 0)
+        self.libro.move(85, 305)
+
+        # Agregar libro al prestamo
+        self.button_renovar = QPushButton("Agregar Libro", self.frame_form_prestamo)
+        self.button_renovar.setFixedWidth(180)
+        self.button_renovar.setFixedHeight(28)
+        self.button_renovar.move(55, 340)
+        self.button_renovar.setFont(self.btnFont)
+        self.button_renovar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+
+        # Realizar prestamo
+        self.button_renovar = QPushButton("Realizar Préstamo", self.frame_form_prestamo)
+        self.button_renovar.setFixedWidth(220)
+        self.button_renovar.setFixedHeight(28)
+        self.button_renovar.move(27, 390)
+        self.button_renovar.setFont(self.btnFont)
+        self.button_renovar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+
+        # Tabla de prestamos
+        self.tabla_libros_prestamos = Books_Loan_Table(self)
+        self.tabla_libros_prestamos.move(305, 60)
+
+        # Tabla de prestamos activos
+        # NOTA: Para agregar nuevas filas, usamos table.insertRow(rowPosition) donde rowposition es donde la queremos poner (de ultima)
+        # https://stackoverflow.com/questions/24044421/how-to-add-a-row-in-a-tablewidget-pyqt
+        self.active_loan_table = Active_Loan_Table(self)
+        self.active_loan_table.move(30, 500)
 
 
 if __name__ == '__main__':
