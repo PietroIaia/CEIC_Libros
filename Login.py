@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QIcon, QPalette, QColor, QPixmap, QFont
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QComboBox, QLineEdit, QPushButton
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from datetime import datetime
@@ -16,6 +16,7 @@ class ventanaLogin(QMainWindow):
         
         self.setWindowTitle("CEIC Libros")
         self.setWindowIcon(QIcon("static/icono_CEIC.png"))
+        self.setIconSize(QSize(200,200))
         self.setWindowFlags(Qt.WindowCloseButtonHint | Qt.MSWindowsFixedSizeDialogHint)
         self.setFixedSize(400, 320)
 
@@ -49,19 +50,19 @@ class ventanaLogin(QMainWindow):
         frame.move(0, 0)
 
         labelIcono = QLabel(frame)
-        labelIcono.setFixedWidth(40)
-        labelIcono.setFixedHeight(40)
-        labelIcono.setPixmap(QPixmap("static/icono_CEIC.png").scaled(40, 40, Qt.KeepAspectRatio,
+        labelIcono.setFixedWidth(110)
+        labelIcono.setFixedHeight(90)
+        labelIcono.setPixmap(QPixmap("static/icono_CEIC.png").scaled(110, 90, Qt.KeepAspectRatio,
                                                          Qt.SmoothTransformation))
-        labelIcono.move(55, 25)
+        labelIcono.move(65, -6)
 
         fuenteTitulo = QFont()
-        fuenteTitulo.setPointSize(23)
+        fuenteTitulo.setPointSize(30)
         fuenteTitulo.setBold(True)
 
-        labelTitulo = QLabel("<font color='white'>CEIC Libros</font>", frame)
+        labelTitulo = QLabel("<font color='Black'>Libros</font>", frame)
         labelTitulo.setFont(fuenteTitulo)
-        labelTitulo.move(105, 20)
+        labelTitulo.move(185, 16)
 
       # ===================== WIDGETS LOGIN ======================
 

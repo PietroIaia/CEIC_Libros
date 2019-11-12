@@ -223,6 +223,7 @@ class Books_Loan_Table(QTableWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.clear()
     
     def getQTableWidgetSize(self):
         w = 0
@@ -266,6 +267,7 @@ class Active_Loan_Table(QTableWidget):
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.clear()
     
     def getQTableWidgetSize(self):
         w = 0

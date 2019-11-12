@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Books_Loan_Table, Active_Loan_Table
+from validationFunctions import checkPattern, checkCarnet, checkTitle
 import sys
 
 
@@ -85,7 +86,7 @@ class prestamos(QWidget):
         self.nombreLabel.setFont(self.subFont)
         self.nombre = QLineEdit(self.frame_form_prestamo)
         self.nombre.setReadOnly(True)
-        self.nombre.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+        self.nombre.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: #F2F2F2;\n}")
         self.nombre.setFixedWidth(150)
         self.nombre.setFixedHeight(25)
         self.nombre.setTextMargins(5, 0, 0, 0)
@@ -97,7 +98,7 @@ class prestamos(QWidget):
         self.apellidoLabel.setFont(self.subFont)
         self.apellido = QLineEdit(self.frame_form_prestamo)
         self.apellido.setReadOnly(True)
-        self.apellido.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+        self.apellido.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: #F2F2F2;\n}")
         self.apellido.setFixedWidth(150)
         self.apellido.setFixedHeight(25)
         self.apellido.setTextMargins(5, 0, 0, 0)
@@ -109,7 +110,7 @@ class prestamos(QWidget):
         self.prestamoLabel.setFont(self.subFont)
         self.prestamo = QLineEdit(self.frame_form_prestamo)
         self.prestamo.setReadOnly(True)
-        self.prestamo.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+        self.prestamo.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: #F2F2F2;\n}")
         self.prestamo.setFixedWidth(150)
         self.prestamo.setFixedHeight(25)
         self.prestamo.setTextMargins(5, 0, 0, 0)
@@ -121,7 +122,7 @@ class prestamos(QWidget):
         self.deudaLabel.setFont(self.subFont)
         self.deuda = QLineEdit(self.frame_form_prestamo)
         self.deuda.setReadOnly(True)
-        self.deuda.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+        self.deuda.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: #F2F2F2;\n}")
         self.deuda.setFixedWidth(150)
         self.deuda.setFixedHeight(25)
         self.deuda.setTextMargins(5, 0, 0, 0)
@@ -135,6 +136,7 @@ class prestamos(QWidget):
         self.button_renovar.setFont(self.btnFont)
         self.button_renovar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        self.button_renovar.setEnabled(False)
 
         # Subtitulo estudiante
         self.sub_libro = QLabel("Libro", self.frame_form_prestamo)
@@ -152,26 +154,30 @@ class prestamos(QWidget):
         self.libro.setFixedHeight(25)
         self.libro.setTextMargins(5, 0, 0, 0)
         self.libro.move(85, 305)
+        self.libro.setEnabled(False)
 
         # Agregar libro al prestamo
-        self.button_renovar = QPushButton("Agregar Libro", self.frame_form_prestamo)
-        self.button_renovar.setFixedWidth(180)
-        self.button_renovar.setFixedHeight(28)
-        self.button_renovar.move(55, 340)
-        self.button_renovar.setFont(self.btnFont)
-        self.button_renovar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        self.button_agregar_libro = QPushButton("Agregar Libro", self.frame_form_prestamo)
+        self.button_agregar_libro.setFixedWidth(180)
+        self.button_agregar_libro.setFixedHeight(28)
+        self.button_agregar_libro.move(55, 340)
+        self.button_agregar_libro.setFont(self.btnFont)
+        self.button_agregar_libro.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        self.button_agregar_libro.setEnabled(False)
 
         # Realizar prestamo
-        self.button_renovar = QPushButton("Realizar Préstamo", self.frame_form_prestamo)
-        self.button_renovar.setFixedWidth(220)
-        self.button_renovar.setFixedHeight(28)
-        self.button_renovar.move(27, 390)
-        self.button_renovar.setFont(self.btnFont)
-        self.button_renovar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        self.button_realizar = QPushButton("Realizar Préstamo", self.frame_form_prestamo)
+        self.button_realizar.setFixedWidth(220)
+        self.button_realizar.setFixedHeight(28)
+        self.button_realizar.move(27, 390)
+        self.button_realizar.setFont(self.btnFont)
+        self.button_realizar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        self.button_realizar.setEnabled(False)
 
         # Tabla de prestamos
+        self.Libros_prestamo = {}         # Para saber los libros que se van a prestar
         self.tabla_libros_prestamos = Books_Loan_Table(self)
         self.tabla_libros_prestamos.move(305, 60)
 
@@ -180,6 +186,94 @@ class prestamos(QWidget):
         # https://stackoverflow.com/questions/24044421/how-to-add-a-row-in-a-tablewidget-pyqt
         self.active_loan_table = Active_Loan_Table(self)
         self.active_loan_table.move(30, 500)
+
+        # Conexiones
+        self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
+        self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
+
+
+    def buscarEstudiante(self, carnetBuscado):
+
+        if(checkCarnet(carnetBuscado)):
+            queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
+            self.query = QSqlQuery()
+            self.query.exec_(queryText)
+
+            if self.query.first():
+                self.Libros_prestamo.clear()
+                self.nombre.setText(str(self.query.value(1)))
+                self.apellido.setText(str(self.query.value(2)))
+                self.deuda.setText(str(self.query.value(8)))
+
+                queryText ="SELECT * FROM Loan WHERE carnet = '" + carnetBuscado + "';"
+                self.query.exec_(queryText)
+                if self.query.first():
+                    self.prestamo.setText("Prestamo activo")
+
+                    # Si le queda menos de 1 dia para regresar el libro, permitimos la renovacion
+                    if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(6)) < 2):
+                        self.button_renovar.setEnabled(True)
+
+                    # Mostramos los libros que se le prestaron
+                    queryText ="SELECT title FROM Book WHERE book_id = '" + self.query.value(1) + "';"
+                    self.query2 = QSqlQuery()
+                    self.query2.exec_(queryText)
+                    i = 0
+                    while(True):
+                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query2.value(0)))
+                        i += 1
+                        if(not self.query2.next()):
+                            break
+
+                else:
+                    self.prestamo.setText("No prestamo activo")
+
+                    self.libro.setEnabled(True)
+                    self.button_agregar_libro.setEnabled(True)
+
+            else:
+                ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
+    
+
+    # Funcion para buscar el libro e ingresarlo a la tabla de libros Prestamos cuando se este realizando un prestamo
+    def buscarLibro(self, Libro):
+
+        if(checkTitle(Libro)):
+            queryText = "SELECT * FROM Book WHERE title = '" + Libro + "';"
+            self.query = QSqlQuery()
+            self.query.exec_(queryText)
+            i = 0
+            if(self.query.first()):
+                self.button_realizar.setEnabled(True)
+                while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
+                    i += 1
+
+                # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
+                if(str(Libro) in self.Libros_prestamo.keys() and self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
+                    self.Libros_prestamo[str(Libro)] += 1
+                    self.tabla_libros_prestamos.item(i, 0).setText(str(Libro))
+                # Si el libro no esta en el diccionario, se agrega
+                elif(str(Libro) not in self.Libros_prestamo.keys()):
+                    self.Libros_prestamo[str(Libro)] = 0
+                    # Si se estan prestando menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
+                    if(self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
+                        self.Libros_prestamo[str(Libro)] = 1
+                        self.tabla_libros_prestamos.item(i, 0).setText(str(Libro))
+                else:
+                    ErrorPrompt("Error", "No existen mas ejemplares disponibles de este libro")
+            else:
+                ErrorPrompt("Error", "No se encontró el Libro especificado")
+
+
+    # Funcion para calcular el tiempo restante de el prestamo
+    def calculateTimeLeft(start_time, return_time):
+        startTimeAux = QDateTime.toSecsSinceEpoch(start_time)
+        returnTimeAux = QDateTime.toSecsSinceEpoch(return_time)
+
+        aux = (int(returnTimeAux) - int(startTimeAux))/86400
+        return aux
+
+
 
 
 if __name__ == '__main__':
