@@ -97,8 +97,8 @@ class AgregarLibro(QWidget):
 
 
         self.query = QSqlQuery()
-        self.query.prepare("INSERT INTO Book(book_id, title, authors, isbn, quantity) VALUES(:ID, :title, \
-            :authors, :ISBN, :quantity) RETURNING book_id")
+        self.query.prepare("INSERT INTO Book(book_id, title, authors, isbn, quantity, quantity_lent) VALUES(:ID, :title, \
+            :authors, :ISBN, :quantity, '0') RETURNING book_id")
         self.query.bindValue(0, int(fields[0]))
         self.query.bindValue(1, fields[1])
         self.query.bindValue(2, fields[2])
@@ -112,6 +112,10 @@ class AgregarLibro(QWidget):
             self.close()
         else:
             ErrorPrompt("Fracaso", "El libro no fue agregado al sistema")
+
+        for i in range(int(fields[4])):
+            self.query.exec_("INSERT INTO Book_copy (copy_id, book_id) VALUES('" + str(i+1) + "', '" + str(fields[0]) + "');")
+
 
     @pyqtSlot()
     def closeWindow(self):

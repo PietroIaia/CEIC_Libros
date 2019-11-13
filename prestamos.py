@@ -1,11 +1,12 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor, QPalette
-from PyQt5.QtCore import pyqtSlot, Qt, QSize
+from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Books_Loan_Table, Active_Loan_Table
 from validationFunctions import checkPattern, checkCarnet, checkTitle
 import sys
+import datetime 
 
 
 # NOTAS:
@@ -13,7 +14,7 @@ import sys
 
 class prestamos(QWidget):
 
-    def __init__(self):
+    def __init__(self, Username):
 
         # Inicialización de la ventana
         super().__init__()
@@ -185,45 +186,48 @@ class prestamos(QWidget):
         # NOTA: Para agregar nuevas filas, usamos table.insertRow(rowPosition) donde rowposition es donde la queremos poner (de ultima)
         # https://stackoverflow.com/questions/24044421/how-to-add-a-row-in-a-tablewidget-pyqt
         self.active_loan_table = Active_Loan_Table(self)
+        # Actualizamos la tabla con los prestamos activos
+        #                  self.updateActiveLoanTable()
         self.active_loan_table.move(30, 500)
 
         # Conexiones
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
+        self.button_realizar.clicked.connect(lambda: self.realizarPrestamo(Username))
 
 
+    # Funcion que busca al estudiante con su informacion acerca de prestamos
     def buscarEstudiante(self, carnetBuscado):
-
         if(checkCarnet(carnetBuscado)):
             queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
             self.query = QSqlQuery()
             self.query.exec_(queryText)
 
             if self.query.first():
+                self.tabla_libros_prestamos.clear()
                 self.Libros_prestamo.clear()
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.deuda.setText(str(self.query.value(8)))
 
-                queryText ="SELECT * FROM Loan WHERE carnet = '" + carnetBuscado + "';"
+                queryText ="SELECT L.book_id, B.title, L.estimated_return_time FROM Loan L, Book B WHERE L.carnet = '" + carnetBuscado + "' AND L.book_id = B.book_id;"
                 self.query.exec_(queryText)
                 if self.query.first():
                     self.prestamo.setText("Prestamo activo")
+                    self.libro.setEnabled(False)
+                    self.button_agregar_libro.setEnabled(False)
+                    self.button_realizar.setEnabled(False)
 
                     # Si le queda menos de 1 dia para regresar el libro, permitimos la renovacion
-                    if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(6)) < 2):
+                    if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2)) < 2):
                         self.button_renovar.setEnabled(True)
 
-                    # Mostramos los libros que se le prestaron
-                    queryText ="SELECT title FROM Book WHERE book_id = '" + self.query.value(1) + "';"
-                    self.query2 = QSqlQuery()
-                    self.query2.exec_(queryText)
                     i = 0
                     while(True):
-                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(1)))
-                        self.tabla_libros_prestamos.item(i, 1).setText(str(self.query2.value(0)))
+                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
+                        self.tabla_libros_prestamos.item(i, 1).setText(str(self.query.value(1)))
                         i += 1
-                        if(not self.query2.next()):
+                        if(not self.query.next()):
                             break
 
                 else:
@@ -238,7 +242,6 @@ class prestamos(QWidget):
 
     # Funcion para buscar el libro e ingresarlo a la tabla de libros Prestamos cuando se este realizando un prestamo
     def buscarLibro(self, Libro):
-
         if(checkTitle(Libro)):
             queryText = "SELECT * FROM Book WHERE title = '" + Libro + "';"
             self.query = QSqlQuery()
@@ -269,12 +272,59 @@ class prestamos(QWidget):
 
 
     # Funcion para calcular el tiempo restante de el prestamo
-    def calculateTimeLeft(start_time, return_time):
+    def calculateTimeLeft(self, start_time, return_time):
         startTimeAux = QDateTime.toSecsSinceEpoch(start_time)
         returnTimeAux = QDateTime.toSecsSinceEpoch(return_time)
 
         aux = (int(returnTimeAux) - int(startTimeAux))/86400
+        print(aux)
         return aux
+
+
+    # Funcion para realizar el prestamo
+    def realizarPrestamo(self, Username):
+        self.query = QSqlQuery()
+        start_date = str(datetime.datetime.now())
+        hours = start_date.split()
+        i = 0
+
+        while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
+            queryText = "INSERT INTO Loan (carnet, lender, start_time, book_id, copy_id, estimated_return_time) VALUES ('" + self.carnet.text() + "', '" + Username + "', '" + start_date + "', "
+            self.query.exec_("SELECT loan_duration FROM Book WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
+
+            # Aqui completamos el queryText con la informacion faltante y restamos la cantidad de copias de cada libro en el diccionario
+            if(self.query.first()):
+                return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
+                queryText = queryText + "'" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "', '" + str(self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())]) +"', '" + return_date + "');"
+                self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] = self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] - 1
+                # Se actualiza la cantidad de copias prestadas del libro
+                self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent + 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
+                # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
+                self.query.exec_(queryText)
+
+                i += 1
+            else: 
+                ErrorPrompt("Error", "No se pudo realizar el prestamo")
+                return
+        InfoPrompt("Éxito", "Se realizo el prestamo!")
+            
+    
+    # Funcion que actualiza la tabla de prestamos activos
+    def updateActiveLoanTable(self):
+        queryText = "SELECT carnet, first_name, last_name FROM Loan L, Estudiante e WHERE L.carnet = e.carnet;"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
+        i = 0
+
+        if(self.query.first()):
+            oldStudent = self.query.value(0)
+            while(True):
+                newStudent = self.query.value(0)
+                if(newStudent != oldStudent):
+                    self.active_loan_table.item(i, 0).setText(str(self.query.value(0)))
+                    self.active_loan_table.item(i, 1).setText(str(self.query.value(1)))
+
+
 
 
 

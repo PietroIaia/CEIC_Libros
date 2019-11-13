@@ -240,8 +240,9 @@ class Books_Loan_Table(QTableWidget):
 
     def clear(self):
         for i in range(self.rowCount()):
-            self.item(i, 0).setText("")
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(224, 255, 255))
 
 ###################################################
 #           Tabla de Prestamos Activos            #
@@ -284,5 +285,6 @@ class Active_Loan_Table(QTableWidget):
 
     def clear(self):
         for i in range(self.rowCount()):
-            self.item(i, 0).setText("")
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(224, 255, 255))

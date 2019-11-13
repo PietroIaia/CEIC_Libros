@@ -840,7 +840,7 @@ class Ui_MainWindow(object):
         self.ventana_gestion_usuarios = gestionUsuarios(username)
         self.stackedWidget.addWidget(self.ventana_gestion_usuarios)
         # Index: 3
-        self.ventana_prestamos = prestamos()
+        self.ventana_prestamos = prestamos(username)
         self.stackedWidget.addWidget(self.ventana_prestamos)
 
 
