@@ -64,7 +64,15 @@ CREATE TABLE Loan(
 	PRIMARY KEY(carnet, book_id, copy_id, start_time)
 );
 
+CREATE TABLE Author(
+    first_name VARCHAR(32),
+    last_name VARCHAR(64),
+    author_id INT4 PRIMARY KEY
+);
+
 CREATE INDEX user_index ON CEIC_User(username, password_);
+
+\COPY Author FROM './AutoresIndexados.csv' DELIMITER ',';
 
 INSERT INTO CEIC_User(username, password_, first_name, last_name, email, permission_mask, last_login, creation_date)
 VALUES('Admin', crypt('prueba1', gen_salt('bf', 8)), 'Alan', 'Turing', 'ImitationGame@gmail.com', 1, now(), now());
