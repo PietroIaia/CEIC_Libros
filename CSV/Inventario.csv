@@ -1,0 +1,152 @@
+Titulo del Libro,Autor,Area,No. 
+Calculo Vectorial,"Jerrol E. Marsden, Anthony J. Tromba",Matemáticas,2
+Introduction to Algorithms,"Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest",Algoritmos,3
+Programming: The Derivation of Algorithms,A. Kaldewaij,Algoritmos,2
+Operating Systems – Design and Implementation,Andrew S. Tanenbaum,Sistemas Operativos,2
+Operating Systems Concepts,"A. Silberchatz, P. Galvin",Sistemas Operativos,3
+An Introduction to Operating Systems,Harvey M. Deitel,Sistemas Operativos,1
+Modern Operating Systems,Andrew S. Tanenbaum,Sistemas Operativos,1
+Introduccion a la Computación Paralela,"José Aguilar, Ernst Leiss",Sistemas Operativos,1
+Distributed Operating Systems,Andrew S. Tanenbaum,Sistemas Operativos,1
+Sistemas Operativos – Conceptos Fundamentales,"A. Silberschatz, J. Peterson, P. Galvin",Sistemas Operativos,2
+"Compiladores – Principios, tecnicas y herramientas","Alfred V. Aho, Monica S. Lam, Ravi Sethi",Lenguajes de Programación,2
+Curso de Probabilidades,María Margarita Olivares,Probabilidades,1
+Probabilidad y Aplicaciones Estadisticas,Meyer,Probabilidades,1
+Probabilidad y Estadistica,"Michael J. Evans, Jeffrey S. Rosenthal",Probabilidades,1
+Reasoning About Paraller Architectures,William W. Collier,Sistemas Operativos,1
+Structured Concurrent Programming with Operating Systems Applications,"R. C. Holt, E. D. Lazowska, G. S. Graham",Sistemas Operativos,1
+Operating Systems – Internal and Design Principles,William Stallings,Sistemas Operativos,1
+Cache and Memory Hierarchy Design,Steven A. Przybylski,Sistemas Operativos,1
+Concepts of Programming Languages,Robert W. Sebesta,Lenguajes de Programación,2
+Programming Languages: Design and Implementation,Terrence W. Pratt,Lenguajes de Programación,3
+Software Engineering for Real-Time Systems,Institute of Industrial Automation and Sofware Engineering,Ingeniera de Software,1
+Programming Language Pragmatics,Michael L. Scott,Lenguajes de Programación,1
+Formal Specification of Programming Languages,Frank G. Pagan,Lenguajes de Programación,1
+Investigación de Operaciones,Taha,Modelos Lineales,3
+UNIX for Programmers and Users,Graham Glass,Sistemas Operativos,1
+LINUX System Administration – Black Book,Dee-Ann LeBlanc,Sistemas Operativos,1
+Grafos y Algoritmos,"Oscar Meza, Maruja Ortega",Algoritmos,7
+"Algebraic Theory of Machines, Languages and Semigroups",Michael A. Arbib,,1
+OASIS V2: Un lenguaje de Especificación Orientado a Objetos,"Oscar Pastor Lopez, Isidro Ramos Salavert",Computación General,1
+Lenguajes de Programación – Conceptos y Constructores,Ravi Sethi,Lenguajes de Programación,1
+Structure and Interpelation of Computer Programs,Harold Abelson,,1
+Programming Language Landscape,"Michael Marcotty, Henry Ledgard",Lenguajes de Programación,1
+Lenguajes de Programación,Allen B. Tucker,Lenguajes de Programación,1
+Translation of Computer Languages,Weingarten,Lenguajes de Programación,1
+"Introducción a la Teoría de Automatas, Lenguajes y Computación","John E. Hopcroft, Rajeev Motwani, Jeffrey D. Ullman",Lenguajes de Programación,2
+An Introduction to Data Structures With Applications,"Jean- Paul Tremblay, Paul G. Sorenson",Algoritmos,1
+Fundamentals of Algorithmics,"Gilles Brassard, Paul Bratley",Algoritmos,1
+Introducción a la Programación – Lógica y Diseño,Johyce Farrell,Algoritmos,1
+Redes de Computadoras,Andrew S. Tanenbaum,Redes,5
+Analisis y Diseño de Algoritmos,"Gustavo Lopez, Ismael Jeder, Augusto Vega",Algoritmos,1
+Algoritmics – The Spirit of Computing,David Harel,Algoritmos,1
+Sistemas de Información Gerencial,"Gordon B. Davis, Margrethe H. Olson",Miscelanea,1
+Programming with BASIC – A Practical Approach,Olen R. Pearson,Computación General,1
+Principles of Compiler Design,"Alfred V. Aho, Jeffrey D. Ullman",Lenguajes de Programación,3
+"The Theory of Parsing, Translation, and Compiling","Alfred V. Aho, Jeffrey D. Ullman",Lenguajes de Programación,1
+"The Theory of Parsing, Translation, and Compiling","Alfred V. Aho, Jeffrey D. Ullman",Lenguajes de Programación,2
+Construcción de Compiladores,Kenneth C. Louden,Lenguajes de Programación,1
+Dynamic Programming with Management Applications,N. A. J. Hastings,Miscelanea,1
+The Art of Computer Programming – Sorting and Searching,Knuth,Algoritmos,1
+The Art of Computer Programming – Seminumerical Algorithms,Knuth,Algoritmos,1
+Information Systems,Steven Alter,Sistemas de Información,1
+Decision Support Systems and Intelligent Systems,"Efraim Turban, Jay E. Aronson",Sistemas de Información,1
+Sistemas de Información – Teoria y Practica,"John G. Burch Jr., Felix R. Strater Jr",Sistemas de Información,1
+Analisis y Diseño de Sistemas de Información,James A. Senn,Sistemas de Información,2
+Management Information Systems,David Kroenke,Sistemas de Información,1
+Analisis y Diseño de Sistemas,Kendall,Sistemas de Información,1
+The Analysis of Information Systems,Charles T. Meadow,Sistemas de Información,1
+Computer Networks,"Larry L. Peterson, Bruce S. Davie",Redes,1
+Complete Encyclopedia of Networking,Werner Feibel,Redes,1
+High-Speed Networks,William Stallings,Redes,1
+Todo Acerca de… Redes de Computación,Kevin Stoltz,Redes,1
+Internetworking with TCP/IP,"Douglas E. Comer, David L. Stevens",Redes,3
+Internetworking with TCP/IP,"Douglas E. Comer, David L. Stevens",Redes,1
+Telecommunications – Reestructuring Work and Employment Relations,Harry C. Katz,Redes,1
+The Business Guide to Local Area Networks,William Stallings,Redes,1
+"Groupware, Workflow and Intranets",Dave Chaffey,Redes,1
+El Lenguaje de Programación C,"Brian K. Kernighan, Dennis M. Ritchie",Computación General,2
+"ATM Networks – Concepts, Protocols, Applications",Rainer Handel,Miscelanea,1
+Local Area Networks,"V. E. Cheong, R. A. Hirschheim",Redes,1
+"Redes de Computadoras – Protocolos, Normas e Interfaces",Uyless Black,Redes,1
+Communication Networks Management,Kornel Terplan,Redes,1
+An Introduction to Computer Science with Modula-2,"J. Mack Adams, Philippe J. Gabrini, Barry L. Kurtz",Computación General,1
+Aspectos Básicos de Networking,"Mark A. Dye, Rick MacDonald",Redes,1
+Adaptation and Learning in Automatic Systems,Ya. Z. Tsypkin,,1
+Software Requirements – Analysis and Specification,Alan M. Davis,Ingeniera de Software,1
+Software Engineering – Concepts and Management,Allen Macro,Ingeniera de Software,1
+Software Engineering,I. Sommerville,Ingeniera de Software,1
+Security + Certification,Microsoft,Miscelanea,1
+Data Structures and Algorithms,"Alfred V. Aho, John E. Hopcroft, Jeffrey D. Ullman",Algoritmos,1
+Tipos Abstractos de Datos y Algoritmos,"Edelmira Pasarella, Cristina Zoltan",Algoritmos,2
+Data and Computer Communications,William Stallings,Miscelanea,1
+Estructura de Datos y Organización de Archivos,Mary E. S. Loomis,,2
+Algoritmos + Estructuras de Datos = Programas,Niklaus Wirth,Algoritmos,3
+"Scheduling Theory, Algorithms and Systems",Michael Pinedo,Algoritmos,1
+Fundamentals of Interactive Computer Graphics,"J. D. Foley, A. van Dam",Computación Grafica,1
+Programming Challenges – The Programming Contest Material,"Steven S. Skiena, Miguel A. Revilla",Computación General,1
+"Estructura de Datos – Especificación, Diseño e Implementación",Xavier Franch Gutiérrez,Algoritmos,1
+,,,
+Introduction to Distributed Algorithms,Gerard Tel,Algoritmos,1
+Graficas en la Web con Linux,,Computación Grafica,1
+JAVA – Cómo Programar,Harvey M. Deitel,Computación General,1
+C Mathematical Function Handbook,Louis Baker,,2
+CORE JAVA,Gary Cornell,Computación General,1
+JAVA Network Programming,Elliote Rusty Harold,Computación General,1
+Problemas de la Metodología de la Programación,Luis Joyanes,,1
+Graficas por Computadora,"Donald Hearn, M. Pauline Baker",Computación Grafica,2
+Computer Graphics – Principles and Practice,"J. D. Foley, A. van Dam",Computación Grafica,1
+"Interactive Computer Graphics – Data Structures, Algorithms, Languages",Wolfgang K. Giloi,Computación Grafica,1
+Graficas por Computadora,"John T. Demel, Michael J. Miller",Computación Grafica,1
+An Introduction to Data Structures and Algorithms with JAVA,Glenn W. Rowe,Algoritmos,1
+Programación Orientada a Objetos,Timothy Budd,Algoritmos,1
+The JAVA Programming Language,"Ken Arnold, James Gosling, David Holmes",Computación General,1
+The Annotated C++ Reference Manual,"Margaret A. Ellis, Bjarne Stroustrup",Computación General,1
+Curso de Programación con Turbo C++,Luis Joyanes,Computación General,1
+Como Programar en C/C++,Harvey M. Deitel,Computación General,1
+C++ Builder,Gérard LeBlanc,Computación General,1
+"Programación en C++ - Algoritmos, Estructura de Datos y Objetos",Luis Joyanes,Computación General,2
+A Logical Approach to Discrete Math,"David Gries, Fred B. Schneider",Discretas,6
+Probabilistic Reasoning in Intelligent Systems,Judea Pearl,,1
+A First Course in Stochastic Processes,Samuel Karlin,Matemáticas,1
+The Science of Programming,David Gries,Algoritmos,1
+Maximun Linux Security,,Miscelanea,1
+UNIX,"Kenneth H. Rosen, Richard R. Rosinski, James M. Farber",Sistemas Operativos,1
+,,,
+Lógica Programable,Mariano Barrón Ruiz,,1
+Introducción a la Lógica Matematica,,Matemáticas,1
+Algebra Moderna,,,2
+Teoría de Conmutación y Diseño Lógico,"Frederick J. Hill, Gerald R. Peterson",,1
+"Dinámica – Principios, Preguntas y Problemas Resultos",Douglas Figueroa,Física,3
+Introducción a la Graficación por Computador,"J. D. Foley, A. van Dam",Computación Grafica,1
+"Cinemática – Principios, Preguntas y Problemas Resuelto",Douglas Figueroa,Física,5
+Fisica,"Francis Sears, Mark Zemansky",Física,2
+An Introduction to Numerical Analysis,Kendall E. Atkinson,Calculo Numérico,1
+Discrete Neural Computation,"Kai-Yeung Siu, Vwani Roychowdhury, Thomas Kailath",,1
+Análisis Numérico,"Richard L. Burden, J. Douglas Faire",Calculo Numérico,2
+A Mathematical Introduction to Logic,Herbert B. Enderton,,1
+Física para Ciencias e Ingenieria,"Raymond A. Serway, John W. Jewett",Física,1
+Program Development in Java,Barbara Liskov,Computación General,1
+Reasoning with Incomplete Information,David W. Etherington,,1
+Fundamentos de Sistemas de Bases de Datos,"Ramez E. Elmasri, Shamkant B. Navathe",Bases de Datos,6
+UML y Patrones,Craig Larman,,1
+Principles of Distributed Database Systems,"M. Tamer Ozsu, Patrick Valduriez",Bases de Datos,1
+DBA Handbook,,,1
+Aprendiendo MySQL en 21 Días,Mark Maslakowski,Bases de Datos,1
+An Introduction to Database Systems,C. J. Date,Bases de Datos,1
+Arquitectura de Computadores,M. Morris Mano,,1
+Structured Computer Organization,Andrew S. Tanenbaum,,10
+Organizacion y Diseño de Computadoras,"David A. Patterson, John L. Hennessy",,3
+Organizacion y Arquitectura de Computadores,William Stallings,,1
+Microcomputer-Based Design,John B. Peatman,,1
+Minicomputer Systems,"Richard H. Eckhouse Jr., L. Robert Morris",,1
+Microprocessors and Interfacing – Programming and Hardware,Douglas V. Hall,,1
+FOTO 212,,,
+Matematicas Discreta y Combinatoria,Ralph P. Grimaldi,Discretas,2
+Matematicas Discretas,Richard Johnsonbaugh,Discretas,2
+HTML – La Guía Completa,"Chuck Musciano, Bill Kennedy",Computación General,2
+Aprendiendo JavaScript en una semana,Arman Danesh,Computación General,1
+JavaScript – The Definitive Guide,David Flanagan,Computación General,1
+Elementos de Teoría Combinatoria,Vicente Yriarte,Discretas,3
+Estructuras Discretas II – Problemarios,Xiomara Contreras,Discretas,1
+Problemario para Estructuras Discretas I,Pedro R. Borges,Discretas,1
