@@ -95,12 +95,18 @@ class AuthorSearch(QWidget):
 
     @pyqtSlot()
     def consulta(self):
-        queryText = "SELECT title, book_id FROM Book WHERE authors LIKE \'%" + self.authorList.currentText() + "%\'"
+        lastName = self.authorList.currentText().split(",")[0]
+        queryText = "SELECT title, book_id FROM Book WHERE authors LIKE \'%" + lastName + "%\';"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 
-        while query.next():
-            
+        i = 0
+
+        while self.query.next():
+            self.table.item(i, 0).setText(str(self.query.value(0)))
+            self.table.item(i, 1).setText(str(self.query.value(1)))
+            i += 1
+
 
 
 
