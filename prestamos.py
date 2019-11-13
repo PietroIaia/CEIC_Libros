@@ -201,11 +201,22 @@ class prestamos(QWidget):
         #                  self.updateActiveLoanTable()
         self.active_loan_table.move(30, 500)
 
+        # Boton para eliminar libros de la tabla
+        self.button_eliminar_libro = QPushButton(" X ")
+
         # Conexiones
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
         self.button_realizar.clicked.connect(lambda: self.realizarPrestamo(Username))
         self.button_devuelto.clicked.connect(lambda: self.finalizarPrestamo())
+        # NOTA: Si se agregan mas filas, no van a tener una conexion con los botones. Luego podemos arreglar eso!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.tabla_libros_prestamos.cellWidget(0, 2).clicked.connect(lambda: self.eliminarLibro(0))
+        self.tabla_libros_prestamos.cellWidget(1, 2).clicked.connect(lambda: self.eliminarLibro(1))
+        self.tabla_libros_prestamos.cellWidget(2, 2).clicked.connect(lambda: self.eliminarLibro(2))
+        self.tabla_libros_prestamos.cellWidget(3, 2).clicked.connect(lambda: self.eliminarLibro(3))
+        self.tabla_libros_prestamos.cellWidget(4, 2).clicked.connect(lambda: self.eliminarLibro(4))
+        self.tabla_libros_prestamos.cellWidget(5, 2).clicked.connect(lambda: self.eliminarLibro(5))
+        self.tabla_libros_prestamos.cellWidget(6, 2).clicked.connect(lambda: self.eliminarLibro(6))
 
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
@@ -222,6 +233,9 @@ class prestamos(QWidget):
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.deuda.setText(str(self.query.value(8)))
+                for i in range(self.tabla_libros_prestamos.rowCount()):
+                    self.tabla_libros_prestamos.cellWidget(i, 2).setText("")
+                    self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(False)
 
                 queryText ="SELECT L.book_id, B.title, L.estimated_return_time FROM Loan L, Book B WHERE L.carnet = '" + carnetBuscado + "' AND L.book_id = B.book_id;"
                 self.query.exec_(queryText)
@@ -261,16 +275,25 @@ class prestamos(QWidget):
             queryText = "SELECT * FROM Book WHERE title = '" + Libro + "';"
             self.query = QSqlQuery()
             self.query.exec_(queryText)
-            i = 0
             if(self.query.first()):
-                while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
-                    i += 1
+                i = 0
+                while(i != self.tabla_libros_prestamos.rowCount()):
+                    if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
+                        i += 1
+                    elif(self.tabla_libros_prestamos.item(i, 0).text() == ""):
+                        break
+
+                    if(i == self.tabla_libros_prestamos.rowCount()):
+                        ErrorPrompt("Error", "Todas las casillas estan llenas, no puede pedir otro libro.")
+                        return
 
                 # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
                 if(str(Libro) in self.Libros_prestamo.keys() and self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
                     self.Libros_prestamo[str(Libro)] += 1
                     self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
                     self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
+                    self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
+                    self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
                 # Si el libro no esta en el diccionario, se agrega
                 elif(str(Libro) not in self.Libros_prestamo.keys()):
                     self.Libros_prestamo[str(Libro)] = 0
@@ -279,6 +302,8 @@ class prestamos(QWidget):
                         self.Libros_prestamo[str(Libro)] = 1
                         self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
                         self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
+                        self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
+                        self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
                 else:
                     ErrorPrompt("Error", "No existen mas ejemplares disponibles de este libro")
             else:
@@ -324,13 +349,14 @@ class prestamos(QWidget):
         InfoPrompt("Éxito", "Se realizo el préstamo!")
     
 
-
+    # Funcion para marcar como finalizado el prestamo
     def finalizarPrestamo(self):
         self.query = QSqlQuery()
         success = self.query.exec_("DELETE FROM Loan WHERE carnet='" + str(self.currentStudent) + "';")
 
         if(success):
             i = 0
+            # Actualizamos la cantidad prestada de cada libro
             while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
                 self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent - 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
                 i += 1
@@ -338,7 +364,15 @@ class prestamos(QWidget):
             ErrorPrompt("Error", "No se pudo marcar el préstamo como finalizado")
             return
         InfoPrompt("Éxito", "Se marco el préstamo como finalizado!")
-            
+
+    
+    # Funcion para eliminar libro de la tabla
+    def eliminarLibro(self, row):
+        self.Libros_prestamo[str(self.tabla_libros_prestamos.item(row, 1).text())] -= 1
+        self.tabla_libros_prestamos.item(row, 0).setText("")
+        self.tabla_libros_prestamos.item(row, 1).setText("")
+        self.tabla_libros_prestamos.cellWidget(row, 2).setText("")
+        self.tabla_libros_prestamos.cellWidget(row, 2).setEnabled(False)
     
     # Funcion que actualiza la tabla de prestamos activos
     def updateActiveLoanTable(self):

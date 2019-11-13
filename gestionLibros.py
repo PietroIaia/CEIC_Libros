@@ -132,6 +132,9 @@ class gestionLibros(QWidget):
         self.nuevo.clicked.connect(self.addBook)
         self.titulo.textChanged[str].connect(self.check_disable)
 
+        # Guarda la cantidad de copias que tiene el libro, si se llega a modificar, la usaremos para ver cuantas copias hay que agregar al sistema
+        self.noCopy = 0
+
     @pyqtSlot()
     def consulta(self):
         inputTitulo = self.titulo.text()
@@ -151,6 +154,8 @@ class gestionLibros(QWidget):
             self.currentBook = tituloBuscado
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
             for i in range(self.table.rowCount()):
+                if(i == 4):
+                    self.noCopy = int(self.query.value(i))
                 self.table.item(i, 0).setText(str(self.query.value(i)))
 
             self.modificar.setEnabled(True)
