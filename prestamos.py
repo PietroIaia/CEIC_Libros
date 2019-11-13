@@ -27,6 +27,7 @@ class prestamos(QWidget):
         self.instFont = QFont("Serif", 12)
         self.subFont = QFont("Serif", 10)
         self.btnFont = QFont("Serif", 9)
+        self.smallbtn = QFont("Serif", 7)
 
         # Título
         self.title = QLabel("Préstamos", self)
@@ -167,12 +168,22 @@ class prestamos(QWidget):
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_agregar_libro.setEnabled(False)
 
+        # Marcar prestamo como finalizado
+        self.button_devuelto = QPushButton("Finalizar Préstamo", self.frame_form_prestamo)
+        self.button_devuelto.setFixedWidth(110)
+        self.button_devuelto.setFixedHeight(28)
+        self.button_devuelto.move(22, 390)
+        self.button_devuelto.setFont(self.smallbtn)
+        self.button_devuelto.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        self.button_devuelto.setEnabled(False)
+
         # Realizar prestamo
         self.button_realizar = QPushButton("Realizar Préstamo", self.frame_form_prestamo)
-        self.button_realizar.setFixedWidth(220)
+        self.button_realizar.setFixedWidth(110)
         self.button_realizar.setFixedHeight(28)
-        self.button_realizar.move(27, 390)
-        self.button_realizar.setFont(self.btnFont)
+        self.button_realizar.move(142, 390)
+        self.button_realizar.setFont(self.smallbtn)
         self.button_realizar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_realizar.setEnabled(False)
@@ -194,11 +205,13 @@ class prestamos(QWidget):
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
         self.button_realizar.clicked.connect(lambda: self.realizarPrestamo(Username))
+        self.button_devuelto.clicked.connect(lambda: self.finalizarPrestamo())
 
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
     def buscarEstudiante(self, carnetBuscado):
         if(checkCarnet(carnetBuscado)):
+            self.currentStudent = carnetBuscado
             queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
             self.query = QSqlQuery()
             self.query.exec_(queryText)
@@ -217,6 +230,7 @@ class prestamos(QWidget):
                     self.libro.setEnabled(False)
                     self.button_agregar_libro.setEnabled(False)
                     self.button_realizar.setEnabled(False)
+                    self.button_devuelto.setEnabled(True)
 
                     # Si le queda menos de 1 dia para regresar el libro, permitimos la renovacion
                     if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2)) < 2):
@@ -235,6 +249,7 @@ class prestamos(QWidget):
 
                     self.libro.setEnabled(True)
                     self.button_agregar_libro.setEnabled(True)
+                    self.button_devuelto.setEnabled(False)
 
             else:
                 ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
@@ -248,7 +263,6 @@ class prestamos(QWidget):
             self.query.exec_(queryText)
             i = 0
             if(self.query.first()):
-                self.button_realizar.setEnabled(True)
                 while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
                     i += 1
 
@@ -269,6 +283,8 @@ class prestamos(QWidget):
                     ErrorPrompt("Error", "No existen mas ejemplares disponibles de este libro")
             else:
                 ErrorPrompt("Error", "No se encontró el Libro especificado")
+
+            self.button_realizar.setEnabled(True)
 
 
     # Funcion para calcular el tiempo restante de el prestamo
@@ -295,7 +311,7 @@ class prestamos(QWidget):
             if(self.query.first()):
                 return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
                 queryText = queryText + "'" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "', '" + str(self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())]) +"', '" + return_date + "');"
-                self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] = self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] - 1
+                self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] -= 1
                 # Se actualiza la cantidad de copias prestadas del libro
                 self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent + 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
                 # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
@@ -303,9 +319,25 @@ class prestamos(QWidget):
 
                 i += 1
             else: 
-                ErrorPrompt("Error", "No se pudo realizar el prestamo")
+                ErrorPrompt("Error", "No se pudo realizar el préstamo")
                 return
-        InfoPrompt("Éxito", "Se realizo el prestamo!")
+        InfoPrompt("Éxito", "Se realizo el préstamo!")
+    
+
+
+    def finalizarPrestamo(self):
+        self.query = QSqlQuery()
+        success = self.query.exec_("DELETE FROM Loan WHERE carnet='" + str(self.currentStudent) + "';")
+
+        if(success):
+            i = 0
+            while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
+                self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent - 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
+                i += 1
+        else:
+            ErrorPrompt("Error", "No se pudo marcar el préstamo como finalizado")
+            return
+        InfoPrompt("Éxito", "Se marco el préstamo como finalizado!")
             
     
     # Funcion que actualiza la tabla de prestamos activos
