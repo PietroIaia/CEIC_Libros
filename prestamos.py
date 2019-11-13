@@ -277,7 +277,6 @@ class prestamos(QWidget):
         returnTimeAux = QDateTime.toSecsSinceEpoch(return_time)
 
         aux = (int(returnTimeAux) - int(startTimeAux))/86400
-        print(aux)
         return aux
 
 

@@ -831,7 +831,7 @@ class Ui_MainWindow(object):
         self.stackedWidget.setObjectName("stackedWidget")
         self.stackedWidget.setStyleSheet("background-color: LightSkyBlue")
         # Index: 0
-        self.ventana_gestion_libros = gestionLibros()
+        self.ventana_gestion_libros = gestionLibros(perm_mask)
         self.stackedWidget.addWidget(self.ventana_gestion_libros)
         # Index: 1
         self.ventana_gestion_estudiante = gestionEstudiante(perm_mask)
