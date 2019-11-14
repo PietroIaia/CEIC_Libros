@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Payments_Table, Debts_Table
-from validationFunctions import checkPattern, checkCarnet
+from validationFunctions import checkPattern, checkCarnet, checkDebt
 import sys
 import datetime 
 
@@ -237,11 +237,7 @@ class multas(QWidget):
         self.debts_table = Debts_Table(self)
         self.debts_table.move(290, 450)
 
-        # Conexiones
-        self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
-
         # Frame de actualizar Deuda agregada por dia
-        # Frame del form
         self.frame_deuda = QFrame(self)
         self.frame_deuda.setFrameShape(QFrame.StyledPanel)
         self.frame_deuda.setFixedWidth(275)
@@ -280,20 +276,46 @@ class multas(QWidget):
         self.act_deuda.move(85, 67)
 
         # Boton Actualizar Monto deuda
-        self.button_cancelar = QPushButton("Actualizar", self.frame_deuda)
-        self.button_cancelar.setFixedWidth(120)
-        self.button_cancelar.setFixedHeight(28)
-        self.button_cancelar.move(130, 110)
-        self.button_cancelar.setFont(self.btnFont)
-        self.button_cancelar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        self.button_act_deuda = QPushButton("Actualizar", self.frame_deuda)
+        self.button_act_deuda.setFixedWidth(120)
+        self.button_act_deuda.setFixedHeight(28)
+        self.button_act_deuda.move(130, 110)
+        self.button_act_deuda.setFont(self.btnFont)
+        self.button_act_deuda.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+
+        # Monto de Deuda por dia
+        self.actualizarMontoDeuda()
 
         # Si el usuario no es Administrador, no puede actualizar el monto
         if(perm_mask == 0):
-            self.button_cancelar.setEnabled(False)
+            self.button_act_deuda.setEnabled(False)
             self.act_deuda.setEnabled(False)
 
+        # Conexiones
+        self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
+        self.button_act_deuda.clicked.connect(self.actualizarMontoDeuda)
 
+
+    # Funcion para actualizar monto de deuda agregada por dia
+    def actualizarMontoDeuda(self):
+        self.query = QSqlQuery()
+
+        if(self.act_deuda.text() == ""):
+            self.query.exec_("SELECT monto_deuda FROM Deuda WHERE id = 0;")
+            if(self.query.first()):
+                self.montoDeuda = float(self.query.value(0))
+            else:
+                ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por dia.")
+        else:
+            if(checkDebt(self.act_deuda.text())):
+                success = self.query.exec_("UPDATE Deuda SET monto_deuda = '" + self.act_deuda.text() + "' WHERE id = 0;")
+                if(success):
+                    self.montoDeuda = float(self.act_deuda.text())
+                    InfoPrompt("Éxito", "El monto de deuda agregada por día se ha actualizado!")
+                    print(self.montoDeuda)
+                else:
+                    ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por dia.")
 
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
@@ -342,3 +364,5 @@ class multas(QWidget):
                 if(newStudent != oldStudent):
                     self.debts_table.item(i, 0).setText(str(self.query.value(0)))
                     self.debts_table.item(i, 1).setText(str(self.query.value(1)))
+        else:
+            checkDebt()
