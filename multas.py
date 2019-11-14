@@ -14,7 +14,7 @@ import datetime
 
 class multas(QWidget):
 
-    def __init__(self, Username):
+    def __init__(self, Username, perm_mask):
 
         # Inicialización de la ventana
         super().__init__()
@@ -47,7 +47,7 @@ class multas(QWidget):
         "{\n"
         "background-color: white;\n"
         "}")
-        self.frame_form_multas.move(10, 120)
+        self.frame_form_multas.move(10, 70)
 
         # Informacion de prestamo
         self.info_prestamo_frame = QFrame(self.frame_form_multas)
@@ -63,7 +63,7 @@ class multas(QWidget):
         self.Info_prestamo = QLabel("Transacción", self.info_prestamo_frame)
         self.Info_prestamo.setStyleSheet('color: black')
         self.Info_prestamo.setFont(self.instFont)
-        self.Info_prestamo.move(80, 10)
+        self.Info_prestamo.move(80, 7)
 
         # Subtitulo estudiante
         self.sub_estudiante = QLabel("Estudiante", self.frame_form_multas)
@@ -239,6 +239,61 @@ class multas(QWidget):
 
         # Conexiones
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
+
+        # Frame de actualizar Deuda agregada por dia
+        # Frame del form
+        self.frame_deuda = QFrame(self)
+        self.frame_deuda.setFrameShape(QFrame.StyledPanel)
+        self.frame_deuda.setFixedWidth(275)
+        self.frame_deuda.setFixedHeight(150)
+        self.frame_deuda.setStyleSheet("QFrame \n"
+        "{\n"
+        "background-color: white;\n"
+        "}")
+        self.frame_deuda.move(10, 520)
+
+        # Actualizar Monto Deuda
+        self.info_prestamo_frame = QFrame(self.frame_deuda)
+        self.info_prestamo_frame.setFrameShape(QFrame.NoFrame)
+        self.info_prestamo_frame.setFrameShadow(QFrame.Sunken)
+        self.info_prestamo_frame.setStyleSheet("QFrame \n"
+        "{\n"
+        "background-color: #79B9E0;\nborder: 1px;\n border-radius: 3px;\n"
+        "}")
+        self.info_prestamo_frame.setFixedWidth(255)
+        self.info_prestamo_frame.setFixedHeight(40)
+        self.info_prestamo_frame.move(10, 10)
+        self.Info_prestamo = QLabel("Deuda por día", self.info_prestamo_frame)
+        self.Info_prestamo.setStyleSheet('color: black')
+        self.Info_prestamo.setFont(self.instFont)
+        self.Info_prestamo.move(70, 7)
+
+        # Monto deuda por dia
+        self.act_deuda_label = QLabel("Código ", self.frame_deuda)
+        self.act_deuda_label.move(10, 67)
+        self.act_deuda_label.setFont(self.subFont)
+        self.act_deuda = QLineEdit(self.frame_deuda)
+        self.act_deuda.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+        self.act_deuda.setFixedWidth(150)
+        self.act_deuda.setFixedHeight(25)
+        self.act_deuda.setTextMargins(5, 0, 0, 0)
+        self.act_deuda.move(85, 67)
+
+        # Boton Actualizar Monto deuda
+        self.button_cancelar = QPushButton("Actualizar", self.frame_deuda)
+        self.button_cancelar.setFixedWidth(120)
+        self.button_cancelar.setFixedHeight(28)
+        self.button_cancelar.move(130, 110)
+        self.button_cancelar.setFont(self.btnFont)
+        self.button_cancelar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+
+        # Si el usuario no es Administrador, no puede actualizar el monto
+        if(perm_mask == 0):
+            self.button_cancelar.setEnabled(False)
+            self.act_deuda.setEnabled(False)
+
+
 
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos

@@ -844,7 +844,7 @@ class Ui_MainWindow(object):
         self.ventana_prestamos = prestamos(username)
         self.stackedWidget.addWidget(self.ventana_prestamos)
         # Index : 4
-        self.ventana_multas = multas(username)
+        self.ventana_multas = multas(username, perm_mask)
         self.stackedWidget.addWidget(self.ventana_multas)
 
 
