@@ -175,28 +175,27 @@ class multas(QWidget):
         self.codigo.setTextMargins(5, 0, 0, 0)
         self.codigo.move(85, 335)
 
-        # Botón de Cancelar
-        self.button_cancelar = QPushButton("Cancelar", self.frame_form_multas)
-        self.button_cancelar.setFixedWidth(90)
-        self.button_cancelar.setFixedHeight(28)
-        self.button_cancelar.move(25, 375)
-        self.button_cancelar.setFont(self.btnFont)
-        self.button_cancelar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        # Refrescar tabla Deudores
+        self.button_refrescar = QPushButton("Refrescar Tabla", self)
+        self.button_refrescar.setFixedWidth(150)
+        self.button_refrescar.setFixedHeight(28)
+        self.button_refrescar.move(647, 690)
+        self.button_refrescar.setFont(self.btnFont)
+        self.button_refrescar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
-        self.button_cancelar.setEnabled(False)
+        self.button_refrescar.setEnabled(True)
 
         # Botón de Aplicar
-        self.button_aplicar = QPushButton("Aplicar Pago", self.frame_form_multas)
-        self.button_aplicar.setFixedWidth(90)
+        self.button_aplicar = QPushButton("Ingresar Pago", self.frame_form_multas)
+        self.button_aplicar.setFixedWidth(200)
         self.button_aplicar.setFixedHeight(28)
-        self.button_aplicar.move(165, 375)
+        self.button_aplicar.move(40, 375)
         self.button_aplicar.setFont(self.btnFont)
         self.button_aplicar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_aplicar.setEnabled(False)
 
         # Tabla de transferencias
-
         # Titulo de tabla de Transferencias
         self.titulo_transfer = QFrame(self)
         self.titulo_transfer.setFrameShape(QFrame.NoFrame)
@@ -228,14 +227,14 @@ class multas(QWidget):
         "}")
         self.titulo_deudas.setFixedWidth(535)
         self.titulo_deudas.setFixedHeight(40)
-        self.titulo_deudas.move(290, 410)
+        self.titulo_deudas.move(290, 400)
         self.deudas = QLabel("Deudas Pendientes", self)
         self.deudas.setStyleSheet('background-color: #79B9E0')
         self.deudas.setFont(self.instFont)
-        self.deudas.move(485, 417)
+        self.deudas.move(485, 407)
 
         self.debts_table = Debts_Table(self)
-        self.debts_table.move(290, 450)
+        self.debts_table.move(290, 440)
 
         # Frame de actualizar Deuda agregada por dia
         self.frame_deuda = QFrame(self)
@@ -265,7 +264,7 @@ class multas(QWidget):
         self.Info_prestamo.move(70, 7)
 
         # Monto deuda por dia
-        self.act_deuda_label = QLabel("Código ", self.frame_deuda)
+        self.act_deuda_label = QLabel("Monto ", self.frame_deuda)
         self.act_deuda_label.move(10, 67)
         self.act_deuda_label.setFont(self.subFont)
         self.act_deuda = QLineEdit(self.frame_deuda)
@@ -286,6 +285,10 @@ class multas(QWidget):
 
         # Monto de Deuda por dia
         self.actualizarMontoDeuda()
+        # Montar Tabla de Transferencia
+        self.updateTablaTranf()
+        # Montar Tabla de Deudores
+        self.updateDebtTabla()
 
         # Si el usuario no es Administrador, no puede actualizar el monto
         if(perm_mask == 0):
@@ -296,6 +299,7 @@ class multas(QWidget):
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_act_deuda.clicked.connect(self.actualizarMontoDeuda)
         self.button_aplicar.clicked.connect(lambda: self.pagarDeuda(Username))
+        self.button_refrescar.clicked.connect(self.updateDebtTabla)
 
 
     # Funcion para actualizar monto de deuda agregada por dia
@@ -314,7 +318,6 @@ class multas(QWidget):
                 if(success):
                     self.montoDeuda = float(self.act_deuda.text())
                     InfoPrompt("Éxito", "El monto de deuda agregada por día se ha actualizado!")
-                    print(self.montoDeuda)
                 else:
                     ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por dia.")
 
@@ -328,7 +331,6 @@ class multas(QWidget):
             self.query.exec_(queryText)
 
             if self.query.first():
-                self.tabla_transferencias.clear()
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.deuda.setText(str(self.query.value(8)))
@@ -361,19 +363,21 @@ class multas(QWidget):
             return
 
         self.query = QSqlQuery()
-        if(self.tipo.currentIndex() == 0 and (self.banco.text() != "") and (self.codigo.text() != "")):
-            success = self.query.exec_("UPDATE Estudiante SET book_debt = '"+  str(float(self.deuda.text()) - float(self.monto.text())) + "' WHERE carnet = '" + self.currentStudent + "';")
-        else:
-            ErrorPrompt("Error", "Los campos de banco o codigo de transferencia no fueron llenados.")
-            return
-
+        if(self.tipo.currentIndex() == 0):
+            if((self.banco.text() == "") or (self.codigo.text() == "")):
+                ErrorPrompt("Error", "Los campos de banco o codigo de transferencia no fueron llenados.")
+                return
+        deuda_restante = float(self.deuda.text()) - float(self.monto.text())
+        success = self.query.exec_("UPDATE Estudiante SET book_debt = '"+  str(deuda_restante) + "' WHERE carnet = '" + self.currentStudent + "';")
+        # Si se logro pagar la deuda, se registra el pago si es transferencia. Si es en efectivo, no se hace nada.
         if(success):
-            print("Success")
             if(self.tipo.currentIndex() == 0):
                 success = self.query.exec_("INSERT INTO Transferencias(username, cliente, monto, banco, codigo) VALUES('" + Username +"', '" + self.currentStudent + "', '" + self.monto.text() + "', '" + self.banco.text() + "', '" + self.codigo.text() + "');")
                 if(success):
                     InfoPrompt("Éxito", "Se ingreso con éxito el pago de la multa!")
+                    self.updateTablaTranf()
                     self.button_aplicar.setEnabled(False)
+                    self.deuda.setText(str(deuda_restante))
                     self.monto.setText("")  
                     self.banco.setText("") 
                     self.codigo.setText("") 
@@ -382,7 +386,11 @@ class multas(QWidget):
             else:
                 self.button_aplicar.setEnabled(False)
                 self.monto.setText("")     
+                self.deuda.setText(str(deuda_restante))
                 InfoPrompt("Éxito", "Se ingreso con éxito el pago de la multa!")
+        # Si se pago la deuda completa, se elimina de los deudores
+        if(deuda_restante == 0):
+            self.updateDebtTabla()
 
 
 
@@ -396,18 +404,40 @@ class multas(QWidget):
 
     
     # Funcion que actualiza la tabla de prestamos activos
-    def updateActiveLoanTable(self):
-        queryText = "SELECT carnet, first_name, last_name FROM Loan L, Estudiante e WHERE L.carnet = e.carnet;"
+    def updateTablaTranf(self):
+        self.tabla_transferencias.clear()
+        queryText = "SELECT * FROM Transferencias;"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
         i = 0
 
         if(self.query.first()):
-            oldStudent = self.query.value(0)
             while(True):
-                newStudent = self.query.value(0)
-                if(newStudent != oldStudent):
-                    self.debts_table.item(i, 0).setText(str(self.query.value(0)))
-                    self.debts_table.item(i, 1).setText(str(self.query.value(1)))
-        else:
-            checkDebt()
+                self.tabla_transferencias.item(i, 0).setText(str(self.query.value(0)))
+                self.tabla_transferencias.item(i, 1).setText(str(self.query.value(1)))
+                self.tabla_transferencias.item(i, 2).setText(str(self.query.value(2)))
+                self.tabla_transferencias.item(i, 3).setText(str(self.query.value(3)))
+                self.tabla_transferencias.item(i, 4).setText(str(self.query.value(4)))
+
+                i+= 1
+                if(not self.query.next()):
+                    break
+
+    # Funcion que actualiza la tabla de prestamos activos
+    def updateDebtTabla(self):
+        self.debts_table.clear()
+        queryText = "SELECT e.carnet, e.first_name, e.last_name, e.book_debt FROM Estudiante e WHERE e.book_debt > 0.0;"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
+        i = 0
+
+        if(self.query.first()):
+            while(True):
+                self.debts_table.item(i, 0).setText(str(self.query.value(0)))
+                self.debts_table.item(i, 1).setText(str(self.query.value(1)))
+                self.debts_table.item(i, 2).setText(str(self.query.value(2)))
+                self.debts_table.item(i, 3).setText(str(self.query.value(3)))
+
+                i+= 1
+                if(not self.query.next()):
+                    break
