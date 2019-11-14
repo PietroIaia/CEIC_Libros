@@ -57,7 +57,7 @@ def checkBooks(bookNo):
     return checkPattern(bookNo, pattern, "Número de libros inválido", "Número de libros inválido")
 
 def checkDebt(debt):
-    pattern  = re.compile(r"[0-9]+\.[0-9]{1,2}")
+    pattern  = re.compile(r"\d+(\.\d+)?")
     return checkPattern(debt, pattern, "Deuda inválida", "La cifra de la deuda es inválida")
 
 def verification_estudiantes(fields, checkUntil):

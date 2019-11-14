@@ -6,6 +6,9 @@
 -- Última modifcación: 21-10-19, 22:02, Hora de Venezuela
 
 -- Constraint en book_copy. Agregado Author y writtenBy
+CREATE DATABASE pruebaceic;
+
+\c pruebaceic
 
 CREATE EXTENSION pgcrypto;
 
@@ -76,6 +79,19 @@ CREATE TABLE WrittenBy(
     PRIMARY KEY(book_id, author_id)
 );
 
+CREATE TABLE Transferencias(
+	username VARCHAR(32) REFERENCES CEIC_User(username),
+	cliente CHAR(8) REFERENCES Estudiante(carnet),
+	monto FLOAT8 CHECK(monto >= 0.0) DEFAULT 0.00,
+	banco TEXT NOT NULL,
+	codigo VARCHAR(100) PRIMARY KEY
+);
+
+CREATE TABLE Deuda(
+	id INT4 PRIMARY KEY,
+	monto_deuda FLOAT8 CHECK(monto_deuda >= 0.0) DEFAULT 0.00
+);
+
 CREATE INDEX WrittenBy_index ON WrittenBy(book_id, author_id);
 
 CREATE INDEX user_index ON CEIC_User(username, password_);
@@ -94,3 +110,6 @@ VALUES('User', crypt('prueba1', gen_salt('bf', 8)), 'Alan', 'Turing', 'Imitation
 
 INSERT INTO Estudiante(carnet, first_name, last_name, CI, phone, email)
 VALUES('15-11095', 'Diego', 'Peña', 26122418, 04242486353, 'djpg98@gmail.com');
+
+INSERT INTO Deuda(id, monto_deuda)
+VALUES(0, 0.00);

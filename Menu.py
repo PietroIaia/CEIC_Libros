@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaceic")
         self.db.setUserName("postgres")
-        self.db.setPassword("pegc7342")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("postgres")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
 
@@ -844,7 +844,7 @@ class Ui_MainWindow(object):
         self.ventana_prestamos = prestamos(username)
         self.stackedWidget.addWidget(self.ventana_prestamos)
         # Index : 4
-        self.ventana_multas = multas(username)
+        self.ventana_multas = multas(username, perm_mask)
         self.stackedWidget.addWidget(self.ventana_multas)
 
 

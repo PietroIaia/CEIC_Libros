@@ -308,12 +308,12 @@ class Payments_Table(QTableWidget):
     def __init__(self, place):
         super().__init__(place)
         self.setColumnCount(5) #Columnas
-        self.setRowCount(25)
+        self.setRowCount(50)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(40)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
-        self.setHorizontalHeaderLabels(["Carnet", "Nombre", "Apellido", "Banco", "Codigo"])
+        self.setHorizontalHeaderLabels(["Usuario", "Cliente", "Monto", "Banco", "Codigo"])
         self.setColumnWidth(0, 100)
         self.setColumnWidth(1, 100)
         self.setColumnWidth(2, 100)
@@ -354,7 +354,7 @@ class Debts_Table(QTableWidget):
     def __init__(self, place):
         super().__init__(place)
         self.setColumnCount(5) #Columnas
-        self.setRowCount(25)
+        self.setRowCount(50)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(30)
