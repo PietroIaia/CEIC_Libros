@@ -20,6 +20,19 @@ CREATE TABLE WrittenBy(
     PRIMARY KEY(book_id, author_id)
 );
 
+CREATE TABLE Transferencias(
+	username VARCHAR(32) REFERENCES CEIC_User(username),
+	cliente CHAR(8) REFERENCES Estudiante(carnet),
+	monto FLOAT8 CHECK(monto >= 0.0) DEFAULT 0.00,
+	banco TEXT NOT NULL,
+	codigo VARCHAR(100) PRIMARY KEY
+);
+
+CREATE TABLE Deuda(
+	id INT4 PRIMARY KEY,
+	monto_deuda FLOAT8 CHECK(monto_deuda >= 0.0) DEFAULT 0.00
+);
+
 \COPY Author FROM './CSV/AutoresIndexados.csv' DELIMITER ',';
 
 \COPY Book(title, authors, quantity, book_id) FROM './CSV/Codes.csv' DELIMITER ',' CSV HEADER;
@@ -27,3 +40,6 @@ CREATE TABLE WrittenBy(
 \COPY WrittenBy FROM './CSV/writtenBy.csv' DELIMITER ',' CSV HEADER;
 
 CREATE INDEX WrittenBy_index ON WrittenBy(book_id, author_id);
+
+INSERT INTO Deuda(id, monto_deuda)
+VALUES(0, 0.00);
