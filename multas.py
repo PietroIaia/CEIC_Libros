@@ -132,7 +132,7 @@ class multas(QWidget):
         self.tipoLabel.setFont(self.subFont)
         self.tipo = QComboBox(self.frame_form_multas)
         self.tipo.addItem("Transferencia")
-        self.tipo.addItem("Divisas")
+        self.tipo.addItem("Efectivo")
         self.tipo.setStyleSheet("QComboBox\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
         self.tipo.setFixedWidth(150)
         self.tipo.setFixedHeight(25)
@@ -295,6 +295,7 @@ class multas(QWidget):
         # Conexiones
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_act_deuda.clicked.connect(self.actualizarMontoDeuda)
+        self.button_aplicar.clicked.connect(lambda: self.pagarDeuda(Username))
 
 
     # Funcion para actualizar monto de deuda agregada por dia
@@ -333,12 +334,56 @@ class multas(QWidget):
                 self.deuda.setText(str(self.query.value(8)))
                 if(self.deuda.text() != "0.0"):
                     self.tipo.setEnabled(True)
-                    self.monto.setReadOnly(False)
-                    self.banco.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")                
+                    self.monto.setReadOnly(False)              
                     self.banco.setReadOnly(False)
                     self.codigo.setReadOnly(False)
+                    self.button_aplicar.setEnabled(True)
+                else:
+                    self.tipo.setEnabled(False)
+                    self.monto.setReadOnly(True)
+                    self.monto.setText("")          
+                    self.banco.setReadOnly(True)
+                    self.banco.setText("")          
+                    self.codigo.setReadOnly(True)
+                    self.codigo.setText("")     
+                    self.button_aplicar.setEnabled(False)
             else:
                 ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
+
+
+    # Funcion para pagar la deuda y agregar los datos de la transferencia, si el metodo de pago es transferencia.
+    def pagarDeuda(self, Username):
+        if(checkDebt(self.monto.text())):
+            if(float(self.deuda.text()) < float(self.monto.text())):
+                ErrorPrompt("Error", "El monto a pagar sobrepasa el monto de la deuda.")
+                return
+        else:
+            return
+
+        self.query = QSqlQuery()
+        if(self.tipo.currentIndex() == 0 and (self.banco.text() != "") and (self.codigo.text() != "")):
+            success = self.query.exec_("UPDATE Estudiante SET book_debt = '"+  str(float(self.deuda.text()) - float(self.monto.text())) + "' WHERE carnet = '" + self.currentStudent + "';")
+        else:
+            ErrorPrompt("Error", "Los campos de banco o codigo de transferencia no fueron llenados.")
+            return
+
+        if(success):
+            print("Success")
+            if(self.tipo.currentIndex() == 0):
+                success = self.query.exec_("INSERT INTO Transferencias(username, cliente, monto, banco, codigo) VALUES('" + Username +"', '" + self.currentStudent + "', '" + self.monto.text() + "', '" + self.banco.text() + "', '" + self.codigo.text() + "');")
+                if(success):
+                    InfoPrompt("Éxito", "Se ingreso con éxito el pago de la multa!")
+                    self.button_aplicar.setEnabled(False)
+                    self.monto.setText("")  
+                    self.banco.setText("") 
+                    self.codigo.setText("") 
+                else:
+                    ErrorPrompt("Error", "Ocurrió un error procesando los datos de la transferencia.")
+            else:
+                self.button_aplicar.setEnabled(False)
+                self.monto.setText("")     
+                InfoPrompt("Éxito", "Se ingreso con éxito el pago de la multa!")
+
 
 
     # Funcion para calcular el tiempo restante de el prestamo
