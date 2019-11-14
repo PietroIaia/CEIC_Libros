@@ -9,10 +9,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from Tables import BooksTable
+from Tables import BooksTable, InventarioBooksTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from validationFunctions import verification_books
-from AgregarLibro import AgregarLibro                               # Falta crear agregarLibro.py
+from AgregarLibro import AgregarLibro                            # Falta crear agregarLibro.py
+from AuthorSearch import AuthorSearch
 import sys
 import re
 
@@ -55,6 +56,8 @@ class gestionLibros(QWidget):
         self.guardar = QPushButton("Guardar modificación")
         self.cancel = QPushButton("Cancelar modificación")
         self.eliminar = QPushButton("Eliminar Libro")
+        self.inventario = QPushButton("Ver inventario")
+        self.author = QPushButton("Buscar por autor")
         self.confirm = QPushButton("Confirmar eliminación")
         self.deleteCancel = QPushButton("Cancelar eliminación")
         self.confirm.hide()
@@ -65,6 +68,8 @@ class gestionLibros(QWidget):
         self.cancel.setStyleSheet('background-color: PowderBlue')
         self.guardar.setStyleSheet('background-color: PowderBlue')
         self.eliminar.setStyleSheet('background-color: PowderBlue')
+        self.inventario.setStyleSheet('background-color: Blue;')
+        self.author.setStyleSheet('background-color: Blue')
         self.confirm.setStyleSheet('background-color: Red; color: white')
         self.deleteCancel.setStyleSheet('background-color: Red; color: white')
         
@@ -74,6 +79,8 @@ class gestionLibros(QWidget):
         self.actionsLayout.addWidget(self.guardar)
         self.actionsLayout.addWidget(self.cancel)
         self.actionsLayout.addWidget(self.eliminar)
+        self.actionsLayout.addWidget(self.inventario)
+        self.actionsLayout.addWidget(self.author)
         self.actionsLayout.addWidget(self.confirm)
         self.actionsLayout.addWidget(self.deleteCancel)
         self.actionsLayout.addStretch()
@@ -126,6 +133,8 @@ class gestionLibros(QWidget):
         self.modificar.clicked.connect(lambda: self.update(perm_mask))
         self.cancel.clicked.connect(self.cancelUpdate)
         self.guardar.clicked.connect(self.saveUpdate)
+        self.inventario.clicked.connect(self.inventarioLibros)
+        self.author.clicked.connect(self.searchAuthor)
         self.eliminar.clicked.connect(self.deleteRequest)
         self.confirm.clicked.connect(self.confirmDelete)
         self.deleteCancel.clicked.connect(self.cancelDelete)
@@ -162,7 +171,7 @@ class gestionLibros(QWidget):
             self.eliminar.setEnabled(True)
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         else:
-            ErrorPrompt("ENE Piso 3", "Error ENE_Piso3: Libro Not Found")
+            ErrorPrompt("Error de busqueda", "Error Libro no encontrado")
 
     @pyqtSlot()
     def update(self, perm_mask):
@@ -176,6 +185,7 @@ class gestionLibros(QWidget):
         self.nuevo.setEnabled(False)
         self.eliminar.setEnabled(False)
         self.modificar.setEnabled(False)
+        self.inventario.setEnabled(False)
         self.guardar.setEnabled(True)
         self.cancel.setEnabled(True)
         InfoPrompt("Modificación activada", "Se ha activado el modo modificación")
@@ -199,6 +209,7 @@ class gestionLibros(QWidget):
             self.nuevo.setEnabled(True)
             self.eliminar.setEnabled(True)
             self.modificar.setEnabled(True)
+            self.inventario.setEnabled(True)
             self.guardar.setEnabled(False)
             self.cancel.setEnabled(False)
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -213,18 +224,19 @@ class gestionLibros(QWidget):
         self.nuevo.setEnabled(True)
         self.eliminar.setEnabled(True)
         self.modificar.setEnabled(True)
+        self.inventario.setEnabled(True)
         self.guardar.setEnabled(False)
         self.cancel.setEnabled(False)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     @pyqtSlot()
     def deleteRequest(self):
-        ConfirmPrompt("Eliminación de Libro", "Se ha solicitado eliminar el Libro. Marque botón de eliminación para\
-            confirmar")
+        ConfirmPrompt("Eliminación de Libro", "Se ha solicitado eliminar el Libro. Marque botón de eliminación para confirmar")
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.modificar.setEnabled(False)
         self.eliminar.setEnabled(False)
+        self.inventario.setEnabled(False)
         self.confirm.setEnabled(True)
         self.deleteCancel.setEnabled(True)
         self.confirm.show()
@@ -243,6 +255,7 @@ class gestionLibros(QWidget):
                 InfoPrompt("Eliminación exitosa", "El libro ha sido eliminado del sistema")
                 self.search.setEnabled(True)
                 self.nuevo.setEnabled(True)
+                self.inventario.setEnabled(True)
                 self.confirm.setEnabled(False)
                 self.deleteCancel.setEnabled(False)
                 self.confirm.hide()
@@ -258,6 +271,7 @@ class gestionLibros(QWidget):
         self.nuevo.setEnabled(True)
         self.modificar.setEnabled(True)
         self.eliminar.setEnabled(True)
+        self.inventario.setEnabled(True)
         self.confirm.setEnabled(False)
         self.deleteCancel.setEnabled(False)
         self.confirm.hide()
@@ -274,3 +288,34 @@ class gestionLibros(QWidget):
             self.search.setEnabled(False)
         else:
             self.search.setEnabled(True)
+
+    @pyqtSlot()
+    def inventarioLibros(self):
+        self.table2 = InventarioBooksTable() #Tablas
+        row = 0
+        sql = "SELECT book_id, title FROM Book"
+        queryx = QSqlQuery(sql)
+        while queryx.next():
+           
+            self.table2.insertRow(row)
+            IDX = QTableWidgetItem(str(queryx.value(0)))
+            titulox = QTableWidgetItem(str(queryx.value(1)))
+            self.table2.setItem(row, 0, IDX)
+            self.table2.setItem(row, 1, titulox)
+            row = row + 1
+
+        self.table2.setRowCount(row)
+        self.table2.setTableColors()
+        header = self.table2.horizontalHeader()       
+        header.setSectionResizeMode(1, QHeaderView.Stretch)
+        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        self.table2.show()
+
+    @pyqtSlot()
+    def searchAuthor(self):
+        self.byAuthor = AuthorSearch()
+        self.byAuthor.show()
+
+
+
+        

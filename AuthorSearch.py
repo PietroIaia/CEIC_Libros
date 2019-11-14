@@ -2,17 +2,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from AuthorSearchTable import AuthorSearchTable #Mover esto a tables después una vez esto esté probado
-from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from validationFunctions import verification_estudiantes
-from AgregarEstudiante import AgregarEstudiante
+from Tables import AuthorSearchTable
 import sys
 
 class AuthorSearch(QWidget):
 
     def __init__(self):
 
-        self.db = QSqlDatabase.addDatabase("QPSQL")
+        self.db = QSqlDatabase.database('qt_sql_default_connection')
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaCEIC")                         
         self.db.setUserName("postgres")
@@ -56,13 +53,13 @@ class AuthorSearch(QWidget):
 
         #botones de consulta y agregar
         self.search = QPushButton("Consultar")
-        self.nuevo = QPushButton("Agregar nuevo autor")
+        #self.nuevo = QPushButton("Agregar nuevo autor")
         self.search.setStyleSheet('background-color: PowderBlue')
-        self.nuevo.setStyleSheet('background-color: PowderBlue')
+        #self.nuevo.setStyleSheet('background-color: PowderBlue')
         self.searchLayout = QVBoxLayout()
         self.searchLayout.addLayout(self.infoLayout)
         self.searchLayout.addWidget(self.search)
-        self.searchLayout.addWidget(self.nuevo)
+        #self.searchLayout.addWidget(self.nuevo)
 
         #Layout final
         self.textLayout = QVBoxLayout()
