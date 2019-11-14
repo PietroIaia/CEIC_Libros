@@ -313,7 +313,7 @@ class Payments_Table(QTableWidget):
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(40)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
-        self.setHorizontalHeaderLabels(["Carnet", "Nombre", "Apellido", "Banco", "Codigo"])
+        self.setHorizontalHeaderLabels(["Usuario", "Cliente", "Monto", "Banco", "Codigo"])
         self.setColumnWidth(0, 100)
         self.setColumnWidth(1, 100)
         self.setColumnWidth(2, 100)

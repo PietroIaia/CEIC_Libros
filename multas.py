@@ -254,11 +254,12 @@ class multas(QWidget):
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.deuda.setText(str(self.query.value(8)))
-                self.tipo.setEnabled(True)
-                self.monto.setReadOnly(False)
-                self.banco.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")                
-                self.banco.setReadOnly(False)
-                self.codigo.setReadOnly(False)
+                if(self.deuda.text() != "0.0"):
+                    self.tipo.setEnabled(True)
+                    self.monto.setReadOnly(False)
+                    self.banco.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")                
+                    self.banco.setReadOnly(False)
+                    self.codigo.setReadOnly(False)
             else:
                 ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
 
