@@ -260,7 +260,7 @@ class Active_Loan_Table(QTableWidget):
     def __init__(self, place):
         super().__init__(place)
         self.setColumnCount(5) #Columnas
-        self.setRowCount(100)
+        self.setRowCount(5)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(40)
@@ -284,7 +284,7 @@ class Active_Loan_Table(QTableWidget):
         w = 0
         for i in range(self.columnCount()):
             w += self.columnWidth(i)  # seems to include gridline (on my machine)
-        return QSize(w+23, 190)
+        return QSize(w+23, 220)
 
     def setTableColors(self):
         for i in range(self.rowCount()):
@@ -297,8 +297,6 @@ class Active_Loan_Table(QTableWidget):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
                 self.item(i, j).setBackground(QColor(224, 255, 255))
-
-
 
 ###################################################
 #           Tabla de Transferencias               #
@@ -386,6 +384,72 @@ class Debts_Table(QTableWidget):
                 self.item(i, j).setBackground(QColor(224, 255, 255))
 
     def clear(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(224, 255, 255))
+
+###################################################
+#           Tabla de inventario de libros         #
+###################################################
+class InventarioBooksTable(QTableWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Inventario de libros") #Título
+        self.setColumnCount(2) #Columnas
+        self.setHorizontalHeaderLabels(["ID","Titulo"])
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.setStyleSheet("background-color:  Silver")
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+    
+    def getQTableWidgetSize(self):
+        return QSize(800, 540)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            self.item(i, 1).setBackground(QColor(224, 255, 255))
+
+###################################################
+#           Tabla de libros de un autor           #
+###################################################
+
+class AuthorSearchTable(QTableWidget):
+    def __init__(self):
+        super().__init__()
+        self.setColumnCount(2) #Columnas
+        self.setRowCount(12)
+        self.setHorizontalHeaderLabels(["Título", "Código"])
+        #self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.setStyleSheet("background-color:  Silver")
+        self.setColumnWidth(0, 500)
+        self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setTableColors()
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        #self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+
+    def getQTableWidgetSize(self):
+        w = self.verticalHeader().width() + 4  # +4 seems to be needed
+        for i in range(self.columnCount()):
+            w += self.columnWidth(i)  # seems to include gridline (on my machine)
+        h = self.horizontalHeader().height() + 4
+        for i in range(self.rowCount()):
+            h += self.rowHeight(i)
+        return QSize(w, h)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.setItem(i, j, QTableWidgetItem())
+                self.item(i, j).setBackground(QColor(224, 255, 255))
+
+    def clear_table(self):
+        self.table.setRowCount(5)
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
