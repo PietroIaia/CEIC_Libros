@@ -188,27 +188,34 @@ class prestamos(QWidget):
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_realizar.setEnabled(False)
 
+        # Refrescar tabla prestamo
+        self.button_refrescar = QPushButton("Refrescar Tabla", self)
+        self.button_refrescar.setFixedWidth(150)
+        self.button_refrescar.setFixedHeight(28)
+        self.button_refrescar.move(647, 690)
+        self.button_refrescar.setFont(self.btnFont)
+        self.button_refrescar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
+        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        self.button_refrescar.setEnabled(True)
+
         # Tabla de prestamos
         self.Libros_prestamo = {}         # Para saber los libros que se van a prestar
         self.tabla_libros_prestamos = Books_Loan_Table(self)
         self.tabla_libros_prestamos.move(305, 60)
 
         # Tabla de prestamos activos
-        # NOTA: Para agregar nuevas filas, usamos table.insertRow(rowPosition) donde rowposition es donde la queremos poner (de ultima)
-        # https://stackoverflow.com/questions/24044421/how-to-add-a-row-in-a-tablewidget-pyqt
+        # NOTA: Para agregar nuevas filas, usamos table.insertRow(rowPosition) donde rowposition es donde la queremos poner (de ultima) https://stackoverflow.com/questions/24044421/how-to-add-a-row-in-a-tablewidget-pyqt
         self.active_loan_table = Active_Loan_Table(self)
-        # Actualizamos la tabla con los prestamos activos
-        #                  self.updateActiveLoanTable()
         self.active_loan_table.move(30, 500)
-
-        # Boton para eliminar libros de la tabla
-        self.button_eliminar_libro = QPushButton(" X ")
+        self.updateActiveLoanTable()                      # Actualizamos la tabla con los prestamos activos
 
         # Conexiones
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
         self.button_realizar.clicked.connect(lambda: self.realizarPrestamo(Username))
         self.button_devuelto.clicked.connect(lambda: self.finalizarPrestamo())
+        self.button_refrescar.clicked.connect(self.updateActiveLoanTable)
+        self.button_renovar.clicked.connect(self.renovarPrestamo)
         # NOTA: Si se agregan mas filas, no van a tener una conexion con los botones. Luego podemos arreglar eso!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.tabla_libros_prestamos.cellWidget(0, 2).clicked.connect(lambda: self.eliminarLibro(0))
         self.tabla_libros_prestamos.cellWidget(1, 2).clicked.connect(lambda: self.eliminarLibro(1))
@@ -247,16 +254,23 @@ class prestamos(QWidget):
                     self.button_devuelto.setEnabled(True)
 
                     # Si le queda menos de 1 dia para regresar el libro, permitimos la renovacion
-                    if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2)) < 2):
-                        self.button_renovar.setEnabled(True)
+                    time_left = 10000
 
                     i = 0
                     while(True):
                         self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
                         self.tabla_libros_prestamos.item(i, 1).setText(str(self.query.value(1)))
+                        # Buscamos el intervalo de prestamo mas pequeño y ese sera el intervalo de prestamo del prestamo
+                        if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2)) <= time_left):
+                            time_left = self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2))
+
                         i += 1
                         if(not self.query.next()):
                             break
+                    
+                    # Si al prestamo le falta 1 dia para vencerse, se deja renovar
+                    if(time_left < 2):
+                        self.button_renovar.setEnabled(True)
 
                 else:
                     self.prestamo.setText("No prestamo activo")
@@ -326,27 +340,32 @@ class prestamos(QWidget):
         self.query = QSqlQuery()
         start_date = str(datetime.datetime.now())
         hours = start_date.split()
+
         i = 0
+        while(i != self.tabla_libros_prestamos.rowCount()):
+            if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
+                queryText = "INSERT INTO Loan (carnet, lender, start_time, book_id, copy_id, estimated_return_time) VALUES ('" + self.carnet.text() + "', '" + Username + "', '" + start_date + "', "
+                self.query.exec_("SELECT loan_duration FROM Book WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
 
-        while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
-            queryText = "INSERT INTO Loan (carnet, lender, start_time, book_id, copy_id, estimated_return_time) VALUES ('" + self.carnet.text() + "', '" + Username + "', '" + start_date + "', "
-            self.query.exec_("SELECT loan_duration FROM Book WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
+                # Aqui completamos el queryText con la informacion faltante y restamos la cantidad de copias de cada libro en el diccionario
+                if(self.query.first()):
+                    return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
+                    queryText = queryText + "'" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "', '" + str(self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())]) +"', '" + return_date + "');"
+                    self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] -= 1
+                    # Se actualiza la cantidad de copias prestadas del libro
+                    self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent + 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
+                    # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
+                    self.query.exec_(queryText)
 
-            # Aqui completamos el queryText con la informacion faltante y restamos la cantidad de copias de cada libro en el diccionario
-            if(self.query.first()):
-                return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
-                queryText = queryText + "'" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "', '" + str(self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())]) +"', '" + return_date + "');"
-                self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] -= 1
-                # Se actualiza la cantidad de copias prestadas del libro
-                self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent + 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
-                # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
-                self.query.exec_(queryText)
-
-                i += 1
-            else: 
-                ErrorPrompt("Error", "No se pudo realizar el préstamo")
-                return
+                    i += 1
+                else: 
+                    ErrorPrompt("Error", "No se pudo realizar el préstamo")
+                    return
+            else:
+                break
         InfoPrompt("Éxito", "Se realizo el préstamo!")
+        self.button_agregar_libro.setEnabled(False)
+        self.button_realizar.setEnabled(False)
     
 
     # Funcion para marcar como finalizado el prestamo
@@ -357,9 +376,12 @@ class prestamos(QWidget):
         if(success):
             i = 0
             # Actualizamos la cantidad prestada de cada libro
-            while(self.tabla_libros_prestamos.item(i, 0).text() != ""):
-                self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent - 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
-                i += 1
+            while(i != self.tabla_libros_prestamos.rowCount()):
+                if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
+                    self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent - 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
+                    i += 1
+                else:
+                    break
         else:
             ErrorPrompt("Error", "No se pudo marcar el préstamo como finalizado")
             return
@@ -374,29 +396,62 @@ class prestamos(QWidget):
         self.tabla_libros_prestamos.cellWidget(row, 2).setText("")
         self.tabla_libros_prestamos.cellWidget(row, 2).setEnabled(False)
     
+
     # Funcion que actualiza la tabla de prestamos activos
     def updateActiveLoanTable(self):
-        queryText = "SELECT carnet, first_name, last_name FROM Loan L, Estudiante e WHERE L.carnet = e.carnet;"
+        self.active_loan_table.clear()
+        queryText = "SELECT L.carnet, e.first_name, e.last_name, L.estimated_return_time, L.book_id, L.copy_id FROM Loan L, Estudiante e WHERE L.carnet = e.carnet;"
         self.query = QSqlQuery()
+        self.query2 = QSqlQuery()
         self.query.exec_(queryText)
-        i = 0
+        i = -1
 
         if(self.query.first()):
-            oldStudent = self.query.value(0)
+            oldStudent = ""
             while(True):
                 newStudent = self.query.value(0)
                 if(newStudent != oldStudent):
+                    i += 1
                     self.active_loan_table.item(i, 0).setText(str(self.query.value(0)))
                     self.active_loan_table.item(i, 1).setText(str(self.query.value(1)))
+                    self.active_loan_table.item(i, 2).setText(str(self.query.value(2)))
+                    time_left = int(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(3))//1)
+                    self.active_loan_table.item(i, 3).setText(str(time_left) + " Dias")
+                    self.query2.exec_("SELECT title FROM Book WHERE book_id ='" + str(self.query.value(4)) + "';")
+                    self.query2.first()
+                    self.active_loan_table.item(i, 4).setText(str(self.query2.value(0)))
+                else:
+                    # Buscamos el intervalo de prestamo mas pequeño y ese sera el intervalo de prestamo del prestamo
+                    if((self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(3))//1) <= time_left):
+                        time_left = int(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(3))//1)
+                        self.active_loan_table.item(i, 3).setText(str(time_left) + " Dias")
 
+                    self.query2.exec_("SELECT title FROM Book WHERE book_id ='" + str(self.query.value(4)) + "';")
+                    self.query2.first()
+                    self.active_loan_table.item(i, 4).setText(self.active_loan_table.item(i, 4).text() + ", " + str(self.query2.value(0)))
 
+                oldStudent = self.query.value(0)
+                if(not self.query.next()):
+                    break
 
+    
+    def renovarPrestamo(self):
+        self.query = QSqlQuery()
+        start_date = str(datetime.datetime.now())
+        hours = start_date.split()
 
+        i = 0
+        while(i != self.tabla_libros_prestamos.rowCount()):
+            if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
+                self.query.exec_("SELECT loan_duration FROM Book WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
+                if(self.query.first()):
+                    return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
+                    print(return_date)
+                    self.query.exec_("UPDATE Loan SET estimated_return_time = '" + return_date + "' WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
+                    i += 1
+                else:
+                    ErrorPrompt("Error", "Ocurrio un error renovando el prestamo")
+            else:
+                break
+        InfoPrompt("Éxito", "El prestamo se renovó con exito!")
 
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    form = prestamos()
-    form.show()
-    sys.exit(app.exec_())

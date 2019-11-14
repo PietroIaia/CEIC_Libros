@@ -260,7 +260,7 @@ class Active_Loan_Table(QTableWidget):
     def __init__(self, place):
         super().__init__(place)
         self.setColumnCount(5) #Columnas
-        self.setRowCount(5)
+        self.setRowCount(100)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(40)
@@ -284,7 +284,7 @@ class Active_Loan_Table(QTableWidget):
         w = 0
         for i in range(self.columnCount()):
             w += self.columnWidth(i)  # seems to include gridline (on my machine)
-        return QSize(w+23, 220)
+        return QSize(w+23, 190)
 
     def setTableColors(self):
         for i in range(self.rowCount()):
