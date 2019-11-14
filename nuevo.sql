@@ -37,7 +37,7 @@ CREATE TABLE Deuda(
 
 \COPY Book(title, authors, quantity, book_id) FROM './CSV/Codes.csv' DELIMITER ',' CSV HEADER;
 
-\COPY WrittenBy FROM './CSV/writtenBy.csv' DELIMITER ',' CSV HEADER;
+\COPY WrittenBy FROM './CSV/writtenBy.csv' DELIMITER ',';
 
 CREATE INDEX WrittenBy_index ON WrittenBy(book_id, author_id);
 

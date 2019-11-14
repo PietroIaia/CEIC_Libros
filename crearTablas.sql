@@ -100,7 +100,7 @@ CREATE INDEX user_index ON CEIC_User(username, password_);
 
 \COPY Book(title, authors, quantity, book_id) FROM './CSV/Codes.csv' DELIMITER ',' CSV HEADER;
 
-\COPY WrittenBy FROM './CSV/writtenBy.csv' DELIMITER ',' CSV HEADER;
+\COPY WrittenBy FROM './CSV/writtenBy.csv' DELIMITER ',';
 
 INSERT INTO CEIC_User(username, password_, first_name, last_name, email, permission_mask, last_login, creation_date)
 VALUES('Admin', crypt('prueba1', gen_salt('bf', 8)), 'Alan', 'Turing', 'ImitationGame@gmail.com', 1, now(), now());
