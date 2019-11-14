@@ -255,7 +255,6 @@ class prestamos(QWidget):
 
                     # Si le queda menos de 1 dia para regresar el libro, permitimos la renovacion
                     time_left = 10000
-
                     i = 0
                     while(True):
                         self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
@@ -274,9 +273,9 @@ class prestamos(QWidget):
 
                 else:
                     self.prestamo.setText("No prestamo activo")
-
-                    self.libro.setEnabled(True)
-                    self.button_agregar_libro.setEnabled(True)
+                    if(float(self.deuda.text()) == 0 ):
+                        self.libro.setEnabled(True)
+                        self.button_agregar_libro.setEnabled(True)
                     self.button_devuelto.setEnabled(False)
 
             else:
@@ -364,6 +363,7 @@ class prestamos(QWidget):
             else:
                 break
         InfoPrompt("Éxito", "Se realizo el préstamo!")
+        self.updateActiveLoanTable()
         self.button_agregar_libro.setEnabled(False)
         self.button_realizar.setEnabled(False)
     
@@ -433,6 +433,22 @@ class prestamos(QWidget):
                 oldStudent = self.query.value(0)
                 if(not self.query.next()):
                     break
+
+            # Luego de haber actualizado la tabla, actualizamos la deuda de cada usuario en la tabla
+            self.query.exec_("SELECT monto_deuda FROM Deuda;")
+            if(self.query.first()):
+                monto = float(self.query.value(0))
+                i = 0
+                while(i != self.active_loan_table.rowCount()):
+                    if(self.active_loan_table.item(i, 0).text() != ""):
+                        dias = self.active_loan_table.item(i, 3).text().split()
+                        dias = int(dias[0])
+                        if(dias < 0):
+                            self.query.exec_("UPDATE Estudiante SET book_debt = '" + str(monto*(-dias)) + "' WHERE carnet = '"+ self.active_loan_table.item(i,0).text() + "';")
+                        i += 1
+                    else:
+                        break
+
 
     
     def renovarPrestamo(self):
