@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaceic")
         self.db.setUserName("postgres")
-        self.db.setPassword("pegc7342")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("postgres")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
 

@@ -47,7 +47,7 @@ class multas(QWidget):
         "{\n"
         "background-color: white;\n"
         "}")
-        self.frame_form_multas.move(10, 60)
+        self.frame_form_multas.move(10, 120)
 
         # Informacion de prestamo
         self.info_prestamo_frame = QFrame(self.frame_form_multas)
@@ -133,7 +133,7 @@ class multas(QWidget):
         self.tipo = QComboBox(self.frame_form_multas)
         self.tipo.addItem("Transferencia")
         self.tipo.addItem("Divisas")
-        self.tipo.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+        self.tipo.setStyleSheet("QComboBox\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
         self.tipo.setFixedWidth(150)
         self.tipo.setFixedHeight(25)
         self.tipo.move(85, 245)
@@ -145,7 +145,7 @@ class multas(QWidget):
         self.montoLabel.setFont(self.subFont)
         self.monto = QLineEdit(self.frame_form_multas)
         self.monto.setReadOnly(True)
-        self.monto.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: #F2F2F2;\n}")
+        self.monto.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
         self.monto.setFixedWidth(150)
         self.monto.setFixedHeight(25)
         self.monto.setTextMargins(5, 0, 0, 0)
@@ -157,19 +157,19 @@ class multas(QWidget):
         self.bancoLabel.setFont(self.subFont)
         self.banco = QLineEdit(self.frame_form_multas)
         self.banco.setReadOnly(True)
-        self.banco.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: #F2F2F2;\n}")
+        self.banco.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
         self.banco.setFixedWidth(150)
         self.banco.setFixedHeight(25)
         self.banco.setTextMargins(5, 0, 0, 0)
         self.banco.move(85, 305)
 
         # Referencia de transferencia
-        self.codigoLabel = QLabel("Codigo Ref ", self.frame_form_multas)
+        self.codigoLabel = QLabel("Código ", self.frame_form_multas)
         self.codigoLabel.move(10, 339)
-        self.codigoLabel.setFont(self.btnFont)
+        self.codigoLabel.setFont(self.subFont)
         self.codigo = QLineEdit(self.frame_form_multas)
         self.codigo.setReadOnly(True)
-        self.codigo.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: #F2F2F2;\n}")
+        self.codigo.setStyleSheet("QLineEdit\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
         self.codigo.setFixedWidth(150)
         self.codigo.setFixedHeight(25)
         self.codigo.setTextMargins(5, 0, 0, 0)
@@ -205,13 +205,13 @@ class multas(QWidget):
         "{\n"
         "background-color: #79B9E0;\nborder: 1px;\n border-radius: 3px;\n"
         "}")
-        self.titulo_transfer.setFixedWidth(255)
+        self.titulo_transfer.setFixedWidth(535)
         self.titulo_transfer.setFixedHeight(40)
-        self.titulo_transfer.move(430, 30)
+        self.titulo_transfer.move(290, 40)
         self.transfer = QLabel("Transferencias", self)
         self.transfer.setStyleSheet('background-color: #79B9E0')
         self.transfer.setFont(self.instFont)
-        self.transfer.move(500, 40)
+        self.transfer.move(485, 47)
 
         self.tabla_transferencias = Payments_Table(self)
         self.tabla_transferencias.move(290, 80)
@@ -226,28 +226,19 @@ class multas(QWidget):
         "{\n"
         "background-color: #79B9E0;\nborder: 1px;\n border-radius: 3px;\n"
         "}")
-        self.titulo_deudas.setFixedWidth(255)
+        self.titulo_deudas.setFixedWidth(535)
         self.titulo_deudas.setFixedHeight(40)
-        self.titulo_deudas.move(430, 400)
+        self.titulo_deudas.move(290, 410)
         self.deudas = QLabel("Deudas Pendientes", self)
         self.deudas.setStyleSheet('background-color: #79B9E0')
         self.deudas.setFont(self.instFont)
-        self.deudas.move(485, 411)
+        self.deudas.move(485, 417)
 
         self.debts_table = Debts_Table(self)
-        self.debts_table.move(300, 450)
+        self.debts_table.move(290, 450)
 
         # Conexiones
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
-
-        # NOTA: Si se agregan mas filas, no van a tener una conexion con los botones. Luego podemos arreglar eso!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        # self.tabla_transferencias.cellWidget(0, 2).clicked.connect(lambda: self.eliminarLibro(0))
-        # self.tabla_transferencias.cellWidget(1, 2).clicked.connect(lambda: self.eliminarLibro(1))
-        # self.tabla_transferencias.cellWidget(2, 2).clicked.connect(lambda: self.eliminarLibro(2))
-        # self.tabla_transferencias.cellWidget(3, 2).clicked.connect(lambda: self.eliminarLibro(3))
-        # self.tabla_transferencias.cellWidget(4, 2).clicked.connect(lambda: self.eliminarLibro(4))
-        # self.tabla_transferencias.cellWidget(5, 2).clicked.connect(lambda: self.eliminarLibro(5))
-        # self.tabla_transferencias.cellWidget(6, 2).clicked.connect(lambda: self.eliminarLibro(6))
 
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
@@ -270,49 +261,6 @@ class multas(QWidget):
                 self.codigo.setReadOnly(False)
             else:
                 ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
-    
-
-    # Funcion para buscar el libro e ingresarlo a la tabla de libros Prestamos cuando se este realizando un prestamo
-    def buscarLibro(self, Libro):
-        if(checkTitle(Libro)):
-            queryText = "SELECT * FROM Book WHERE title = '" + Libro + "';"
-            self.query = QSqlQuery()
-            self.query.exec_(queryText)
-            if(self.query.first()):
-                i = 0
-                while(i != self.tabla_transferencias.rowCount()):
-                    if(self.tabla_transferencias.item(i, 0).text() != ""):
-                        i += 1
-                    elif(self.tabla_transferencias.item(i, 0).text() == ""):
-                        break
-
-                    if(i == self.tabla_transferencias.rowCount()):
-                        ErrorPrompt("Error", "Todas las casillas estan llenas, no puede pedir otro libro.")
-                        return
-
-                # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
-                if(str(Libro) in self.Libros_prestamo.keys() and self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
-                    self.Libros_prestamo[str(Libro)] += 1
-                    self.tabla_transferencias.item(i, 0).setText(str(self.query.value(0)))
-                    self.tabla_transferencias.item(i, 1).setText(str(Libro))
-                    self.tabla_transferencias.cellWidget(i, 2).setEnabled(True)
-                    self.tabla_transferencias.cellWidget(i, 2).setText("X")
-                # Si el libro no esta en el diccionario, se agrega
-                elif(str(Libro) not in self.Libros_prestamo.keys()):
-                    self.Libros_prestamo[str(Libro)] = 0
-                    # Si se estan prestando menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
-                    if(self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
-                        self.Libros_prestamo[str(Libro)] = 1
-                        self.tabla_transferencias.item(i, 0).setText(str(self.query.value(0)))
-                        self.tabla_transferencias.item(i, 1).setText(str(Libro))
-                        self.tabla_transferencias.cellWidget(i, 2).setEnabled(True)
-                        self.tabla_transferencias.cellWidget(i, 2).setText("X")
-                else:
-                    ErrorPrompt("Error", "No existen mas ejemplares disponibles de este libro")
-            else:
-                ErrorPrompt("Error", "No se encontró el Libro especificado")
-
-            self.button_realizar.setEnabled(True)
 
 
     # Funcion para calcular el tiempo restante de el prestamo
@@ -323,59 +271,6 @@ class multas(QWidget):
         aux = (int(returnTimeAux) - int(startTimeAux))/86400
         return aux
 
-
-    # Funcion para realizar el prestamo
-    def realizarPrestamo(self, Username):
-        self.query = QSqlQuery()
-        start_date = str(datetime.datetime.now())
-        hours = start_date.split()
-        i = 0
-
-        while(self.tabla_transferencias.item(i, 0).text() != ""):
-            queryText = "INSERT INTO Loan (carnet, lender, start_time, book_id, copy_id, estimated_return_time) VALUES ('" + self.carnet.text() + "', '" + Username + "', '" + start_date + "', "
-            self.query.exec_("SELECT loan_duration FROM Book WHERE book_id = '" + self.tabla_transferencias.item(i, 0).text() + "';")
-
-            # Aqui completamos el queryText con la informacion faltante y restamos la cantidad de copias de cada libro en el diccionario
-            if(self.query.first()):
-                return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
-                queryText = queryText + "'" + str(self.tabla_transferencias.item(i, 0).text()) + "', '" + str(self.Libros_prestamo[str(self.tabla_transferencias.item(i, 1).text())]) +"', '" + return_date + "');"
-                self.Libros_prestamo[str(self.tabla_transferencias.item(i, 1).text())] -= 1
-                # Se actualiza la cantidad de copias prestadas del libro
-                self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent + 1 WHERE book_id='" + str(self.tabla_transferencias.item(i, 0).text()) + "';")
-                # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
-                self.query.exec_(queryText)
-
-                i += 1
-            else: 
-                ErrorPrompt("Error", "No se pudo realizar el préstamo")
-                return
-        InfoPrompt("Éxito", "Se realizo el préstamo!")
-    
-
-    # Funcion para marcar como finalizado el prestamo
-    def finalizarPrestamo(self):
-        self.query = QSqlQuery()
-        success = self.query.exec_("DELETE FROM Loan WHERE carnet='" + str(self.currentStudent) + "';")
-
-        if(success):
-            i = 0
-            # Actualizamos la cantidad prestada de cada libro
-            while(self.tabla_transferencias.item(i, 0).text() != ""):
-                self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent - 1 WHERE book_id='" + str(self.tabla_transferencias.item(i, 0).text()) + "';")
-                i += 1
-        else:
-            ErrorPrompt("Error", "No se pudo marcar el préstamo como finalizado")
-            return
-        InfoPrompt("Éxito", "Se marco el préstamo como finalizado!")
-
-    
-    # Funcion para eliminar libro de la tabla
-    def eliminarLibro(self, row):
-        self.Libros_prestamo[str(self.tabla_transferencias.item(row, 1).text())] -= 1
-        self.tabla_transferencias.item(row, 0).setText("")
-        self.tabla_transferencias.item(row, 1).setText("")
-        self.tabla_transferencias.cellWidget(row, 2).setText("")
-        self.tabla_transferencias.cellWidget(row, 2).setEnabled(False)
     
     # Funcion que actualiza la tabla de prestamos activos
     def updateActiveLoanTable(self):
@@ -391,15 +286,3 @@ class multas(QWidget):
                 if(newStudent != oldStudent):
                     self.debts_table.item(i, 0).setText(str(self.query.value(0)))
                     self.debts_table.item(i, 1).setText(str(self.query.value(1)))
-
-
-
-
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    form = multas('Admin')
-    form.show()
-    sys.exit(app.exec_())
