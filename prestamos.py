@@ -240,6 +240,7 @@ class prestamos(QWidget):
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.deuda.setText(str(self.query.value(8)))
+                self.button_renovar.setEnabled(False)
                 for i in range(self.tabla_libros_prestamos.rowCount()):
                     self.tabla_libros_prestamos.cellWidget(i, 2).setText("")
                     self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(False)
@@ -268,7 +269,7 @@ class prestamos(QWidget):
                             break
                     
                     # Si al prestamo le falta 1 dia para vencerse, se deja renovar
-                    if(time_left < 2):
+                    if(-1 < time_left < 2):
                         self.button_renovar.setEnabled(True)
 
                 else:
@@ -277,6 +278,7 @@ class prestamos(QWidget):
                         self.libro.setEnabled(True)
                         self.button_agregar_libro.setEnabled(True)
                     self.button_devuelto.setEnabled(False)
+                    self.button_renovar.setEnabled(False)
 
             else:
                 ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
@@ -343,7 +345,7 @@ class prestamos(QWidget):
         i = 0
         while(i != self.tabla_libros_prestamos.rowCount()):
             if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
-                queryText = "INSERT INTO Loan (carnet, lender, start_time, book_id, copy_id, estimated_return_time) VALUES ('" + self.carnet.text() + "', '" + Username + "', '" + start_date + "', "
+                queryText = "INSERT INTO Loan (carnet, lender, start_time, book_id, copy_id, estimated_return_time) VALUES ('" + self.currentStudent + "', '" + Username + "', '" + start_date + "', "
                 self.query.exec_("SELECT loan_duration FROM Book WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
 
                 # Aqui completamos el queryText con la informacion faltante y restamos la cantidad de copias de cada libro en el diccionario
@@ -364,8 +366,7 @@ class prestamos(QWidget):
                 break
         InfoPrompt("Éxito", "Se realizo el préstamo!")
         self.updateActiveLoanTable()
-        self.button_agregar_libro.setEnabled(False)
-        self.button_realizar.setEnabled(False)
+        self.buscarEstudiante(self.currentStudent)
     
 
     # Funcion para marcar como finalizado el prestamo
@@ -386,6 +387,8 @@ class prestamos(QWidget):
             ErrorPrompt("Error", "No se pudo marcar el préstamo como finalizado")
             return
         InfoPrompt("Éxito", "Se marco el préstamo como finalizado!")
+        self.updateActiveLoanTable()
+        self.buscarEstudiante(self.currentStudent)
 
     
     # Funcion para eliminar libro de la tabla
