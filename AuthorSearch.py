@@ -101,8 +101,11 @@ class AuthorSearch(QWidget):
                      JOIN WrittenBy as w ON w.book_id = b.book_id\
                      WHERE w.author_id = (SELECT author_id\
                                           FROM Author\
-                                          WHERE last_name = \'" + names[0] + "\' \
-                                          AND first_name = \'" + names[1] + "\')"
+                                          WHERE last_name = \'" + names[0] + "\'"
+        if (len(names) > 1):
+            queryText += "AND first_name = \'" + names[1] + "\')"
+        else:
+            queryText += ")"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 
@@ -112,6 +115,7 @@ class AuthorSearch(QWidget):
             self.table.item(i, 0).setText(str(self.query.value(0)))
             self.table.item(i, 1).setText(str(self.query.value(1)))
             i += 1
+            #self.table.resizeColumnsToContents()
 
 
 

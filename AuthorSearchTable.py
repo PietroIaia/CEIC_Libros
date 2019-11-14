@@ -10,14 +10,17 @@ class AuthorSearchTable(QTableWidget):
     def __init__(self):
         super().__init__()
         self.setColumnCount(2) #Columnas
-        self.setRowCount(5)
+        self.setRowCount(10)
         self.setHorizontalHeaderLabels(["Título", "Código"])
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        #self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
+        self.setColumnWidth(0, 500)
+        self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())
         self.setTableColors()
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        #self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
 
     def getQTableWidgetSize(self):
         w = self.verticalHeader().width() + 4  # +4 seems to be needed
