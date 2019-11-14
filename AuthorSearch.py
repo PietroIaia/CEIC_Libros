@@ -95,8 +95,14 @@ class AuthorSearch(QWidget):
 
     @pyqtSlot()
     def consulta(self):
-        lastName = self.authorList.currentText().split(",")[0]
-        queryText = "SELECT title, book_id FROM Book WHERE authors LIKE \'%" + lastName + "%\';"
+        names = self.authorList.currentText().split(", ")
+        queryText = "SELECT b.title, b.book_id \
+                     FROM Book as b\
+                     JOIN WrittenBy as w ON w.book_id = b.book_id\
+                     WHERE w.author_id = (SELECT author_id\
+                                          FROM Author\
+                                          WHERE last_name = \'" + names[0] + "\' \
+                                          AND first_name = \'" + names[1] + "\')"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 

@@ -5,7 +5,7 @@
 -- Fecha de inicio: 14-10-19, no recuerdo la hora, pero debe haber sido tarde-noche
 -- Última modifcación: 21-10-19, 22:02, Hora de Venezuela
 
--- Tablas básicas y algunos datos de prueba
+-- Constraint en book_copy. Agregado Author y writtenBy
 
 CREATE EXTENSION pgcrypto;
 
@@ -36,15 +36,15 @@ CREATE TABLE Book(
 	book_id INT4 PRIMARY KEY CHECK(book_id <= 9999 AND book_id >= 0),
 	title VARCHAR(100),
 	authors VARCHAR(100),
-	isbn VARCHAR(100),
+	isbn VARCHAR(100) DEFAULT 'NA',
 	quantity INT4,
-	quantity_lent INT4, 
+	quantity_lent INT4 DEFAULT 0, 
 	loan_duration INT4 DEFAULT 7 --Recordar cambiar esto luego de hablar con el CEIC
 );
 
 CREATE TABLE Book_copy(
 	copy_id INT4 CHECK(copy_id <= 99 AND copy_id >= 0), 
-	book_id INT4,
+	book_id INT4 REFERENCES Book(book_id),
 	edition INT4 DEFAULT NULL,
 	ed_year INT4 DEFAULT NULL,
 	ed_language VARCHAR(32) DEFAULT NULL,
@@ -70,9 +70,21 @@ CREATE TABLE Author(
     author_id INT4 PRIMARY KEY
 );
 
+CREATE TABLE WrittenBy(
+    book_id INT4 REFERENCES Book(book_id),
+    author_id INT4 REFERENCES Author(author_id),
+    PRIMARY KEY(book_id, author_id)
+);
+
+CREATE INDEX WrittenBy_index ON WrittenBy(book_id, author_id);
+
 CREATE INDEX user_index ON CEIC_User(username, password_);
 
-\COPY Author FROM './AutoresIndexados.csv' DELIMITER ',';
+\COPY Author FROM './CSV/AutoresIndexados.csv' DELIMITER ',';
+
+\COPY Book(title, authors, quantity, book_id) FROM './CSV/Codes.csv' DELIMITER ',' CSV HEADER;
+
+\COPY WrittenBy FROM './CSV/writtenBy.csv' DELIMITER ',' CSV HEADER;
 
 INSERT INTO CEIC_User(username, password_, first_name, last_name, email, permission_mask, last_login, creation_date)
 VALUES('Admin', crypt('prueba1', gen_salt('bf', 8)), 'Alan', 'Turing', 'ImitationGame@gmail.com', 1, now(), now());
