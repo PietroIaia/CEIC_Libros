@@ -297,3 +297,97 @@ class Active_Loan_Table(QTableWidget):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
                 self.item(i, j).setBackground(QColor(224, 255, 255))
+
+
+
+###################################################
+#           Tabla de Transferencias               #
+###################################################
+
+class Payments_Table(QTableWidget):
+    def __init__(self, place):
+        super().__init__(place)
+        self.setColumnCount(5) #Columnas
+        self.setRowCount(25)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
+        self.verticalHeader().hide()
+        self.verticalHeader().setDefaultSectionSize(40)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.setHorizontalHeaderLabels(["Carnet", "Nombre", "Apellido", "Banco", "Codigo"])
+        self.setColumnWidth(0, 100)
+        self.setColumnWidth(1, 100)
+        self.setColumnWidth(2, 100)
+        self.setColumnWidth(3, 100)
+        self.setColumnWidth(4, 120)
+        self.setStyleSheet("background-color:  Silver")
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setTableColors()
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.clear()
+    
+    def getQTableWidgetSize(self):
+        w = 0
+        for i in range(self.columnCount()):
+            w += self.columnWidth(i)  # seems to include gridline (on my machine)
+        return QSize(w+16, 300)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.setItem(i, j, QTableWidgetItem())
+                self.item(i, j).setBackground(QColor(224, 255, 255))
+
+    def clear(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(224, 255, 255))
+
+###################################################
+#             Tabla de Deudas                     #
+###################################################
+
+class Debts_Table(QTableWidget):
+    def __init__(self, place):
+        super().__init__(place)
+        self.setColumnCount(5) #Columnas
+        self.setRowCount(25)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
+        self.verticalHeader().hide()
+        self.verticalHeader().setDefaultSectionSize(30)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.setHorizontalHeaderLabels(["Carnet", "Nombre", "Apellido", "Deuda", "Préstamo actual"])
+        self.setColumnWidth(0, 100)
+        self.setColumnWidth(1, 100)
+        self.setColumnWidth(2, 100)
+        self.setColumnWidth(3, 100)
+        self.setColumnWidth(4, 120)
+        self.setStyleSheet("background-color:  Silver")
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setTableColors()
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.clear()
+    
+    def getQTableWidgetSize(self):
+        w = 0
+        for i in range(self.columnCount()):
+            w += self.columnWidth(i)  # seems to include gridline (on my machine)
+        return QSize(w+16, 250)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.setItem(i, j, QTableWidgetItem())
+                self.item(i, j).setBackground(QColor(224, 255, 255))
+
+    def clear(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(224, 255, 255))
