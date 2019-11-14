@@ -9,7 +9,7 @@
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
-from PyQt5.QtGui import QFont, QPixmap, QColor
+from PyQt5.QtGui import QFont, QPixmap, QColor, QKeySequence
 from Prompt import ErrorPrompt
 
 
@@ -448,9 +448,16 @@ class AuthorSearchTable(QTableWidget):
                 self.setItem(i, j, QTableWidgetItem())
                 self.item(i, j).setBackground(QColor(224, 255, 255))
 
-    def clear_table(self):
-        self.table.setRowCount(5)
+    def clearTable(self):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
                 self.item(i, j).setBackground(QColor(224, 255, 255))
+
+    def keyPressEvent(self, event):
+        clipboard = QApplication.clipboard()
+        if event.matches(QKeySequence.Copy):
+            clipboard.setText("some text")
+        if event.matches(QKeySequence.Paste):
+            print(clipboard.text())
+        QTableWidget.keyPressEvent(self, event)

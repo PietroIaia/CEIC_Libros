@@ -92,6 +92,7 @@ class AuthorSearch(QWidget):
 
     @pyqtSlot()
     def consulta(self):
+        self.table.clearTable()
         names = self.authorList.currentText().split(", ")
         queryText = "SELECT b.title, b.book_id \
                      FROM Book as b\
