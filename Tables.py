@@ -220,6 +220,8 @@ class Books_Loan_Table(QTableWidget):
         self.setStyleSheet("background-color:  Silver")
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())
+        for i in range(self.rowCount()):
+            self.setCellWidget(i, 2, QPushButton())
         self.setTableColors()
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.setFocusPolicy(Qt.NoFocus)
@@ -235,13 +237,21 @@ class Books_Loan_Table(QTableWidget):
     def setTableColors(self):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
-                self.setItem(i, j, QTableWidgetItem())
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                if(j == 2):
+                    self.cellWidget(i, j).setStyleSheet('background-color: rgb(224, 255, 255); border: 0px')
+                else:
+                    self.setItem(i, j, QTableWidgetItem())
+                    self.item(i, j).setBackground(QColor(224, 255, 255))
 
     def clear(self):
         for i in range(self.rowCount()):
-            self.item(i, 0).setText("")
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            self.cellWidget(i, 2).setEnabled(False)
+            for j in range(self.columnCount()):
+                if(j != 2):
+                    self.item(i, j).setText("")
+                    self.item(i, j).setBackground(QColor(224, 255, 255))
+
+    
 
 ###################################################
 #           Tabla de Prestamos Activos            #
@@ -250,7 +260,7 @@ class Active_Loan_Table(QTableWidget):
     def __init__(self, place):
         super().__init__(place)
         self.setColumnCount(5) #Columnas
-        self.setRowCount(5)
+        self.setRowCount(100)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(40)
@@ -274,7 +284,7 @@ class Active_Loan_Table(QTableWidget):
         w = 0
         for i in range(self.columnCount()):
             w += self.columnWidth(i)  # seems to include gridline (on my machine)
-        return QSize(w+23, 220)
+        return QSize(w+23, 190)
 
     def setTableColors(self):
         for i in range(self.rowCount()):
@@ -284,5 +294,6 @@ class Active_Loan_Table(QTableWidget):
 
     def clear(self):
         for i in range(self.rowCount()):
-            self.item(i, 0).setText("")
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(224, 255, 255))

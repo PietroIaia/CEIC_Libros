@@ -18,7 +18,7 @@ import re
 
 class gestionLibros(QWidget):
 
-    def __init__(self):
+    def __init__(self, perm_mask):
 
         #Inicialización de la ventana
         super().__init__()
@@ -123,7 +123,7 @@ class gestionLibros(QWidget):
         self.setLayout(self.textLayout)
 
         self.search.clicked.connect(self.consulta)
-        self.modificar.clicked.connect(self.update)
+        self.modificar.clicked.connect(lambda: self.update(perm_mask))
         self.cancel.clicked.connect(self.cancelUpdate)
         self.guardar.clicked.connect(self.saveUpdate)
         self.eliminar.clicked.connect(self.deleteRequest)
@@ -131,6 +131,9 @@ class gestionLibros(QWidget):
         self.deleteCancel.clicked.connect(self.cancelDelete)
         self.nuevo.clicked.connect(self.addBook)
         self.titulo.textChanged[str].connect(self.check_disable)
+
+        # Guarda la cantidad de copias que tiene el libro, si se llega a modificar, la usaremos para ver cuantas copias hay que agregar al sistema
+        self.noCopy = 0
 
     @pyqtSlot()
     def consulta(self):
@@ -151,6 +154,8 @@ class gestionLibros(QWidget):
             self.currentBook = tituloBuscado
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
             for i in range(self.table.rowCount()):
+                if(i == 4):
+                    self.noCopy = int(self.query.value(i))
                 self.table.item(i, 0).setText(str(self.query.value(i)))
 
             self.modificar.setEnabled(True)
@@ -160,11 +165,13 @@ class gestionLibros(QWidget):
             ErrorPrompt("ENE Piso 3", "Error ENE_Piso3: Libro Not Found")
 
     @pyqtSlot()
-    def update(self):
+    def update(self, perm_mask):
         #Permito modificar la tabla
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers | QAbstractItemView.DoubleClicked)
         self.table.item(0, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "ID"
         self.table.item(5, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                         # No deja modificar la fila "Cantidad prestada"
+        if(perm_mask == 0):
+            self.table.item(6, 0).setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)                     # No deja modificar la fila "Duracion de prestamo" si el usuario no es Admin
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.eliminar.setEnabled(False)
