@@ -284,7 +284,7 @@ class Active_Loan_Table(QTableWidget):
         w = 0
         for i in range(self.columnCount()):
             w += self.columnWidth(i)  # seems to include gridline (on my machine)
-        return QSize(w+23, 220)
+        return QSize(w+23, 190)
 
     def setTableColors(self):
         for i in range(self.rowCount()):
