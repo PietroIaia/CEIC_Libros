@@ -44,13 +44,13 @@ class AgregarLibro(QWidget):
         #Aquí vienen los campos
         self.IDLabel = QLabel("ID del libro")
         self.IDInput = QLineEdit(self)
-        self.titleBookLabel = QLabel("Titulo del libro")
+        self.titleBookLabel = QLabel("Título del libro")
         self.titleBookInput = QLineEdit(self)
         self.authorsLabel = QLabel("Nombre del autor")
         self.authorsInput = QLineEdit(self)
         self.ISBNLabel = QLabel("ISBN")
         self.ISBNInput = QLineEdit(self)
-        self.quantityLabel = QLabel("Numero de ejemplares")
+        self.quantityLabel = QLabel("Número de ejemplares")
         self.quantityInput = QLineEdit(self)
 
         #CSS
