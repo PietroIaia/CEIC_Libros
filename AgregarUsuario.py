@@ -51,7 +51,7 @@ class AgregarUsuario(QWidget):
         self.nombreInput = QLineEdit(self)
         self.apellidoLabel = QLabel("Apellido")
         self.apellidoInput = QLineEdit(self)
-        self.emailLabel = QLabel("Correo electronico")
+        self.emailLabel = QLabel("Correo electrónico")
         self.emailInput = QLineEdit(self)
         self.permisosLabel = QLabel("Permisos de Administrador")
         self.permisosInput = QCheckBox()
