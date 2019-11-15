@@ -1,3 +1,7 @@
+CREATE SEQUENCE idAuthor INCREMENT 1
+MINVALUE 173
+START 173;
+
 CREATE TABLE Book(
 	book_id INT4 PRIMARY KEY CHECK(book_id <= 9999 AND book_id >= 0),
 	title VARCHAR(100),
@@ -11,7 +15,7 @@ CREATE TABLE Book(
 CREATE TABLE Author(
     first_name VARCHAR(32),
     last_name VARCHAR(64),
-    author_id INT4 PRIMARY KEY
+    author_id INT4 DEFAULT nextval('idAuthor') PRIMARY KEY
 );
 
 CREATE TABLE WrittenBy(

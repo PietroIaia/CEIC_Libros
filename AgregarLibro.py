@@ -13,6 +13,8 @@ from validationFunctions import verification_books
 from Prompt import InfoPrompt, ErrorPrompt
 import sys
 
+autores = ""
+
 class AgregarLibro(QWidget):
 
     def __init__(self):
@@ -28,9 +30,9 @@ class AgregarLibro(QWidget):
         #Base de datos
         self.db = QSqlDatabase.database('qt_sql_default_connection')
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaceic")
+        self.db.setDatabaseName("pruebaCEIC")
         self.db.setUserName("postgres")
-        self.db.setPassword("postgres")
+        self.db.setPassword("Tranc0nReloj-7aha")
         self.db.open()
 
         #Creación de fonts para las letras
@@ -47,16 +49,26 @@ class AgregarLibro(QWidget):
         self.titleBookLabel = QLabel("Titulo del libro")
         self.titleBookInput = QLineEdit(self)
         self.authorsLabel = QLabel("Nombre del autor")
-        self.authorsInput = QLineEdit(self)
+        self.authorsInput = QComboBox(self)
         self.ISBNLabel = QLabel("ISBN")
         self.ISBNInput = QLineEdit(self)
         self.quantityLabel = QLabel("Numero de ejemplares")
         self.quantityInput = QLineEdit(self)
 
+        sql = "SELECT first_name, last_name FROM Author ORDER BY last_name"  ## cambiar esto
+        queryx = QSqlQuery(sql)
+        while queryx.next():
+           
+            IDX = str(queryx.value(0))
+            IDX2 = str(queryx.value(1))
+            IDX3 = IDX + " "+ IDX2
+            self.authorsInput.addItem(IDX3)
+
+
         #CSS
         self.IDInput.setStyleSheet('background-color: white')
         self.titleBookInput.setStyleSheet('background-color: white')
-        self.authorsInput.setStyleSheet('background-color: white')
+        #self.authorsInput.setStyleSheet('background-color: white')
         self.ISBNInput.setStyleSheet('background-color: white')
         self.quantityInput.setStyleSheet('background-color: white')
 
@@ -84,10 +96,12 @@ class AgregarLibro(QWidget):
 
         self.agregar.clicked.connect(self.AgregarLibro)
         self.cancelar.clicked.connect(self.closeWindow)
+        self.authorsInput.activated[str].connect(self.seleccion)
 
     @pyqtSlot()
     def AgregarLibro(self):
-        fields = [self.IDInput.text(), self.titleBookInput.text(), self.authorsInput.text(), self.ISBNInput.text(),\
+        global autores
+        fields = [self.IDInput.text(), self.titleBookInput.text(), autores, self.ISBNInput.text(),\
             self.quantityInput.text()]
 
         correct = verification_books(fields, 5)
@@ -116,6 +130,13 @@ class AgregarLibro(QWidget):
         for i in range(int(fields[4])):
             self.query.exec_("INSERT INTO Book_copy (copy_id, book_id) VALUES('" + str(i+1) + "', '" + str(fields[0]) + "');")
 
+    @pyqtSlot()
+    def seleccion(self):
+        global autores
+        autores = autores + self.authorsInput.currentText()+ " , "
+        InfoPrompt("Éxito", "Su autor ha sido seleccionado exitosamente")
+        self.authorsInput.removeItem(self.authorsInput.currentIndex())
+        print(autores)
 
     @pyqtSlot()
     def closeWindow(self):

@@ -10,6 +10,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtGui import QFont, QPixmap, QColor, QKeySequence
+from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt
 
 
@@ -412,6 +413,58 @@ class InventarioBooksTable(QTableWidget):
         for i in range(self.rowCount()):
             self.item(i, 0).setBackground(QColor(224, 255, 255))
             self.item(i, 1).setBackground(QColor(224, 255, 255))
+
+###################################################
+#                 Tabla de autores                #
+###################################################
+class autoresTable(QTableWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Inventario de autores") #Título
+        self.setColumnCount(3) #Columnas
+        self.setHorizontalHeaderLabels(["Nombre","Apellido","ID"])
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.setStyleSheet("background-color:  Silver")
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+    
+    def getQTableWidgetSize(self):
+        return QSize(500, 570)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            self.item(i, 1).setBackground(QColor(224, 255, 255))
+            self.item(i, 2).setBackground(QColor(224, 255, 255))
+
+    def llenarAutores(self):
+        row = 0
+        sql = "SELECT * FROM Author ORDER BY last_name"  ## cambiar esto
+        queryx = QSqlQuery(sql)
+        while queryx.next():
+           
+            self.insertRow(row)
+            IDX = QTableWidgetItem(str(queryx.value(0)))
+            IDX2 = QTableWidgetItem(str(queryx.value(1)))
+            IDX3 = QTableWidgetItem(str(queryx.value(2)))
+            self.setItem(row, 0, IDX)
+            self.setItem(row, 1, IDX2)
+            self.setItem(row, 2, IDX3)
+            row = row + 1
+
+        self.setRowCount(row)
+        self.setTableColors()
+        header = self.horizontalHeader()       
+        header.setSectionResizeMode(0, QHeaderView.Stretch)
+        #self.db.close()
+
+    def clear(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(224, 255, 255))
 
 ###################################################
 #           Tabla de libros de un autor           #

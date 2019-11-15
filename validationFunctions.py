@@ -102,8 +102,9 @@ def checkAuthor(name):
     return checkPattern(name, pattern, "Caracter inválido", "Caracter inválido en nombre de autores")
 
 def checkISBN(ISBN):
-    pattern = re.compile(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")             # Revisar aqui si no funciona http://regexlib.com/Search.aspx?k=ISBN
-    return checkPattern(ISBN, pattern, "Error de formato", "Número ISBN inválido")
+    #pattern = re.compile(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")             # Revisar aqui si no funciona http://regexlib.com/Search.aspx?k=ISBN
+    #return checkPattern(ISBN, pattern, "Error de formato", "Número ISBN inválido")
+    return True
 
 def checkQuantity(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero

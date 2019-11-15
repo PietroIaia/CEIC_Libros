@@ -12,7 +12,8 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Tables import BooksTable, InventarioBooksTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from validationFunctions import verification_books
-from AgregarLibro import AgregarLibro                            # Falta crear agregarLibro.py
+from AgregarLibro import AgregarLibro
+from verificarAutor import verificarAutor                              # Falta crear agregarLibro.py
 from AuthorSearch import AuthorSearch
 import sys
 import re
@@ -247,7 +248,13 @@ class gestionLibros(QWidget):
         if (int(self.table.item(5, 0).text()) != 0):
             ErrorPrompt("Error en la eliminación", "Una copia del libro esta siendo prestada a un estudiante, no se puede eliminar")
         else:
-            queryText = "DELETE FROM Book WHERE book_id = \'" + self.table.item(0, 0).text() + "\' RETURNING book_id"
+            queryText = "DELETE FROM Book_copy WHERE book_id = " + self.table.item(0, 0).text() + " RETURNING book_id"
+            self.query = QSqlQuery()
+            self.query.exec_(queryText)
+            queryText = "DELETE FROM WrittenBy WHERE book_id = " + self.table.item(0, 0).text() + " RETURNING book_id"
+            self.query = QSqlQuery()
+            self.query.exec_(queryText)
+            queryText = "DELETE FROM Book WHERE book_id = " + self.table.item(0, 0).text() + " RETURNING book_id"
             self.query = QSqlQuery()
             self.query.exec_(queryText)
 
@@ -279,7 +286,7 @@ class gestionLibros(QWidget):
 
     @pyqtSlot()
     def addBook(self):
-        self.form = AgregarLibro()
+        self.form = verificarAutor()
         self.form.show()
 
     @pyqtSlot()
@@ -293,7 +300,7 @@ class gestionLibros(QWidget):
     def inventarioLibros(self):
         self.table2 = InventarioBooksTable() #Tablas
         row = 0
-        sql = "SELECT book_id, title FROM Book"
+        sql = "SELECT book_id, title FROM Book ORDER BY title"
         queryx = QSqlQuery(sql)
         while queryx.next():
            
