@@ -201,7 +201,7 @@ class gestionUsuarios(QWidget):
             queryText = "SELECT * FROM CEIC_User WHERE username = '" + loggedUser + "' and password_ = crypt(\'" + input_logged_user_password[0] + "\', password_);"
             self.query.exec_(queryText)
             if(not self.query.first()):
-                ErrorPrompt("Error", "Contraseña Invalida!")
+                ErrorPrompt("Error", "Contraseña Inválida!")
                 return
             
         correct = verification_users(fields, 5)
@@ -213,7 +213,7 @@ class gestionUsuarios(QWidget):
         self.query.exec_(queryText)
 
         if self.query.first():
-            InfoPrompt("Actualización completada", "La información del Usuario ha sido actualizada exitosamente")
+            InfoPrompt("Actualización completada", "La información del usuario ha sido actualizada exitosamente")
             self.search.setEnabled(True)
             self.nuevo.setEnabled(True)
             self.eliminar.setEnabled(True)
@@ -223,7 +223,7 @@ class gestionUsuarios(QWidget):
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
             self.table.cellWidget(4, 0).setEnabled(False)
         else:
-            ErrorPrompt("Error", "La informacion del Usuario no pudo ser modificada")
+            ErrorPrompt("Error", "La información del usuario no pudo ser modificada")
 
     @pyqtSlot()
     def cancelUpdate(self):
@@ -240,7 +240,7 @@ class gestionUsuarios(QWidget):
 
     @pyqtSlot()
     def deleteRequest(self):
-        ConfirmPrompt("Eliminación de usuario", "Se ha solicitado eliminar usuario. Marque el botón de confirmar eliminación para eliminar el usuario o el boton de cancelar eliminacion para regresar")
+        ConfirmPrompt("Eliminación de usuario", "Se ha solicitado eliminar usuario. Marque el botón de confirmar eliminación para eliminar el usuario o el botón de cancelar eliminación para regresar")
         self.search.setEnabled(False)
         self.nuevo.setEnabled(False)
         self.modificar.setEnabled(False)
