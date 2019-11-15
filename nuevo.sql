@@ -39,6 +39,8 @@ CREATE TABLE Deuda(
 
 \COPY WrittenBy FROM './CSV/writtenBy.csv' DELIMITER ',';
 
+\COPY Book_copy(copy_id, book_id) FROM './CSV/CopyCodes.csv' DELIMITER ',';
+
 CREATE INDEX WrittenBy_index ON WrittenBy(book_id, author_id);
 
 INSERT INTO Deuda(id, monto_deuda)
