@@ -58,7 +58,7 @@ class prestamos(QWidget):
         self.info_prestamo_frame.setFixedWidth(255)
         self.info_prestamo_frame.setFixedHeight(40)
         self.info_prestamo_frame.move(10, 10)
-        self.Info_prestamo = QLabel("Información de prestamo", self.info_prestamo_frame)
+        self.Info_prestamo = QLabel("Información de préstamo", self.info_prestamo_frame)
         self.Info_prestamo.setStyleSheet('color: black')
         self.Info_prestamo.setFont(self.instFont)
         self.Info_prestamo.move(15, 7)
@@ -273,7 +273,7 @@ class prestamos(QWidget):
                         self.button_renovar.setEnabled(True)
 
                 else:
-                    self.prestamo.setText("No prestamo activo")
+                    self.prestamo.setText("No préstamo activo")
                     if(float(self.deuda.text()) == 0 ):
                         self.libro.setEnabled(True)
                         self.button_agregar_libro.setEnabled(True)
@@ -281,7 +281,7 @@ class prestamos(QWidget):
                     self.button_renovar.setEnabled(False)
 
             else:
-                ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
+                ErrorPrompt("Error", "No se encontró un estudiante con ese carnet")
     
 
     # Funcion para buscar el libro e ingresarlo a la tabla de libros Prestamos cuando se este realizando un prestamo
@@ -299,7 +299,7 @@ class prestamos(QWidget):
                         break
 
                     if(i == self.tabla_libros_prestamos.rowCount()):
-                        ErrorPrompt("Error", "Todas las casillas estan llenas, no puede pedir otro libro.")
+                        ErrorPrompt("Error", "Todas las casillas están llenas, no puede pedir otro libro.")
                         return
 
                 # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
@@ -320,9 +320,9 @@ class prestamos(QWidget):
                         self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
                         self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
                 else:
-                    ErrorPrompt("Error", "No existen mas ejemplares disponibles de este libro")
+                    ErrorPrompt("Error", "No existen más ejemplares disponibles de este libro")
             else:
-                ErrorPrompt("Error", "No se encontró el Libro especificado")
+                ErrorPrompt("Error", "No se encontró el libro especificado")
 
             self.button_realizar.setEnabled(True)
 
@@ -364,7 +364,7 @@ class prestamos(QWidget):
                     return
             else:
                 break
-        InfoPrompt("Éxito", "Se realizo el préstamo!")
+        InfoPrompt("Éxito", "Se realizó el préstamo!")
         self.updateActiveLoanTable()
         self.buscarEstudiante(self.currentStudent)
     
@@ -386,7 +386,7 @@ class prestamos(QWidget):
         else:
             ErrorPrompt("Error", "No se pudo marcar el préstamo como finalizado")
             return
-        InfoPrompt("Éxito", "Se marco el préstamo como finalizado!")
+        InfoPrompt("Éxito", "Se marcó el préstamo como finalizado!")
         self.updateActiveLoanTable()
         self.buscarEstudiante(self.currentStudent)
 
@@ -469,8 +469,8 @@ class prestamos(QWidget):
                     self.query.exec_("UPDATE Loan SET estimated_return_time = '" + return_date + "' WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
                     i += 1
                 else:
-                    ErrorPrompt("Error", "Ocurrio un error renovando el prestamo")
+                    ErrorPrompt("Error", "Ocurrió un error renovando el préstamo")
             else:
                 break
-        InfoPrompt("Éxito", "El prestamo se renovó con exito!")
+        InfoPrompt("Éxito", "El préstamo se renovó con éxito!")
 
