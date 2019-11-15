@@ -42,7 +42,7 @@ class gestionLibros(QWidget):
         self.title.setFont(self.titleFont)
 
         #Instrucciones
-        self.instrucciones = QLabel("Ingrese el Titulo del libro a consultar, ingresar o modificar")
+        self.instrucciones = QLabel("Ingrese el Título del libro a consultar, ingresar o modificar")
         self.instrucciones.setStyleSheet('background-color: white')
         self.instrucciones.setFont(self.instFont)
         self.instrucciones.setFrameShape(QFrame.StyledPanel)
@@ -101,7 +101,7 @@ class gestionLibros(QWidget):
 
         #Titulo del libro
         self.currentStudent = "" #Guarda el valor del titulo del libro actualmente mostrado en pantalla
-        self.tituloLabel = QLabel("Titulo del libro: ")
+        self.tituloLabel = QLabel("Título del libro: ")
         self.titulo = QLineEdit(self)
         self.titulo.setStyleSheet('background-color: white')
         self.infoLayout = QHBoxLayout()
@@ -150,7 +150,7 @@ class gestionLibros(QWidget):
         inputTitulo = self.titulo.text()
 
         if (self.libroPattern.match(inputTitulo) is None):
-            ErrorPrompt("Error de formato", "Error: Ese no es el formato del Titulo de un Libro")
+            ErrorPrompt("Error de formato", "Error: Ese no es el formato del Título de un Libro")
             return
 
         self.consultaAux(inputTitulo)
@@ -172,7 +172,7 @@ class gestionLibros(QWidget):
             self.eliminar.setEnabled(True)
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         else:
-            ErrorPrompt("Error de busqueda", "Error Libro no encontrado")
+            ErrorPrompt("Error de búsqueda", "Error Libro no encontrado")
 
     @pyqtSlot()
     def update(self, perm_mask):
@@ -215,7 +215,7 @@ class gestionLibros(QWidget):
             self.cancel.setEnabled(False)
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         else:
-            ErrorPrompt("Error", "La informacion del libro no pudo ser modificado")
+            ErrorPrompt("Error", "La información del libro no pudo ser modificada")
 
     @pyqtSlot()
     def cancelUpdate(self):
@@ -246,7 +246,7 @@ class gestionLibros(QWidget):
     @pyqtSlot()
     def confirmDelete(self):
         if (int(self.table.item(5, 0).text()) != 0):
-            ErrorPrompt("Error en la eliminación", "Una copia del libro esta siendo prestada a un estudiante, no se puede eliminar")
+            ErrorPrompt("Error en la eliminación", "Una copia del libro está siendo prestada a un estudiante, no se puede eliminar")
         else:
             queryText = "DELETE FROM Book_copy WHERE book_id = " + self.table.item(0, 0).text() + " RETURNING book_id"
             self.query = QSqlQuery()

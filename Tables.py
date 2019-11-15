@@ -82,7 +82,7 @@ class BooksTable(QTableWidget):
         self.setColumnCount(1) #Columnas
         self.setRowCount(7)
         self.setHorizontalHeaderLabels(["Información del Libro"])
-        self.setVerticalHeaderLabels(["ID", "Titulo", "Autores", "ISBN", "Cantidad", "Cantidad prestada", "Duracion del prestamo en dias"]) #Header
+        self.setVerticalHeaderLabels(["ID", "Título", "Autores", "ISBN", "Cantidad", "Cantidad prestada", "Duración del préstamo en días"]) #Header
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
@@ -147,7 +147,7 @@ class UserTable(QTableWidget):
         self.setColumnCount(1) #Columnas
         self.setRowCount(7)
         self.setHorizontalHeaderLabels(["Información del usuario"])
-        self.setVerticalHeaderLabels(['Nombre de usuario', 'Nombre', 'Apellido', 'Email', 'Permisos', 'Ultima conexion', 'Fecha de creacion']) #Header
+        self.setVerticalHeaderLabels(['Nombre de usuario', 'Nombre', 'Apellido', 'Email', 'Permisos', 'Última conexión', 'Fecha de creación']) #Header
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
@@ -312,7 +312,7 @@ class Payments_Table(QTableWidget):
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(40)
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
-        self.setHorizontalHeaderLabels(["Usuario", "Cliente", "Monto", "Banco", "Codigo"])
+        self.setHorizontalHeaderLabels(["Usuario", "Cliente", "Monto", "Banco", "Código"])
         self.setColumnWidth(0, 100)
         self.setColumnWidth(1, 100)
         self.setColumnWidth(2, 100)
@@ -398,7 +398,7 @@ class InventarioBooksTable(QTableWidget):
         super().__init__()
         self.setWindowTitle("Inventario de libros") #Título
         self.setColumnCount(2) #Columnas
-        self.setHorizontalHeaderLabels(["ID","Titulo"])
+        self.setHorizontalHeaderLabels(["ID","Título"])
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")

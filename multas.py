@@ -311,7 +311,7 @@ class multas(QWidget):
             if(self.query.first()):
                 self.montoDeuda = float(self.query.value(0))
             else:
-                ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por dia.")
+                ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por día.")
         else:
             if(checkDebt(self.act_deuda.text())):
                 success = self.query.exec_("UPDATE Deuda SET monto_deuda = '" + self.act_deuda.text() + "' WHERE id = 0;")
@@ -319,7 +319,7 @@ class multas(QWidget):
                     self.montoDeuda = float(self.act_deuda.text())
                     InfoPrompt("Éxito", "El monto de deuda agregada por día se ha actualizado!")
                 else:
-                    ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por dia.")
+                    ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por día.")
 
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
@@ -365,7 +365,7 @@ class multas(QWidget):
         self.query = QSqlQuery()
         if(self.tipo.currentIndex() == 0):
             if((self.banco.text() == "") or (self.codigo.text() == "")):
-                ErrorPrompt("Error", "Los campos de banco o codigo de transferencia no fueron llenados.")
+                ErrorPrompt("Error", "Los campos de banco o código de transferencia no fueron llenados.")
                 return
         deuda_restante = float(self.deuda.text()) - float(self.monto.text())
         success = self.query.exec_("UPDATE Estudiante SET book_debt = '"+  str(deuda_restante) + "' WHERE carnet = '" + self.currentStudent + "';")
@@ -374,7 +374,7 @@ class multas(QWidget):
             if(self.tipo.currentIndex() == 0):
                 success = self.query.exec_("INSERT INTO Transferencias(username, cliente, monto, banco, codigo) VALUES('" + Username +"', '" + self.currentStudent + "', '" + self.monto.text() + "', '" + self.banco.text() + "', '" + self.codigo.text() + "');")
                 if(success):
-                    InfoPrompt("Éxito", "Se ingreso con éxito el pago de la multa!")
+                    InfoPrompt("Éxito", "Se ingresó con éxito el pago de la multa!")
                     self.updateTablaTranf()
                     self.button_aplicar.setEnabled(False)
                     self.deuda.setText(str(deuda_restante))
@@ -387,7 +387,7 @@ class multas(QWidget):
                 self.button_aplicar.setEnabled(False)
                 self.monto.setText("")     
                 self.deuda.setText(str(deuda_restante))
-                InfoPrompt("Éxito", "Se ingreso con éxito el pago de la multa!")
+                InfoPrompt("Éxito", "Se ingresó con éxito el pago de la multa!")
         # Si se pago la deuda completa, se elimina de los deudores
         if(deuda_restante == 0):
             self.updateDebtTabla()

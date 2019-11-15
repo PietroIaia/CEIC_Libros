@@ -157,7 +157,7 @@ def checkUsername(username):
     if len(username) < 33:
         return True
     else:
-        ErrorPrompt("Error", "Nombre de usuario invalido, verifique la longitud del mismo")
+        ErrorPrompt("Error", "Nombre de usuario inválido, verifique la longitud del mismo")
         return False
 
 # Funcion para verificar si el nombre y el apellido del usuario estan escrito correctamente
