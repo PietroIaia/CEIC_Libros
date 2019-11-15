@@ -18,7 +18,7 @@ class AuthorSearch(QWidget):
 
         #Inicialización de la ventana
         super().__init__()
-        self.setGeometry(200, 0, 600, 600)
+        self.setGeometry(200, 100, 600, 600)
         self.setWindowTitle("Búsqueda por autor")
         self.setStyleSheet('background-color: LightSkyBlue')
 
