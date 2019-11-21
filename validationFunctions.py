@@ -22,7 +22,7 @@ def check_pattern(name, pattern, title, message):
         return True
 
 def check_carnet(carnet):
-    pattern = re.compile(r"^[0-9]{2}\-[0-9]{5}$")
+    pattern = re.compile(r"\d\d\-\d{5}")
     return check_pattern(carnet, pattern, "Error de formato", "Formato de carnet inválido")
 
 def check_name(name, firstOrLast):
@@ -48,15 +48,15 @@ def check_email(address):
     pattern = re.compile(r"[a-zA-Z0-9\-_\.]+@[a-zA-Z0-9\-_\.]+")
     return check_pattern(address, pattern, "Email inválido", "Dirección de correo inválida")
 
-def checkDays(days):
+def check_days(days):
     pattern = re.compile(r"^[0-9]{1,3}$")
     return check_pattern(days, pattern, "Número de días inválidos", "Número de días inválidos")
 
-def checkBooks(bookNo):
+def check_books(bookNo):
     pattern = re.compile(r"^[0-9]{2}$")
     return check_pattern(bookNo, pattern, "Número de libros inválido", "Número de libros inválido")
 
-def checkDebt(debt):
+def check_debt(debt):
     pattern  = re.compile(r"\d+(\.\d+)?")
     return check_pattern(debt, pattern, "Deuda inválida", "La cifra de la deuda es inválida")
 
@@ -74,11 +74,11 @@ def verification_estudiantes(fields, checkUntil):
         elif i == 5:
             correct = check_email(fields[i])
         elif i == 6:
-            correct = checkDays(fields[i])
+            correct = check_days(fields[i])
         elif i == 7:
-            correct = checkBooks(fields[i])
+            correct = check_books(fields[i])
         else:
-            correct = checkDebt(fields[i])
+            correct = check_debt(fields[i])
 
         if not correct:
             return False
