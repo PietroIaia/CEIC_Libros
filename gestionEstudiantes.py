@@ -194,8 +194,6 @@ class gestionEstudiante(QWidget):
             return
 
         values = self.table.getValues()
-        #queryText = "UPDATE Estudiante SET carnet = :car, first_name = :fn, last_name = :ln, CI = :ci, phone = :num, \
-        #    email = :mail, days_blocked"
         queryText = "UPDATE Estudiante SET " + values + " WHERE carnet = \'" + self.table.item(0, 0).text() + "\' returning carnet"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
@@ -286,11 +284,3 @@ class gestionEstudiante(QWidget):
             self.search.setEnabled(False)
         else:
             self.search.setEnabled(True)
-                
-
-#if __name__ == '__main__':
-#    app = QApplication(sys.argv)
-
-#    estudiante = gestionEstudiante()
-#    estudiante.show()
-#    sys.exit(app.exec_())

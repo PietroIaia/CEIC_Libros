@@ -14,65 +14,65 @@ import re
 #####################################################
 #               Validadores de Estudiante           #
 #####################################################
-def checkPattern(name, pattern, title, message):
+def check_pattern(name, pattern, title, message):
     if pattern.match(name) is None:
         ErrorPrompt(title, message)
         return False
     else:
         return True
 
-def checkCarnet(carnet):
+def check_carnet(carnet):
     pattern = re.compile(r"^[0-9]{2}\-[0-9]{5}$")
-    return checkPattern(carnet, pattern, "Error de formato", "Formato de carnet inválido")
+    return check_pattern(carnet, pattern, "Error de formato", "Formato de carnet inválido")
 
-def checkName(name, firstOrLast):
+def check_name(name, firstOrLast):
     if firstOrLast == 1: #Estamos validando un nombre
         pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ]+$")
         ubicacion = "Caracter inválido en el nombre"
     else: #Estamos validando un apellido
         pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+$")
         ubicacion = "Caracter inválido en el apellido"
-    return checkPattern(name, pattern, "Caracter inválido", ubicacion)
+    return check_pattern(name, pattern, "Caracter inválido", ubicacion)
 
-def checkCI(number):
+def check_CI(number):
     pattern = re.compile(r"^[0-9]{6,8}$") 
     #Si este sistema perdura hasta que las cédulas tengan más de 8 dígitos, cambiar el 8 por el 9
     #y por favor avisarm porque wow, no debió llegar tan lejos
-    return checkPattern(number, pattern, "Error de formato", "Formato de cédula inválido")
+    return check_pattern(number, pattern, "Error de formato", "Formato de cédula inválido")
 
-def checkPhone(number):
+def check_phone(number):
     pattern = re.compile(r"^[0-9]{10,11}$") 
-    return checkPattern(number, pattern, "Error de formato", "Número de teléfono inválido")
+    return check_pattern(number, pattern, "Error de formato", "Número de teléfono inválido")
 
-def checkEmail(address):
+def check_email(address):
     pattern = re.compile(r"[a-zA-Z0-9\-_\.]+@[a-zA-Z0-9\-_\.]+")
-    return checkPattern(address, pattern, "Email inválido", "Dirección de correo inválida")
+    return check_pattern(address, pattern, "Email inválido", "Dirección de correo inválida")
 
 def checkDays(days):
     pattern = re.compile(r"^[0-9]{1,3}$")
-    return checkPattern(days, pattern, "Número de días inválidos", "Número de días inválidos")
+    return check_pattern(days, pattern, "Número de días inválidos", "Número de días inválidos")
 
 def checkBooks(bookNo):
     pattern = re.compile(r"^[0-9]{2}$")
-    return checkPattern(bookNo, pattern, "Número de libros inválido", "Número de libros inválido")
+    return check_pattern(bookNo, pattern, "Número de libros inválido", "Número de libros inválido")
 
 def checkDebt(debt):
     pattern  = re.compile(r"\d+(\.\d+)?")
-    return checkPattern(debt, pattern, "Deuda inválida", "La cifra de la deuda es inválida")
+    return check_pattern(debt, pattern, "Deuda inválida", "La cifra de la deuda es inválida")
 
 def verification_estudiantes(fields, checkUntil):
     correct = True
     for i in range(checkUntil):
         if i == 0:
-            correct = checkCarnet(fields[i])
+            correct = check_carnet(fields[i])
         elif i == 1 or i == 2:
-            correct = checkName(fields[i], i)
+            correct = check_name(fields[i], i)
         elif i == 3:
-            correct = checkCI(fields[i])
+            correct = check_CI(fields[i])
         elif i == 4:
-            correct = checkPhone(fields[i])
+            correct = check_phone(fields[i])
         elif i == 5:
-            correct = checkEmail(fields[i])
+            correct = check_email(fields[i])
         elif i == 6:
             correct = checkDays(fields[i])
         elif i == 7:
@@ -91,32 +91,32 @@ def verification_estudiantes(fields, checkUntil):
 #####################################################
 def checkIdBook(number):
     pattern = re.compile(r"^[0-9]{3,4}$")
-    return checkPattern(number, pattern, "Código inválido", "Ese código de libro no es válido")
+    return check_pattern(number, pattern, "Código inválido", "Ese código de libro no es válido")
 
 def checkTitle(title):
     pattern = re.compile(r"[a-zA-Z0-9ñÑáÁéÉíÍóÓúÚ \.,]+$")
-    return checkPattern(title, pattern, "Caracter inválido", "Caracter inválido en el título")
+    return check_pattern(title, pattern, "Caracter inválido", "Caracter inválido en el título")
 
 def checkAuthor(name):
     pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ \.,]+$")
-    return checkPattern(name, pattern, "Caracter inválido", "Caracter inválido en nombre de autores")
+    return check_pattern(name, pattern, "Caracter inválido", "Caracter inválido en nombre de autores")
 
 def checkISBN(ISBN):
     #pattern = re.compile(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")             # Revisar aqui si no funciona http://regexlib.com/Search.aspx?k=ISBN
-    #return checkPattern(ISBN, pattern, "Error de formato", "Número ISBN inválido")
+    #return check_pattern(ISBN, pattern, "Error de formato", "Número ISBN inválido")
     return True
 
 def checkQuantity(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
-    return checkPattern(number, pattern, "Error de formato", "Cantidad de libros inválida")
+    return check_pattern(number, pattern, "Error de formato", "Cantidad de libros inválida")
 
 def checkQuantityLent(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
-    return checkPattern(number, pattern, "Error de formato", "Cantidad de libros prestados inválida")
+    return check_pattern(number, pattern, "Error de formato", "Cantidad de libros prestados inválida")
 
 def checkLoanDuration(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
-    return checkPattern(number, pattern, "Error de formato", "Número de dias inválido")
+    return check_pattern(number, pattern, "Error de formato", "Número de dias inválido")
 
 def verification_books(fields, checkUntil):
     correct = True
@@ -145,13 +145,6 @@ def verification_books(fields, checkUntil):
 #####################################################
 #               Validadores de Usuarios             #
 #####################################################
-# Funcion para verificar si una frase coincide con un Regex
-def checkPattern(name, pattern, title, message):
-    if pattern.match(name) is None:
-        ErrorPrompt(title, message)
-        return False
-    else:
-        return True
 # Funcion para verificar si la longitud del nombre de usuario es correcta
 def checkUsername(username):
     if len(username) < 33:
@@ -160,15 +153,6 @@ def checkUsername(username):
         ErrorPrompt("Error", "Nombre de usuario inválido, verifique la longitud del mismo")
         return False
 
-# Funcion para verificar si el nombre y el apellido del usuario estan escrito correctamente
-def checkName(name, firstOrLast):
-    if firstOrLast == 1: #Estamos validando un nombre
-        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ]+$")
-        ubicacion = "Caracter inválido en el nombre"
-    else: #Estamos validando un apellido
-        pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ][a-zA-ZñÑáÁéÉíÍóÓúÚ ]+$")
-        ubicacion = "Caracter inválido en el apellido"
-    return checkPattern(name, pattern, "Caracter inválido", ubicacion)
 
 def checkPermisos(permisos):
     if permisos != "Usuario" and permisos != "Administrador":
@@ -177,11 +161,6 @@ def checkPermisos(permisos):
     else:
         return True
 
-# Funcion para verificar si el correo del usuario esta escrito correctamente
-def checkEmail(address):
-    pattern = re.compile(r"[a-zA-Z0-9\-_\.]+@[a-zA-Z0-9\-_\.]+")
-    return checkPattern(address, pattern, "Email inválido", "Dirección de correo inválida")
-
 # Funcion que realiza la verificacion de todos los campos de la informacion de usuario a modificar o agregar
 def verification_users(fields, checkUntil):
     correct = True
@@ -189,9 +168,9 @@ def verification_users(fields, checkUntil):
         if i == 0:
             correct = checkUsername(fields[i])
         elif i == 1 or i == 2:
-            correct = checkName(fields[i], i)
+            correct = check_name(fields[i], i)
         elif i == 3:
-            correct = checkEmail(fields[i])
+            correct = check_email(fields[i])
         elif i == 4:
             correct = checkPermisos(fields[i])
 
