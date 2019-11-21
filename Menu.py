@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         self.pushButton_1.setGeometry(QtCore.QRect(0, 10, 191, 60))
         self.pushButton_1.setFont(font)
         self.pushButton_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(1, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(1, "#646464", "#6E6E6E")
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap("static/home-page-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_1.setIcon(icon7)
@@ -57,7 +57,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setGeometry(QtCore.QRect(0, 70, 191, 60))
         self.pushButton_2.setFont(font)
         self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(2, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(2, "#646464", "#6E6E6E")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("static/books-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_2.setIcon(icon)
@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.pushButton_3.setGeometry(QtCore.QRect(0, 130, 191, 60))
         self.pushButton_3.setFont(font)
         self.pushButton_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(3, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(3, "#646464", "#6E6E6E")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("static/students-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_3.setIcon(icon1)
@@ -83,7 +83,7 @@ class Ui_MainWindow(object):
         self.pushButton_4.setGeometry(QtCore.QRect(0, 190, 191, 60))
         self.pushButton_4.setFont(font)
         self.pushButton_4.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(4, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(4, "#646464", "#6E6E6E")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("static/préstamos-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_4.setIcon(icon2)
@@ -96,7 +96,7 @@ class Ui_MainWindow(object):
         self.pushButton_5.setGeometry(QtCore.QRect(0, 250, 191, 60))
         self.pushButton_5.setFont(font)
         self.pushButton_5.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(5, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(5, "#646464", "#6E6E6E")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap("static/fines-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_5.setIcon(icon3)
@@ -109,7 +109,7 @@ class Ui_MainWindow(object):
         self.pushButton_6.setGeometry(QtCore.QRect(0, 310, 191, 60))
         self.pushButton_6.setFont(font)
         self.pushButton_6.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(6, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(6, "#646464", "#6E6E6E")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("static/banned-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_6.setIcon(icon4)
@@ -122,7 +122,7 @@ class Ui_MainWindow(object):
         self.pushButton_7.setGeometry(QtCore.QRect(0, 370, 191, 60))
         self.pushButton_7.setFont(font)
         self.pushButton_7.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(7, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(7, "#646464", "#6E6E6E")
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap("static/admin-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_7.setIcon(icon5)
@@ -135,7 +135,7 @@ class Ui_MainWindow(object):
         self.pushButton_8.setGeometry(QtCore.QRect(0, 430, 191, 60))
         self.pushButton_8.setFont(font)
         self.pushButton_8.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.setButtonStyleSheet(8, 100, 100, 100, 110, 110, 110)
+        self.setButtonStyleSheet(8, "#646464", "#6E6E6E")
         icon6 = QtGui.QIcon()
         icon6.addPixmap(QtGui.QPixmap("static/about-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_8.setIcon(icon6)
@@ -236,19 +236,19 @@ class Ui_MainWindow(object):
                                             "    color: #B5B5B5\n"
                                             "}")
 
-    def setButtonStyleSheet(self, buttonId, rgb1, rgb2, rgb3, rgb4, rgb5, rgb6):
+    def setButtonStyleSheet(self, buttonId, hex1, hex2):
         button = getattr(self, 'pushButton_%s' %buttonId)
         button.setStyleSheet("QPushButton:hover#pushButton_"+str(buttonId)+"\n"
                 "{\n"
                 "    border-radius: 0px;\n"
-                "    background-color: rgb("+str(rgb1)+", "+str(rgb2)+", "+str(rgb3)+");\n"
+                "    background-color: " + hex1 + ";\n"
                 "    color: #E9F2E6;\n"
                 "}\n"
                 "\n"
                 "QPushButton:pressed#pushButton_"+str(buttonId)+"\n"
                 "{\n"
                 "    border-radius: 0px;\n"
-                "    background-color: rgb("+str(rgb4)+", "+str(rgb5)+", "+str(rgb6)+");\n"
+                "    background-color: " + hex2 + ";\n"
                 "    color: #E9F2E6;\n"
                 "}\n"
                 "QPushButton\n"
