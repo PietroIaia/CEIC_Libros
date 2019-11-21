@@ -53,13 +53,10 @@ class AuthorSearch(QWidget):
 
         #botones de consulta y agregar
         self.search = QPushButton("Consultar")
-        #self.nuevo = QPushButton("Agregar nuevo autor")
         self.search.setStyleSheet('background-color: PowderBlue')
-        #self.nuevo.setStyleSheet('background-color: PowderBlue')
         self.searchLayout = QVBoxLayout()
         self.searchLayout.addLayout(self.infoLayout)
         self.searchLayout.addWidget(self.search)
-        #self.searchLayout.addWidget(self.nuevo)
 
         #Layout final
         self.textLayout = QVBoxLayout()
@@ -113,14 +110,3 @@ class AuthorSearch(QWidget):
             self.table.item(i, 0).setText(str(self.query.value(0)))
             self.table.item(i, 1).setText(str(self.query.value(1)))
             i += 1
-            #self.table.resizeColumnsToContents()
-
-
-
-
-if __name__ == '__main__':
-   app = QApplication(sys.argv)
-
-   estudiante = AuthorSearch()
-   estudiante.show()
-   sys.exit(app.exec_())
