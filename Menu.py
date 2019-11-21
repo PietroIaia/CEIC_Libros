@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'Menu.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.0
-#
-# WARNING! All changes made in this file will be lost!
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
 from gestionEstudiantes import *
@@ -29,8 +20,8 @@ class Ui_MainWindow(object):
         MainWindow.setWindowIcon(QtGui.QIcon("static/icono_CEIC.png"))
         MainWindow.setMinimumSize(QtCore.QSize(1031, 748))
         MainWindow.setMaximumSize(QtCore.QSize(1031, 748))
-        MainWindow.setStyleSheet("background-color: rgb(235, 235, 235);\n"
-"")     
+        MainWindow.setStyleSheet("background-color: rgb(235, 235, 235);\n""")
+
         # Conexion a la base de datos
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
@@ -39,783 +30,147 @@ class Ui_MainWindow(object):
         self.db.setPassword("postgres")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
-
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(0, 70, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_2.setPalette(palette)
+
+        # Font: Para los botones
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
         font.setWeight(75)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_2.setStyleSheet("QPushButton:hover#pushButton_2\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_2\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("static/books-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_2.setIcon(icon)
-        self.pushButton_2.setIconSize(QtCore.QSize(45, 40))
-        self.pushButton_2.setAutoDefault(False)
-        self.pushButton_2.setDefault(False)
-        self.pushButton_2.setFlat(True)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(0, 130, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_3.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_3.setStyleSheet("QPushButton:hover#pushButton_3\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_3\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("static/students-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_3.setIcon(icon1)
-        self.pushButton_3.setIconSize(QtCore.QSize(50, 50))
-        self.pushButton_3.setFlat(True)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(0, 190, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_4.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_4.setFont(font)
-        self.pushButton_4.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_4.setStyleSheet("QPushButton:hover#pushButton_4\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_4\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("static/préstamos-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_4.setIcon(icon2)
-        self.pushButton_4.setIconSize(QtCore.QSize(45, 45))
-        self.pushButton_4.setFlat(True)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(0, 250, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_5.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_5.setFont(font)
-        self.pushButton_5.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_5.setStyleSheet("QPushButton:hover#pushButton_5\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_5\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("static/fines-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_5.setIcon(icon3)
-        self.pushButton_5.setIconSize(QtCore.QSize(50, 50))
-        self.pushButton_5.setFlat(True)
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_6.setGeometry(QtCore.QRect(0, 310, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_6.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_6.setFont(font)
-        self.pushButton_6.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_6.setStyleSheet("QPushButton:hover#pushButton_6\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_6\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("static/banned-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_6.setIcon(icon4)
-        self.pushButton_6.setIconSize(QtCore.QSize(45, 45))
-        self.pushButton_6.setFlat(True)
-        self.pushButton_6.setObjectName("pushButton_6")
-        self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_7.setGeometry(QtCore.QRect(0, 370, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_7.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_7.setFont(font)
-        self.pushButton_7.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_7.setStyleSheet("QPushButton:hover#pushButton_7\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_7\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("static/admin-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_7.setIcon(icon5)
-        self.pushButton_7.setIconSize(QtCore.QSize(40, 40))
-        self.pushButton_7.setFlat(True)
-        self.pushButton_7.setObjectName("pushButton_7")
-        self.pushButton_8 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_8.setGeometry(QtCore.QRect(0, 430, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_8.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_8.setFont(font)
-        self.pushButton_8.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_8.setStyleSheet("QPushButton:hover#pushButton_8\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_8\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("static/about-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_8.setIcon(icon6)
-        self.pushButton_8.setIconSize(QtCore.QSize(45, 45))
-        self.pushButton_8.setFlat(True)
-        self.pushButton_8.setObjectName("pushButton_8")
+
+        # Button (pushButton_1): Inicio
         self.pushButton_1 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_1.setGeometry(QtCore.QRect(0, 10, 191, 60))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(153, 153, 153))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(235, 235, 235))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_1.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
         self.pushButton_1.setFont(font)
         self.pushButton_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_1.setStyleSheet("QPushButton:hover#pushButton_1\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(100, 100, 100);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_1\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: rgb(110, 110, 110);\n"
-"    color: #E9F2E6;                        "
-"}\n"
-"\n"
-"QPushButton \n"
-"{\n"
-"    color: #666666\n"
-"}")
+        self.setButtonStyleSheet(1, 100, 100, 100, 110, 110, 110)
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap("static/home-page-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_1.setIcon(icon7)
         self.pushButton_1.setIconSize(QtCore.QSize(50, 50))
         self.pushButton_1.setFlat(True)
         self.pushButton_1.setObjectName("pushButton_1")
+        
+        # Button (pushButton_2): Gestión de Libros
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(0, 70, 191, 60))
+        self.pushButton_2.setFont(font)
+        self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setButtonStyleSheet(2, 100, 100, 100, 110, 110, 110)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("static/books-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_2.setIcon(icon)
+        self.pushButton_2.setIconSize(QtCore.QSize(45, 40))
+        self.pushButton_2.setFlat(True)
+        self.pushButton_2.setObjectName("pushButton_2")
+
+        # Button (pushButton_3): Gestión de Estudiantes
+        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_3.setGeometry(QtCore.QRect(0, 130, 191, 60))
+        self.pushButton_3.setFont(font)
+        self.pushButton_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setButtonStyleSheet(3, 100, 100, 100, 110, 110, 110)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("static/students-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_3.setIcon(icon1)
+        self.pushButton_3.setIconSize(QtCore.QSize(50, 50))
+        self.pushButton_3.setFlat(True)
+        self.pushButton_3.setObjectName("pushButton_3")
+
+        # Button (pushButton_4): Préstamos
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_4.setGeometry(QtCore.QRect(0, 190, 191, 60))
+        self.pushButton_4.setFont(font)
+        self.pushButton_4.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setButtonStyleSheet(4, 100, 100, 100, 110, 110, 110)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("static/préstamos-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_4.setIcon(icon2)
+        self.pushButton_4.setIconSize(QtCore.QSize(45, 45))
+        self.pushButton_4.setFlat(True)
+        self.pushButton_4.setObjectName("pushButton_4")
+
+        # Button (pushButton_5): Multas
+        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_5.setGeometry(QtCore.QRect(0, 250, 191, 60))
+        self.pushButton_5.setFont(font)
+        self.pushButton_5.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setButtonStyleSheet(5, 100, 100, 100, 110, 110, 110)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("static/fines-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_5.setIcon(icon3)
+        self.pushButton_5.setIconSize(QtCore.QSize(50, 50))
+        self.pushButton_5.setFlat(True)
+        self.pushButton_5.setObjectName("pushButton_5")
+
+        # Button (pushButton_6): Sanciones
+        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_6.setGeometry(QtCore.QRect(0, 310, 191, 60))
+        self.pushButton_6.setFont(font)
+        self.pushButton_6.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setButtonStyleSheet(6, 100, 100, 100, 110, 110, 110)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("static/banned-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_6.setIcon(icon4)
+        self.pushButton_6.setIconSize(QtCore.QSize(45, 45))
+        self.pushButton_6.setFlat(True)
+        self.pushButton_6.setObjectName("pushButton_6")
+
+        # Button (pushButton_7): Administracion
+        self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_7.setGeometry(QtCore.QRect(0, 370, 191, 60))
+        self.pushButton_7.setFont(font)
+        self.pushButton_7.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setButtonStyleSheet(7, 100, 100, 100, 110, 110, 110)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("static/admin-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_7.setIcon(icon5)
+        self.pushButton_7.setIconSize(QtCore.QSize(40, 40))
+        self.pushButton_7.setFlat(True)
+        self.pushButton_7.setObjectName("pushButton_7")
+
+        # Button (pushButton_8): About
+        self.pushButton_8 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_8.setGeometry(QtCore.QRect(0, 430, 191, 60))
+        self.pushButton_8.setFont(font)
+        self.pushButton_8.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.setButtonStyleSheet(8, 100, 100, 100, 110, 110, 110)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("static/about-CAD3C8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_8.setIcon(icon6)
+        self.pushButton_8.setIconSize(QtCore.QSize(45, 45))
+        self.pushButton_8.setFlat(True)
+        self.pushButton_8.setObjectName("pushButton_8")
+
+        # Button (pushButton_22): Cerrar sesión
         self.pushButton_22 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_22.setGeometry(QtCore.QRect(0, 672, 191, 51))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(202, 211, 200))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(202, 211, 200))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(183, 21, 64))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.pushButton_22.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        font.setBold(True)
-        font.setWeight(75)
         self.pushButton_22.setFont(font)
         self.pushButton_22.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton_22.setAutoFillBackground(False)
         self.pushButton_22.setStyleSheet("QPushButton:hover#pushButton_22\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: #C20000;\n"
-"}\n"
-"\n"
-"QPushButton:pressed#pushButton_22\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: #C20000;\n"    
-"}\n"
-"\n"
-"QPushButton\n"
-"{\n"
-"    border-radius: 0px;\n"
-"    background-color: #F10000;\n"
-"    color: #FFFFFF;             "
-"}")
+                                         "{\n"
+                                         "    border-radius: 0px;\n"
+                                         "    background-color: #C20000;\n"
+                                         "}\n"
+                                         "\n"
+                                         "QPushButton:pressed#pushButton_22\n"
+                                         "{\n"
+                                         "    border-radius: 0px;\n"
+                                         "    background-color: #C20000;\n"    
+                                         "}\n"
+                                         "\n"
+                                         "QPushButton\n"
+                                         "{\n"
+                                         "    border-radius: 0px;\n"
+                                         "    background-color: #F10000;\n"
+                                         "    color: #FFFFFF;             "
+                                         "}")
         self.pushButton_22.setFlat(True)
         self.pushButton_22.setObjectName("pushButton_22")
+
+        # Menu lateral: gridFrame
         self.gridFrame = QtWidgets.QFrame(self.centralwidget)
         self.gridFrame.setGeometry(QtCore.QRect(0, 0, 191, 748))
         self.gridFrame.setAutoFillBackground(False)
@@ -847,8 +202,9 @@ class Ui_MainWindow(object):
         self.ventana_multas = multas(username, perm_mask)
         self.stackedWidget.addWidget(self.ventana_multas)
 
-
+        # Elementos de la pantalla
         self.gridFrame.raise_()
+        self.pushButton_1.raise_()
         self.pushButton_2.raise_()
         self.pushButton_3.raise_()
         self.pushButton_4.raise_()
@@ -856,18 +212,10 @@ class Ui_MainWindow(object):
         self.pushButton_6.raise_()
         self.pushButton_7.raise_()
         self.pushButton_8.raise_()
-        self.pushButton_1.raise_()
         self.pushButton_22.raise_()
         self.stackedWidget.raise_()
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1050, 26))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
+        MainWindow.setCentralWidget(self.centralwidget)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -884,11 +232,29 @@ class Ui_MainWindow(object):
         if(perm_mask == 0):
             self.pushButton_7.setEnabled(False)
             self.pushButton_7.setStyleSheet("QPushButton\n"
-"{\n"
-"    color: #B5B5B5\n"
-"}")
+                                            "{\n"
+                                            "    color: #B5B5B5\n"
+                                            "}")
 
-
+    def setButtonStyleSheet(self, buttonId, rgb1, rgb2, rgb3, rgb4, rgb5, rgb6):
+        button = getattr(self, 'pushButton_%s' %buttonId)
+        button.setStyleSheet("QPushButton:hover#pushButton_"+str(buttonId)+"\n"
+                "{\n"
+                "    border-radius: 0px;\n"
+                "    background-color: rgb("+str(rgb1)+", "+str(rgb2)+", "+str(rgb3)+");\n"
+                "    color: #E9F2E6;\n"
+                "}\n"
+                "\n"
+                "QPushButton:pressed#pushButton_"+str(buttonId)+"\n"
+                "{\n"
+                "    border-radius: 0px;\n"
+                "    background-color: rgb("+str(rgb4)+", "+str(rgb5)+", "+str(rgb6)+");\n"
+                "    color: #E9F2E6;\n"
+                "}\n"
+                "QPushButton\n"
+                "{\n"
+                "    color: #666666;\n"
+                "}")
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -913,7 +279,7 @@ class Ui_MainWindow(object):
         self.pushButton_22.setText(_translate("MainWindow", "Cerrar Sesión"))
 
 if __name__ == '__main__':
-    # Este sera el rol del usuario
+    # Este será el rol del usuario
     perm_mask = int(sys.argv[2])
     username = str(sys.argv[1])
     
