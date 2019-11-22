@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor, QIcon
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from validationFunctions import check_name, checkQuantity
+from validationFunctions import check_name, check_quantity
 from Prompt import InfoPrompt, ErrorPrompt
 import sys
 
