@@ -14,6 +14,7 @@ class Ui_MainWindow(object):
     global perm_mask
     global username
     global password
+    global db
 
     def setupUi(self, main_window):
 
@@ -25,12 +26,7 @@ class Ui_MainWindow(object):
         main_window.setStyleSheet("background-color: rgb(235, 235, 235);\n""")
 
         # Conexion a la base de datos
-        self.db = QSqlDatabase.addDatabase("QPSQL")
-        self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaceic")
-        self.db.setUserName("postgres")
-        self.db.setPassword("postgres")                                # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
-        self.db.open()
+        self.db = db
 
         self.centralwidget = QtWidgets.QWidget(main_window)
         self.centralwidget.setObjectName("centralwidget")
