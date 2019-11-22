@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Payments_Table, Debts_Table
-from validationFunctions import checkPattern, checkCarnet, checkDebt
+from validationFunctions import *
 import sys
 import datetime 
 
@@ -286,7 +286,7 @@ class multas(QWidget):
         # Monto de Deuda por dia
         self.actualizarMontoDeuda()
         # Montar Tabla de Transferencia
-        self.updateTablaTranf()
+        self.updateTablaTransf()
         # Montar Tabla de Deudores
         self.updateDebtTabla()
 
@@ -310,6 +310,7 @@ class multas(QWidget):
             self.query.exec_("SELECT monto_deuda FROM Deuda WHERE id = 0;")
             if(self.query.first()):
                 self.montoDeuda = float(self.query.value(0))
+                self.act_deuda.setText(str(self.montoDeuda))
             else:
                 ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por día.")
         else:
@@ -355,39 +356,40 @@ class multas(QWidget):
 
     # Funcion para pagar la deuda y agregar los datos de la transferencia, si el metodo de pago es transferencia.
     def pagarDeuda(self, Username):
-        if(checkDebt(self.monto.text())):
-            if(float(self.deuda.text()) < float(self.monto.text())):
-                ErrorPrompt("Error", "El monto a pagar sobrepasa el monto de la deuda.")
-                return
-        else:
+
+        debt = checkDebt(self.monto.text()) # Variable debt permite no hacer el llamado dos veces al remover el nested if
+        if(debt and (float(self.deuda.text()) < float(self.monto.text()))):
+            ErrorPrompt("Error", "El monto a pagar sobrepasa el monto de la deuda.")
+            return
+        elif (not debt):
             return
 
         self.query = QSqlQuery()
-        if(self.tipo.currentIndex() == 0):
-            if((self.banco.text() == "") or (self.codigo.text() == "")):
-                ErrorPrompt("Error", "Los campos de banco o código de transferencia no fueron llenados.")
-                return
+        if(self.tipo.currentIndex() == 0 and ((self.banco.text() == "") or (self.codigo.text() == ""))):
+            ErrorPrompt("Error", "Los campos de banco o código de transferencia no fueron llenados.")
+            return
         deuda_restante = float(self.deuda.text()) - float(self.monto.text())
-        success = self.query.exec_("UPDATE Estudiante SET book_debt = '"+  str(deuda_restante) + "' WHERE carnet = '" + self.currentStudent + "';")
+        success_deuda = self.query.exec_("UPDATE Estudiante SET book_debt = '"+  str(deuda_restante) + "' WHERE carnet = '" + self.currentStudent + "';")
+
         # Si se logro pagar la deuda, se registra el pago si es transferencia. Si es en efectivo, no se hace nada.
-        if(success):
-            if(self.tipo.currentIndex() == 0):
-                success = self.query.exec_("INSERT INTO Transferencias(username, cliente, monto, banco, codigo) VALUES('" + Username +"', '" + self.currentStudent + "', '" + self.monto.text() + "', '" + self.banco.text() + "', '" + self.codigo.text() + "');")
-                if(success):
-                    InfoPrompt("Éxito", "Se ingresó con éxito el pago de la multa!")
-                    self.updateTablaTranf()
-                    self.button_aplicar.setEnabled(False)
-                    self.deuda.setText(str(deuda_restante))
-                    self.monto.setText("")  
-                    self.banco.setText("") 
-                    self.codigo.setText("") 
-                else:
-                    ErrorPrompt("Error", "Ocurrió un error procesando los datos de la transferencia.")
-            else:
-                self.button_aplicar.setEnabled(False)
-                self.monto.setText("")     
-                self.deuda.setText(str(deuda_restante))
+        if(success_deuda and self.tipo.currentIndex() == 0):
+            success_transf = self.query.exec_("INSERT INTO Transferencias(username, cliente, monto, banco, codigo) VALUES('" + Username +"', '" + self.currentStudent + "', '" + self.monto.text() + "', '" + self.banco.text() + "', '" + self.codigo.text() + "');")
+            if(success_transf):
                 InfoPrompt("Éxito", "Se ingresó con éxito el pago de la multa!")
+                self.updateTablaTransf()
+                self.button_aplicar.setEnabled(False)
+                self.deuda.setText(str(deuda_restante))
+                self.monto.setText("")  
+                self.banco.setText("") 
+                self.codigo.setText("") 
+            else:
+                ErrorPrompt("Error", "Ocurrió un error procesando los datos de la transferencia.")
+        elif(success_deuda):
+            self.button_aplicar.setEnabled(False)
+            self.monto.setText("")     
+            self.deuda.setText(str(deuda_restante))
+            InfoPrompt("Éxito", "Se ingresó con éxito el pago de la multa!")
+            
         # Si se pago la deuda completa, se elimina de los deudores
         if(deuda_restante == 0):
             self.updateDebtTabla()
@@ -404,7 +406,7 @@ class multas(QWidget):
 
     
     # Funcion que actualiza la tabla de prestamos activos
-    def updateTablaTranf(self):
+    def updateTablaTransf(self):
         self.tabla_transferencias.clear()
         queryText = "SELECT * FROM Transferencias;"
         self.query = QSqlQuery()
