@@ -251,6 +251,9 @@ class Books_Loan_Table(QTableWidget):
                 if(j != 2):
                     self.item(i, j).setText("")
                     self.item(i, j).setBackground(QColor(224, 255, 255))
+                else:
+                    self.cellWidget(i, j).setText("")
+                    self.cellWidget(i, 2).setEnabled(False)
 
     
 

@@ -4,7 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Books_Loan_Table, Active_Loan_Table
-from validationFunctions import checkPattern, checkCarnet, checkTitle
+from validationFunctions import check_pattern, checkTitle
+import re
 import sys
 import datetime 
 
@@ -228,103 +229,120 @@ class prestamos(QWidget):
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
     def buscarEstudiante(self, carnetBuscado):
-        if(checkCarnet(carnetBuscado)):
-            self.currentStudent = carnetBuscado
-            queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
-            self.query = QSqlQuery()
-            self.query.exec_(queryText)
+        pattern = re.compile(r"\d\d\-\d{5}")
+        if(pattern.match(carnetBuscado) is None):
+            ErrorPrompt("Error de formato", "Formato de carnet inválido")
+            return
 
-            if self.query.first():
-                self.tabla_libros_prestamos.clear()
-                self.Libros_prestamo.clear()
-                self.nombre.setText(str(self.query.value(1)))
-                self.apellido.setText(str(self.query.value(2)))
-                self.deuda.setText(str(self.query.value(8)))
-                self.button_renovar.setEnabled(False)
-                for i in range(self.tabla_libros_prestamos.rowCount()):
-                    self.tabla_libros_prestamos.cellWidget(i, 2).setText("")
-                    self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(False)
+        self.currentStudent = carnetBuscado
+        queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
+        self.query = QSqlQuery()
+        self.query2 = QSqlQuery()
+        self.query2.exec_(queryText)
+        queryText ="SELECT L.book_id, B.title, L.estimated_return_time FROM Loan L, Book B WHERE L.carnet = '" + carnetBuscado + "' AND L.book_id = B.book_id;"
+        self.query.exec_(queryText)
 
-                queryText ="SELECT L.book_id, B.title, L.estimated_return_time FROM Loan L, Book B WHERE L.carnet = '" + carnetBuscado + "' AND L.book_id = B.book_id;"
-                self.query.exec_(queryText)
-                if self.query.first():
-                    self.prestamo.setText("Prestamo activo")
-                    self.libro.setEnabled(False)
-                    self.button_agregar_libro.setEnabled(False)
-                    self.button_realizar.setEnabled(False)
-                    self.button_devuelto.setEnabled(True)
+        # Si no existe el estudiante
+        if(not(self.query2.first())):
+            ErrorPrompt("Error", "No se encontró un estudiante con ese carnet")
+            return
+        # Si existe estudiante y tiene prestamo activo
+        elif(self.query.first()):
+            self.tabla_libros_prestamos.clear()
+            self.Libros_prestamo.clear()
+            self.nombre.setText(str(self.query2.value(1)))
+            self.apellido.setText(str(self.query2.value(2)))
+            self.deuda.setText(str(self.query2.value(8)))
+            self.button_renovar.setEnabled(False)
+            self.tabla_libros_prestamos.clear()
 
-                    # Si le queda menos de 1 dia para regresar el libro, permitimos la renovacion
-                    time_left = 10000
-                    i = 0
-                    while(True):
-                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
-                        self.tabla_libros_prestamos.item(i, 1).setText(str(self.query.value(1)))
-                        # Buscamos el intervalo de prestamo mas pequeño y ese sera el intervalo de prestamo del prestamo
-                        if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2)) <= time_left):
-                            time_left = self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2))
+            self.prestamo.setText("Prestamo activo")
+            self.libro.setEnabled(False)
+            self.button_agregar_libro.setEnabled(False)
+            self.button_realizar.setEnabled(False)
+            self.button_devuelto.setEnabled(True)
 
-                        i += 1
-                        if(not self.query.next()):
-                            break
-                    
-                    # Si al prestamo le falta 1 dia para vencerse, se deja renovar
-                    if(-1 < time_left < 2):
-                        self.button_renovar.setEnabled(True)
+            # Si le queda menos de 1 dia para regresar el libro, permitimos la renovacion
+            time_left = 10000
+            i = 0
+            while(True):
+                self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
+                self.tabla_libros_prestamos.item(i, 1).setText(str(self.query.value(1)))
+                # Buscamos el intervalo de prestamo mas pequeño y ese sera el intervalo de prestamo del prestamo
+                if(self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2)) <= time_left):
+                    time_left = self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(2))
 
-                else:
-                    self.prestamo.setText("No préstamo activo")
-                    if(float(self.deuda.text()) == 0 ):
-                        self.libro.setEnabled(True)
-                        self.button_agregar_libro.setEnabled(True)
-                    self.button_devuelto.setEnabled(False)
-                    self.button_renovar.setEnabled(False)
+                i += 1
+                if(not self.query.next()):
+                    break
+            
+            # Si al prestamo le falta 1 dia para vencerse, se deja renovar
+            if(-1 < time_left < 2):
+                self.button_renovar.setEnabled(True)
+            return
 
-            else:
-                ErrorPrompt("Error", "No se encontró un estudiante con ese carnet")
+        # Si existe Estudiante pero no tiene prestamo activo
+        self.tabla_libros_prestamos.clear()
+        self.Libros_prestamo.clear()
+        self.nombre.setText(str(self.query2.value(1)))
+        self.apellido.setText(str(self.query2.value(2)))
+        self.deuda.setText(str(self.query2.value(8)))
+        self.button_renovar.setEnabled(False)
+        self.tabla_libros_prestamos.clear()
+
+        self.prestamo.setText("No préstamo activo")
+        if(float(self.deuda.text()) == 0 ):
+            self.libro.setEnabled(True)
+            self.button_agregar_libro.setEnabled(True)
+        self.button_devuelto.setEnabled(False)
+        self.button_renovar.setEnabled(False)
+        return
     
 
     # Funcion para buscar el libro e ingresarlo a la tabla de libros Prestamos cuando se este realizando un prestamo
     def buscarLibro(self, Libro):
-        if(checkTitle(Libro)):
-            queryText = "SELECT * FROM Book WHERE title = '" + Libro + "';"
-            self.query = QSqlQuery()
-            self.query.exec_(queryText)
-            if(self.query.first()):
-                i = 0
-                while(i != self.tabla_libros_prestamos.rowCount()):
-                    if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
-                        i += 1
-                    elif(self.tabla_libros_prestamos.item(i, 0).text() == ""):
-                        break
+        pattern = re.compile(r"[a-zA-Z0-9ñÑáÁéÉíÍóÓúÚ \.,]+$")
+        if(pattern.match(Libro) is None):
+            ErrorPrompt("Caracter inválido", "Caracter inválido en el título")
+            return
 
-                    if(i == self.tabla_libros_prestamos.rowCount()):
-                        ErrorPrompt("Error", "Todas las casillas están llenas, no puede pedir otro libro.")
-                        return
+        queryText = "SELECT * FROM Book WHERE title = '" + Libro + "';"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
+        if(not(self.query.first())):
+            ErrorPrompt("Error", "No se encontró el libro especificado")
+            return
 
-                # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
-                if(str(Libro) in self.Libros_prestamo.keys() and self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
-                    self.Libros_prestamo[str(Libro)] += 1
-                    self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
-                    self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
-                    self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
-                    self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
-                # Si el libro no esta en el diccionario, se agrega
-                elif(str(Libro) not in self.Libros_prestamo.keys()):
-                    self.Libros_prestamo[str(Libro)] = 0
-                    # Si se estan prestando menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
-                    if(self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
-                        self.Libros_prestamo[str(Libro)] = 1
-                        self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
-                        self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
-                        self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
-                        self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
-                else:
-                    ErrorPrompt("Error", "No existen más ejemplares disponibles de este libro")
-            else:
-                ErrorPrompt("Error", "No se encontró el libro especificado")
+        i = 0
+        while(i != self.tabla_libros_prestamos.rowCount()):
+            if((self.tabla_libros_prestamos.item(i, 0).text() == "") and (i != self.tabla_libros_prestamos.rowCount())):
+                break
+            elif(i == self.tabla_libros_prestamos.rowCount()):
+                ErrorPrompt("Error", "Todas las casillas están llenas, no puede pedir otro libro.")
+                return
+            i += 1
 
-            self.button_realizar.setEnabled(True)
+        # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
+        if(str(Libro) in self.Libros_prestamo.keys() and self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
+            self.Libros_prestamo[str(Libro)] += 1
+            self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
+            self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
+            self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
+            self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
+        # Si el libro no esta en el diccionario, se agrega
+        elif(str(Libro) not in self.Libros_prestamo.keys()):
+            self.Libros_prestamo[str(Libro)] = 0
+            # Si se estan prestando menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
+            if(self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
+                self.Libros_prestamo[str(Libro)] = 1
+                self.tabla_libros_prestamos.item(i, 0).setText(str(self.query.value(0)))
+                self.tabla_libros_prestamos.item(i, 1).setText(str(Libro))
+                self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
+                self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
+        else:
+            ErrorPrompt("Error", "No existen más ejemplares disponibles de este libro")
+
+        self.button_realizar.setEnabled(True)
 
 
     # Funcion para calcular el tiempo restante de el prestamo
@@ -438,22 +456,25 @@ class prestamos(QWidget):
                     break
 
             # Luego de haber actualizado la tabla, actualizamos la deuda de cada usuario en la tabla
-            self.query.exec_("SELECT monto_deuda FROM Deuda;")
-            if(self.query.first()):
-                monto = float(self.query.value(0))
-                i = 0
-                while(i != self.active_loan_table.rowCount()):
-                    if(self.active_loan_table.item(i, 0).text() != ""):
-                        dias = self.active_loan_table.item(i, 3).text().split()
-                        dias = int(dias[0])
-                        if(dias < 0):
-                            self.query.exec_("UPDATE Estudiante SET book_debt = '" + str(monto*(-dias)) + "' WHERE carnet = '"+ self.active_loan_table.item(i,0).text() + "';")
-                        i += 1
-                    else:
-                        break
+            self.updateDebtTable()
 
 
-    
+    def updateDebtTable(self):
+        self.query.exec_("SELECT monto_deuda FROM Deuda;")
+        if(self.query.first()):
+            monto = float(self.query.value(0))
+            i = 0
+            while(i != self.active_loan_table.rowCount()):
+                if(self.active_loan_table.item(i, 0).text() != ""):
+                    dias = self.active_loan_table.item(i, 3).text().split()
+                    dias = int(dias[0])
+                    if(dias < 0):
+                        self.query.exec_("UPDATE Estudiante SET book_debt = '" + str(monto*(-dias)) + "' WHERE carnet = '"+ self.active_loan_table.item(i,0).text() + "';")
+                    i += 1
+                else:
+                    break
+
+
     def renovarPrestamo(self):
         self.query = QSqlQuery()
         start_date = str(datetime.datetime.now())

@@ -13,7 +13,7 @@ class AuthorSearch(QWidget):
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaCEIC")                         
         self.db.setUserName("postgres")
-        self.db.setPassword("Tranc0nReloj-7aha")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("postgres")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
         #Inicialización de la ventana

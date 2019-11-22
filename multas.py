@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Payments_Table, Debts_Table
-from validationFunctions import checkPattern, checkCarnet, checkDebt
+from validationFunctions import check_pattern, check_carnet, check_debt
 import sys
 import datetime 
 
