@@ -140,13 +140,6 @@ class ventanaLogin(QMainWindow):
         self.query.exec_("SELECT permission_mask FROM CEIC_User WHERE " + condition)
 
         if self.query.first():
-            # Si es Admin
-            if self.query.value(0) == 1:
-                perm_mask = 1
-            # Si es User
-            else:
-                perm_mask = 0
-
             # Hace update del last_login del user
             update_last_login = "UPDATE CEIC_User SET last_login='"+str(datetime.now())+"' WHERE username='"+inputUsername+"';"
             self.query.exec_(update_last_login)
@@ -154,7 +147,7 @@ class ventanaLogin(QMainWindow):
             # Cerramos el Login
             self.close()
             # Abrimos el MainWindow
-            os.system("py Menu.py " + str(inputUsername) + " " + str(perm_mask) + " " + str(inputPassword))
+            os.system("py Menu.py " + str(inputUsername) + " " + str(inputPassword))
 
         else:
             ErrorPrompt("Error de Login", "Nombre de usuario o contraseña incorrectos!")
