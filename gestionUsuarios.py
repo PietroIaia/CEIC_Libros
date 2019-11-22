@@ -8,7 +8,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from Tables import UserTable
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from validationFunctions import verification_users, checkUsername
+from validationFunctions import verification_users, check_username
 from AgregarUsuario import AgregarUsuario
 from PyQt5.QtCore import *
 import sys
@@ -291,7 +291,7 @@ class gestionUsuarios(QWidget):
                 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QApplication()
 
     estudiante = gestionUsuarios()
     estudiante.show()

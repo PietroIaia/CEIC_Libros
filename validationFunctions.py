@@ -48,15 +48,15 @@ def check_email(address):
     pattern = re.compile(r"[a-zA-Z0-9\-_\.]+@[a-zA-Z0-9\-_\.]+")
     return check_pattern(address, pattern, "Email inválido", "Dirección de correo inválida")
 
-def checkDays(days):
+def check_days(days):
     pattern = re.compile(r"^[0-9]{1,3}$")
     return check_pattern(days, pattern, "Número de días inválidos", "Número de días inválidos")
 
-def checkBooks(bookNo):
+def check_books(bookNo):
     pattern = re.compile(r"^[0-9]{2}$")
     return check_pattern(bookNo, pattern, "Número de libros inválido", "Número de libros inválido")
 
-def checkDebt(debt):
+def check_debt(debt):
     pattern  = re.compile(r"\d+(\.\d+)?")
     return check_pattern(debt, pattern, "Deuda inválida", "La cifra de la deuda es inválida")
 
@@ -74,11 +74,11 @@ def verification_estudiantes(fields, checkUntil):
         elif i == 5:
             correct = check_email(fields[i])
         elif i == 6:
-            correct = checkDays(fields[i])
+            correct = check_days(fields[i])
         elif i == 7:
-            correct = checkBooks(fields[i])
+            correct = check_books(fields[i])
         else:
-            correct = checkDebt(fields[i])
+            correct = check_debt(fields[i])
 
         if not correct:
             return False
@@ -89,32 +89,34 @@ def verification_estudiantes(fields, checkUntil):
 #####################################################
 #               Validadores de libros               #
 #####################################################
-def checkIdBook(number):
+def check_idBook(number):
     pattern = re.compile(r"^[0-9]{3,4}$")
     return check_pattern(number, pattern, "Código inválido", "Ese código de libro no es válido")
 
-def checkTitle(title):
+def check_title(title):
     pattern = re.compile(r"[a-zA-Z0-9ñÑáÁéÉíÍóÓúÚ \.,]+$")
     return check_pattern(title, pattern, "Caracter inválido", "Caracter inválido en el título")
 
-def checkAuthor(name):
+def check_author(name):
     pattern = re.compile(r"[a-zA-ZñÑáÁéÉíÍóÓúÚ \.,]+$")
     return check_pattern(name, pattern, "Caracter inválido", "Caracter inválido en nombre de autores")
 
-def checkISBN(ISBN):
-    #pattern = re.compile(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")             # Revisar aqui si no funciona http://regexlib.com/Search.aspx?k=ISBN
-    #return check_pattern(ISBN, pattern, "Error de formato", "Número ISBN inválido")
-    return True
+def check_isbn(ISBN):
+    if ISBN == "NA":
+        return True
+    else:
+        pattern = re.compile(r"^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$")            
+        return check_pattern(ISBN, pattern, "Error de formato", "Número ISBN inválido")
 
-def checkQuantity(number):
+def check_quantity(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
     return check_pattern(number, pattern, "Error de formato", "Cantidad de libros inválida")
 
-def checkQuantityLent(number):
+def check_quantity_lent(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
     return check_pattern(number, pattern, "Error de formato", "Cantidad de libros prestados inválida")
 
-def checkLoanDuration(number):
+def check_loan_duration(number):
     pattern = re.compile(r"^[0-9]+$")                                                # Checkea si es un numero
     return check_pattern(number, pattern, "Error de formato", "Número de dias inválido")
 
@@ -122,19 +124,19 @@ def verification_books(fields, checkUntil):
     correct = True
     for i in range(checkUntil):
         if i == 0:
-            correct = checkIdBook(fields[i])
+            correct = check_idBook(fields[i])
         elif i == 1:
-            correct = checkTitle(fields[i])
+            correct = check_title(fields[i])
         elif i == 2:
-            correct = checkAuthor(fields[i])
+            correct = check_author(fields[i])
         elif i == 3:
-            correct = checkISBN(fields[i])
+            correct = check_isbn(fields[i])
         elif i == 4:
-            correct = checkQuantity(fields[i])
+            correct = check_quantity(fields[i])
         elif i == 5:
-            correct = checkQuantityLent(fields[i])
+            correct = check_quantity_lent(fields[i])
         elif i == 6:
-            correct = checkLoanDuration(fields[i])
+            correct = check_loan_duration(fields[i])
 
         if not correct:
             return False
@@ -146,7 +148,7 @@ def verification_books(fields, checkUntil):
 #               Validadores de Usuarios             #
 #####################################################
 # Funcion para verificar si la longitud del nombre de usuario es correcta
-def checkUsername(username):
+def check_username(username):
     if len(username) < 33:
         return True
     else:
@@ -154,7 +156,7 @@ def checkUsername(username):
         return False
 
 
-def checkPermisos(permisos):
+def check_permisos(permisos):
     if permisos != "Usuario" and permisos != "Administrador":
         ErrorPrompt("Error", "Sólo existen dos roles, Usuario y Administrador")
         return False

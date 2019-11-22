@@ -32,7 +32,7 @@ class gestionEstudiante(QWidget):
         self.setStyleSheet('background-color: LightSkyBlue')
 
         #Regex del carnet
-        self.carnetPattern = re.compile(r"\d{2}\-\d{5}")
+        self.carnetPattern = re.compile(r"\d\d\-\d{5}")
 
         #Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
