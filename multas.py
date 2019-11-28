@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor, QPalette
 from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Payments_Table, Debts_Table
 from validationFunctions import check_pattern, check_carnet, check_debt
@@ -20,23 +21,29 @@ class multas(QWidget):
         super().__init__()
         self.setGeometry(200, 0, 600, 600)
         self.setWindowTitle("Gestión de Estudiantes")
-        self.setStyleSheet('background-color: LightSkyBlue')
+        self.setStyleSheet('background-color: rgb(236, 240, 241)')
 
         # Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
+        self.titleFont.setBold(True)
         self.instFont = QFont("Serif", 12)
         self.subFont = QFont("Serif", 10)
         self.btnFont = QFont("Serif", 9)
         self.smallbtn = QFont("Serif", 7)
 
-
         # Título
-        self.title = QLabel("Multas", self)
-        self.title.setStyleSheet('background-color: DodgerBlue')
-        self.title.setStyleSheet('color: white')
+        self.title = QtWidgets.QLabel(self)
+        self.title.setText("Multas")
+        self.title.setStyleSheet('color: rgb(30, 39, 46)')
         self.title.setFont(self.titleFont)
-        self.title.move(30, 10)
+        self.title.setGeometry(10, 15, 350, 50)
 
+        # Línea debajo del título
+        self.line = QtWidgets.QFrame(self)
+        self.line.setGeometry(QtCore.QRect(10, 55, 820, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
 
         # Frame del form
         self.frame_form_multas = QFrame(self)
@@ -49,7 +56,7 @@ class multas(QWidget):
         "}")
         self.frame_form_multas.move(10, 70)
 
-        # Informacion de prestamo
+        # Informacion de préstamo
         self.info_prestamo_frame = QFrame(self.frame_form_multas)
         self.info_prestamo_frame.setFrameShape(QFrame.NoFrame)
         self.info_prestamo_frame.setFrameShadow(QFrame.Sunken)
@@ -176,14 +183,14 @@ class multas(QWidget):
         self.codigo.move(85, 335)
 
         # Refrescar tabla Deudores
-        self.button_refrescar = QPushButton("Refrescar Tabla", self)
-        self.button_refrescar.setFixedWidth(150)
-        self.button_refrescar.setFixedHeight(28)
-        self.button_refrescar.move(647, 690)
-        self.button_refrescar.setFont(self.btnFont)
-        self.button_refrescar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
-        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
-        self.button_refrescar.setEnabled(True)
+        #self.button_refrescar = QPushButton("Refrescar Tabla", self)
+        #self.button_refrescar.setFixedWidth(150)
+        #self.button_refrescar.setFixedHeight(28)
+        #self.button_refrescar.move(647, 690)
+        #self.button_refrescar.setFont(self.btnFont)
+        #self.button_refrescar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
+        #"QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        #self.button_refrescar.setEnabled(True)
 
         # Botón de Aplicar
         self.button_aplicar = QPushButton("Ingresar Pago", self.frame_form_multas)
@@ -206,14 +213,14 @@ class multas(QWidget):
         "}")
         self.titulo_transfer.setFixedWidth(535)
         self.titulo_transfer.setFixedHeight(40)
-        self.titulo_transfer.move(290, 40)
+        self.titulo_transfer.move(290, 70)
         self.transfer = QLabel("Transferencias", self)
         self.transfer.setStyleSheet('background-color: #79B9E0')
         self.transfer.setFont(self.instFont)
-        self.transfer.move(485, 47)
+        self.transfer.move(485, 77)
 
         self.tabla_transferencias = Payments_Table(self)
-        self.tabla_transferencias.move(290, 80)
+        self.tabla_transferencias.move(290, 105)
 
         # Tabla de Deudas
 
@@ -227,14 +234,14 @@ class multas(QWidget):
         "}")
         self.titulo_deudas.setFixedWidth(535)
         self.titulo_deudas.setFixedHeight(40)
-        self.titulo_deudas.move(290, 400)
+        self.titulo_deudas.move(290, 425)
         self.deudas = QLabel("Deudas Pendientes", self)
         self.deudas.setStyleSheet('background-color: #79B9E0')
         self.deudas.setFont(self.instFont)
-        self.deudas.move(485, 407)
+        self.deudas.move(485, 432)
 
         self.debts_table = Debts_Table(self)
-        self.debts_table.move(290, 440)
+        self.debts_table.move(290, 460)
 
         # Frame de actualizar Deuda agregada por dia
         self.frame_deuda = QFrame(self)
@@ -299,7 +306,7 @@ class multas(QWidget):
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_act_deuda.clicked.connect(self.actualizarMontoDeuda)
         self.button_aplicar.clicked.connect(lambda: self.pagarDeuda(Username))
-        self.button_refrescar.clicked.connect(self.updateDebtTabla)
+        #self.button_refrescar.clicked.connect(self.updateDebtTabla)
 
 
     # Funcion para actualizar monto de deuda agregada por dia
