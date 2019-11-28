@@ -141,7 +141,7 @@ class gestionUsuarios(QWidget):
     def consulta(self):
         inputUser = self.User.text()
 
-        if(checkUsername(inputUser)):
+        if(check_username(inputUser)):
             self.consultaAux(inputUser)
         else:
             ErrorPrompt("Error de usuario", "El username no sigue el patrón correspondiente")

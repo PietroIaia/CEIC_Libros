@@ -23,7 +23,7 @@ class AgregarAutor(QWidget):
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaCEIC")
         self.db.setUserName("postgres")
-        self.db.setPassword("Tranc0nReloj-7aha")
+        self.db.setPassword("postgres")
         self.db.open()
 
         #Creación de fonts para las letras
