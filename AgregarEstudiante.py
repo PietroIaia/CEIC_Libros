@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor, QIcon
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5 import QtCore, QtGui, QtWidgets
 from validationFunctions import verification_estudiantes
 from Prompt import InfoPrompt, ErrorPrompt
 import sys
@@ -18,12 +19,9 @@ class AgregarEstudiante(QWidget):
     def __init__(self):
         #Inicialización de la ventana
         super().__init__()
-        self.setGeometry(200, 100, 600, 500)
-        self.setMinimumSize(QSize(600, 500))
-        self.setMaximumSize(QSize(600, 500))
         self.setWindowTitle("Gestión de estudiantes")
         self.setWindowIcon(QIcon("static/icono_CEIC.png"))
-        self.setStyleSheet('background-color: LightSkyBlue')
+        self.setStyleSheet('background-color: rgb(236, 240, 241)')
 
         #Base de datos
         self.db = QSqlDatabase.database('qt_sql_default_connection')
@@ -35,60 +33,108 @@ class AgregarEstudiante(QWidget):
 
         #Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
+        self.titleFont.setBold(True)
+        self.labelFont = QFont("Helvetica", 13)
+        self.labelFont.setBold(True)
+        self.buttonFont = QFont("Arial", 12)
+        self.buttonFont.setBold(True)
 
-        #Título
-        self.title = QLabel("Agregar nuevo estudiante")
-        self.title.setStyleSheet('color: white')
+        # Título
+        self.title = QLabel(self)
+        self.title.setText("Agregar Estudiante")
+        self.title.setStyleSheet('color: rgb(30, 39, 46)')
         self.title.setFont(self.titleFont)
+        self.title.setGeometry(10, 15, 570, 50)
 
-        #Aquí vienen los campos
-        self.carnetLabel = QLabel("Carnet del estudiante")
+        # Línea debajo del título
+        self.line = QtWidgets.QFrame(self)
+        self.line.setGeometry(QtCore.QRect(10, 55, 820, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+
+        # Line edits para introducir los datos del estudiante
         self.carnetInput = QLineEdit(self)
-        self.fnameLabel = QLabel("Nombre del estudiante")
         self.fnameInput = QLineEdit(self)
-        self.lnameLabel = QLabel("Apellido del estudiante")
         self.lnameInput = QLineEdit(self)
-        self.CILabel = QLabel("CI")
         self.CIInput = QLineEdit(self)
-        self.phoneLabel = QLabel("Teléfono")
         self.phoneInput = QLineEdit(self)
-        self.emailLabel = QLabel("Email del estudiante")
         self.emailInput = QLineEdit(self)
 
-        #CSS
-        self.carnetInput.setStyleSheet('background-color: white')
-        self.fnameInput.setStyleSheet('background-color: white')
-        self.lnameInput.setStyleSheet('background-color: white')
-        self.CIInput.setStyleSheet('background-color: white')
-        self.phoneInput.setStyleSheet('background-color: white')
-        self.emailInput.setStyleSheet('background-color: white')
+        # CSS, PlaceholderText y posicionamiento de los line edits
+        self.carnetInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.carnetInput.setPlaceholderText(" Carnet del estudiante")
+        self.carnetInput.setGeometry(130, 150, 600, 50)
+
+        self.fnameInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.fnameInput.setPlaceholderText(" Nombre del estudiante")
+        self.fnameInput.setGeometry(130, 220, 600, 50) 
+
+        self.lnameInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.lnameInput.setPlaceholderText(" Apellido del estudiante")
+        self.lnameInput.setGeometry(130, 290, 600, 50)
+
+        self.CIInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.CIInput.setPlaceholderText(" Cédula del estudiante")
+        self.CIInput.setGeometry(130, 360, 600, 50)
+
+        self.phoneInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.phoneInput.setPlaceholderText(" Teléfono del estudiante")
+        self.phoneInput.setGeometry(130, 430, 600, 50)
+
+        self.emailInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.emailInput.setPlaceholderText(" Email del estudiante")
+        self.emailInput.setGeometry(130, 500, 600, 50)
 
         #Botones
-        self.agregar = QPushButton("Agregar")
-        self.cancelar = QPushButton("Cancelar")
+        self.agregar = QPushButton(self)
+        self.agregar.setText("Agregar")
+        self.agregar.setFont(self.buttonFont)
+        self.agregar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.agregar.setGeometry(430, 610, 290, 40)
 
-        #LAyout
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.title)
-        self.layout.addWidget(self.carnetLabel)
-        self.layout.addWidget(self.carnetInput)
-        self.layout.addWidget(self.fnameLabel)
-        self.layout.addWidget(self.fnameInput)
-        self.layout.addWidget(self.lnameLabel)
-        self.layout.addWidget(self.lnameInput)
-        self.layout.addWidget(self.CILabel)
-        self.layout.addWidget(self.CIInput)
-        self.layout.addWidget(self.phoneLabel)
-        self.layout.addWidget(self.phoneInput)
-        self.layout.addWidget(self.emailLabel)
-        self.layout.addWidget(self.emailInput)
-        self.layout.addWidget(self.agregar)
-        self.layout.addWidget(self.cancelar)
+        self.cancelar = QPushButton(self)
+        self.cancelar.setText("Cancelar")
+        self.cancelar.setFont(self.buttonFont)
+        self.cancelar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.cancelar.setGeometry(130, 610, 290, 40)
 
-        self.setLayout(self.layout)
+        #CSS Botones
+        self.agregar.setStyleSheet("QPushButton:hover\n"
+                                  "{\n"
+                                  "    background-color: rgb(55, 162, 228);\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed\n"
+                                  "{\n"
+                                  "    background-color: rgb(35, 142, 208);\n"
+                                  "}\n"
+                                  "QPushButton\n"
+                                  "{\n"
+                                  "    border-radius: 15px;\n"
+                                  "    background-color: rgb(45, 152, 218);\n"
+                                  "    color: white;\n"
+                                  "}")
 
+        self.cancelar.setStyleSheet("QPushButton:hover\n"
+                                  "{\n"
+                                  "    background-color: #F10000;\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed\n"
+                                  "{\n"
+                                  "    background-color: #CC0000;\n"
+                                  "}\n"
+                                  "QPushButton\n"
+                                  "{\n"
+                                  "    border-radius: 15px;\n"
+                                  "    background-color: #C20000;\n"
+                                  "    color: white;\n"
+                                  "}")
+
+        #Conexiones de los botones
         self.agregar.clicked.connect(self.agregarEstudiante)
-        self.cancelar.clicked.connect(self.closeWindow)
+        self.cancelar.clicked.connect(self.clean)
 
     @pyqtSlot()
     def agregarEstudiante(self):
@@ -114,10 +160,15 @@ class AgregarEstudiante(QWidget):
 
         if self.query.first():
             InfoPrompt("Éxito", "La información del estudiante ha sido agregada exitosamente")
-            self.close()
+            self.clean()
         else:
             ErrorPrompt("Fracaso", "El estudiante no fue agregado al sistema")
 
     @pyqtSlot()
-    def closeWindow(self):
-        self.close()
+    def clean(self):
+        self.carnetInput.clear()
+        self.fnameInput.clear()
+        self.lnameInput.clear()
+        self.CIInput.clear()
+        self.phoneInput.clear()
+        self.emailInput.clear()
