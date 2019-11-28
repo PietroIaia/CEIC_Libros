@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor, QIcon
 from PyQt5.QtCore import pyqtSlot, Qt, QSize
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5 import QtCore, QtGui, QtWidgets
 from validationFunctions import verification_books
 from Prompt import InfoPrompt, ErrorPrompt
 import sys
@@ -18,16 +19,13 @@ autores = ""
 class AgregarLibro(QWidget):
 
     def __init__(self):
-        #Inicialización de la ventana
+        # Inicialización de la ventana
         super().__init__()
-        self.setGeometry(200, 100, 600, 500)
-        self.setMinimumSize(QSize(600, 500))
-        self.setMaximumSize(QSize(600, 500))
         self.setWindowTitle("Gestión de libros")
         self.setWindowIcon(QIcon("static/icono_CEIC.png"))
-        self.setStyleSheet('background-color: LightSkyBlue')
+        self.setStyleSheet('background-color: rgb(236, 240, 241)')
 
-        #Base de datos
+        # Base de datos
         self.db = QSqlDatabase.database('qt_sql_default_connection')
         self.db.setHostName("localhost")
         self.db.setDatabaseName("pruebaceic")
@@ -35,68 +33,138 @@ class AgregarLibro(QWidget):
         self.db.setPassword("postgres")
         self.db.open()
 
-        #Creación de fonts para las letras
+        # Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
+        self.titleFont.setBold(True)
+        self.labelFont = QFont("Helvetica", 13)
+        self.labelFont.setBold(True)
+        self.buttonFont = QFont("Arial", 12)
+        self.buttonFont.setBold(True)
 
-        #Título
-        self.title = QLabel("Agregar nuevo libro")
-        self.title.setStyleSheet('color: white')
+        # Título
+        self.title = QLabel(self)
+        self.title.setText("Agregar Libro")
+        self.title.setStyleSheet('color: rgb(30, 39, 46)')
         self.title.setFont(self.titleFont)
+        self.title.setGeometry(10, 15, 570, 50)
 
-        #Aquí vienen los campos
-        self.IDLabel = QLabel("ID del libro")
+        # Línea debajo del título
+        self.line = QtWidgets.QFrame(self)
+        self.line.setGeometry(QtCore.QRect(10, 55, 820, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+
+        # Line edits
         self.IDInput = QLineEdit(self)
-        self.titleBookLabel = QLabel("Título del libro")
         self.titleBookInput = QLineEdit(self)
-        self.authorsLabel = QLabel("Nombre del autor")
+        self.authorsLabel = QLabel(self)
+        self.authorsLabel.setText("  Autor")
         self.authorsInput = QComboBox(self)
-        self.ISBNLabel = QLabel("ISBN")
         self.ISBNInput = QLineEdit(self)
-        self.quantityLabel = QLabel("Número de ejemplares")
         self.quantityInput = QLineEdit(self)
 
-        sql = "SELECT first_name, last_name FROM Author ORDER BY last_name"  ## cambiar esto
-        queryx = QSqlQuery(sql)
-        while queryx.next():
-           
-            IDX = str(queryx.value(0))
-            IDX2 = str(queryx.value(1))
-            IDX3 = IDX + " "+ IDX2
-            self.authorsInput.addItem(IDX3)
+        # CSS, PlaceholderText y posicionamiento de los line edits
+        self.IDInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.IDInput.setPlaceholderText(" Ingrese el código de identificación del libro")
+        self.IDInput.setGeometry(130, 150, 600, 50)
 
+        self.titleBookInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.titleBookInput.setPlaceholderText(" Ingrese el título del libro")
+        self.titleBookInput.setGeometry(130, 220, 600, 50)  
 
-        #CSS
-        self.IDInput.setStyleSheet('background-color: white')
-        self.titleBookInput.setStyleSheet('background-color: white')
-        #self.authorsInput.setStyleSheet('background-color: white')
-        self.ISBNInput.setStyleSheet('background-color: white')
-        self.quantityInput.setStyleSheet('background-color: white')
+        self.authorsLabel.setGeometry(130, 290, 200, 50)
+        self.authorsLabel.setStyleSheet('color: rgb(79, 90, 94)')
+        self.authorsLabel.setFont(self.labelFont)
+        self.authorsInput.setGeometry(200, 290, 530, 50)
+        self.authorsInput.setStyleSheet('background-color: white; border: 1px solid rgb(210, 218, 226); border-radius: 20px;')
 
-        #Botones
-        self.agregar = QPushButton("Agregar")
-        self.cancelar = QPushButton("Cancelar")
+        self.ISBNInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.ISBNInput.setPlaceholderText(" Ingrese el ISBN del libro")
+        self.ISBNInput.setGeometry(130, 360, 600, 50)
 
-        #LAyout
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.title)
-        self.layout.addWidget(self.IDLabel)
-        self.layout.addWidget(self.IDInput)
-        self.layout.addWidget(self.titleBookLabel)
-        self.layout.addWidget(self.titleBookInput)
-        self.layout.addWidget(self.authorsLabel)
-        self.layout.addWidget(self.authorsInput)
-        self.layout.addWidget(self.ISBNLabel)
-        self.layout.addWidget(self.ISBNInput)
-        self.layout.addWidget(self.quantityLabel)
-        self.layout.addWidget(self.quantityInput)
-        self.layout.addWidget(self.agregar)
-        self.layout.addWidget(self.cancelar)
+        self.quantityInput.setStyleSheet('background-color: white; border-radius: 20px; border: 1px solid rgb(210, 218, 226); font: 16px;')
+        self.quantityInput.setPlaceholderText(" Ingrese el número de ejemplares que tiene el libro")
+        self.quantityInput.setGeometry(130, 430, 600, 50)
 
-        self.setLayout(self.layout)
+        # Botones
+        self.agregarAutor = QPushButton(self)
+        self.agregarAutor.setText("Agregar autor")
+        self.agregarAutor.setFont(self.buttonFont)
+        self.agregarAutor.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.agregarAutor.setGeometry(130, 520, 300, 35)
 
-        self.agregar.clicked.connect(self.AgregarLibro)
-        self.cancelar.clicked.connect(self.closeWindow)
+        self.agregarLibro = QPushButton(self)
+        self.agregarLibro.setText("Agregar libro")
+        self.agregarLibro.setFont(self.buttonFont)
+        self.agregarLibro.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.agregarLibro.setGeometry(432, 520, 300, 35)
+
+        self.cancelar = QPushButton(self)
+        self.cancelar.setText("Cancelar")
+        self.cancelar.setFont(self.buttonFont)
+        self.cancelar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.cancelar.setGeometry(130, 565, 600, 35)
+
+        # CSS Botones
+        self.agregarLibro.setStyleSheet("QPushButton:hover\n"
+                                  "{\n"
+                                  "    background-color: rgb(55, 162, 228);\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed\n"
+                                  "{\n"
+                                  "    background-color: rgb(35, 142, 208);\n"
+                                  "}\n"
+                                  "QPushButton\n"
+                                  "{\n"
+                                  "    border-radius: 15px;\n"
+                                  "    background-color: rgb(45, 152, 218);\n"
+                                  "    color: white;\n"
+                                  "}")
+
+        self.agregarAutor.setStyleSheet("QPushButton:hover\n"
+                                  "{\n"
+                                  "    background-color: rgb(22, 46, 107);\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed\n"
+                                  "{\n"
+                                  "    background-color: rgb(2, 26, 87);\n"
+                                  "}\n"
+                                  "QPushButton\n"
+                                  "{\n"
+                                  "    border-radius: 15px;\n"
+                                  "    background-color: rgb(12, 36, 97);\n"
+                                  "    color: white;\n"
+                                  "}")
+
+        self.cancelar.setStyleSheet("QPushButton:hover\n"
+                                  "{\n"
+                                  "    background-color: #C20000;\n"
+                                  "}\n"
+                                  "\n"
+                                  "QPushButton:pressed\n"
+                                  "{\n"
+                                  "    background-color: #CC0000;\n"
+                                  "}\n"
+                                  "QPushButton\n"
+                                  "{\n"
+                                  "    border-radius: 15px;\n"
+                                  "    background-color: #F10000;\n"
+                                  "    color: white;\n"
+                                  "}")
+
+        self.mostrarAutores()
+
+        # Conexiones de botones
+        self.cancelar.clicked.connect(self.clean)
+        self.agregarLibro.clicked.connect(self.AgregarLibro)
         self.authorsInput.activated[str].connect(self.seleccion)
+
+        # Raise
+        self.title.raise_()
+        self.line.raise_()
 
     @pyqtSlot()
     def AgregarLibro(self):
@@ -108,7 +176,6 @@ class AgregarLibro(QWidget):
 
         if not correct:
             return
-
 
         self.query = QSqlQuery()
         self.query.prepare("INSERT INTO Book(book_id, title, authors, isbn, quantity, quantity_lent) VALUES(:ID, :title, \
@@ -123,7 +190,6 @@ class AgregarLibro(QWidget):
 
         if self.query.first():
             InfoPrompt("Éxito", "La información del libro ha sido agregada exitosamente")
-            self.close()
         else:
             ErrorPrompt("Fracaso", "El libro no fue agregado al sistema")
 
@@ -136,8 +202,22 @@ class AgregarLibro(QWidget):
         autores = autores + self.authorsInput.currentText()+ " , "
         InfoPrompt("Éxito", "Su autor ha sido seleccionado exitosamente")
         self.authorsInput.removeItem(self.authorsInput.currentIndex())
-        print(autores)
 
     @pyqtSlot()
-    def closeWindow(self):
-        self.close()
+    def mostrarAutores(self):
+        # Query para mostrar todos los autores en authorsInput
+        sql = "SELECT first_name, last_name FROM Author ORDER BY last_name"  ## cambiar esto
+        queryx = QSqlQuery(sql)
+        while queryx.next():
+           
+            IDX = str(queryx.value(0))
+            IDX2 = str(queryx.value(1))
+            IDX3 = IDX + " "+ IDX2
+            self.authorsInput.addItem(IDX3)
+
+    @pyqtSlot()
+    def clean(self):
+        self.IDInput.clear()
+        self.titleBookInput.clear()
+        self.ISBNInput.clear()
+        self.quantityInput.clear()

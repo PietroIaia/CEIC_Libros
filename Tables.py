@@ -32,6 +32,19 @@ class StudentTable(QTableWidget):
         self.setMinimumSize(self.getQTableWidgetSize())
         self.setTableColors()
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setShowGrid(False)
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
+
+        self.fontData = QFont("Helvetica", 12)
+
+        for i in range(0, 10):
+            self.verticalHeaderItem(i).setTextAlignment(Qt.AlignHCenter)
+            self.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            self.item(i, 0).setFont(self.fontData)
 
     def getQTableWidgetSize(self):
         w = self.verticalHeader().width() + 4  # +4 seems to be needed
@@ -45,12 +58,18 @@ class StudentTable(QTableWidget):
     def setTableColors(self):
         for i in range(self.rowCount()):
             self.setItem(i, 0, QTableWidgetItem())
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            if (i % 2 == 0):
+                self.item(i, 0).setBackground(QColor(234, 235, 235))
+            else:
+                self.item(i, 0).setBackground(QColor(244, 245, 245))
 
     def clear(self):
         for i in range(self.rowCount()):
             self.item(i, 0).setText("")
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            if (i % 2 == 0):
+                self.item(i, 0).setBackground(QColor(234, 235, 235))
+            else:
+                self.item(i, 0).setBackground(QColor(244, 245, 245))
 
     def getFields(self):
         fields = []
@@ -82,15 +101,28 @@ class BooksTable(QTableWidget):
         self.setColumnCount(1) #Columnas
         self.setRowCount(7)
         self.setHorizontalHeaderLabels(["Información del Libro"])
-        self.setVerticalHeaderLabels(["ID", "Título", "Autores", "ISBN", "Cantidad", "Cantidad prestada", "Duración del préstamo en días"]) #Header
+        self.setVerticalHeaderLabels(["ID", "Título", "Autores", "ISBN", "Cantidad", "Cantidad prestada", "Duración del préstamo\n(en días)"]) #Header
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.setStyleSheet("background-color:  Silver")
+        self.setStyleSheet("background-color:  Silver;")
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())
         self.setTableColors()
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setShowGrid(False)
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
+
+        self.fontData = QFont("Helvetica", 12)
+
+        for i in range(0, 7):
+            self.verticalHeaderItem(i).setTextAlignment(Qt.AlignHCenter)
+            self.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            self.item(i, 0).setFont(self.fontData)
     
     def getQTableWidgetSize(self):
         w = self.verticalHeader().width() + 4  # +4 seems to be needed
@@ -104,12 +136,18 @@ class BooksTable(QTableWidget):
     def setTableColors(self):
         for i in range(self.rowCount()):
             self.setItem(i, 0, QTableWidgetItem())
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            if (i % 2 == 0):
+                self.item(i, 0).setBackground(QColor(234, 235, 235))
+            else:
+                self.item(i, 0).setBackground(QColor(244, 245, 245))
 
     def clear(self):
         for i in range(self.rowCount()):
             self.item(i, 0).setText("")
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            if (i % 2 == 0):
+                self.item(i, 0).setBackground(QColor(234, 235, 235))
+            else:
+                self.item(i, 0).setBackground(QColor(244, 245, 245))
 
     def getFields(self):
         fields = []
@@ -142,7 +180,7 @@ class UserTable(QTableWidget):
         comboBox.insertItem(1, "Administrador")
         comboBox.insertItem(2, "")                                     #El segundo item es el default
         comboBox.setCurrentIndex(2)
-        comboBox.model().item(2).setEnabled(False)                     #lo ponemos disabled para que el usuario no pueda clickearlo
+        comboBox.model().item(2).setEnabled(False)                     #Lo ponemos disabled para que el usuario no pueda clickearlo
         # Creamos la tabla
         self.setColumnCount(1) #Columnas
         self.setRowCount(7)
@@ -158,6 +196,19 @@ class UserTable(QTableWidget):
         self.setTableColors()
         self.cellWidget(4, 0).setEnabled(False)
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setShowGrid(False)
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
+
+        self.fontData = QFont("Helvetica", 12)
+
+        for i in range(0, 7):
+            self.verticalHeaderItem(i).setTextAlignment(Qt.AlignHCenter)
+            self.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            self.item(i, 0).setFont(self.fontData)
 
     def getQTableWidgetSize(self):
         w = self.verticalHeader().width() + 4  # +4 seems to be needed
@@ -171,13 +222,19 @@ class UserTable(QTableWidget):
     def setTableColors(self):
         for i in range(self.rowCount()):
             self.setItem(i, 0, QTableWidgetItem())
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
-        self.cellWidget(4, 0).setStyleSheet('background-color: rgb(224, 255, 255); border: 0px')
+            if (i % 2 == 0):
+                self.item(i, 0).setBackground(QColor(234, 235, 235))
+            else:
+                self.item(i, 0).setBackground(QColor(244, 245, 245))
+        self.cellWidget(4, 0).setStyleSheet('background-color: rgb(234, 235, 235); border: 0px')
 
     def clear(self):
         for i in range(self.rowCount()):
             self.item(i, 0).setText("")
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
+            if (i % 2 == 0):
+                self.item(i, 0).setBackground(QColor(234, 235, 235))
+            else:
+                self.item(i, 0).setBackground(QColor(244, 245, 245))
         self.cellWidget(4, 0).setCurrentIndex(2)
 
     def getFields(self):
@@ -228,6 +285,18 @@ class Books_Loan_Table(QTableWidget):
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.clear()
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
+
+        #self.fontData = QFont("Helvetica", 12)
+
+        #for i in range(0, 3):
+        #    self.horizontalHeaderItem(i).setTextAlignment(Qt.AlignHCenter)
+        #    self.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        #    self.item(i, 0).setFont(self.fontData)
     
     def getQTableWidgetSize(self):
         w = 0
@@ -239,10 +308,10 @@ class Books_Loan_Table(QTableWidget):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 if(j == 2):
-                    self.cellWidget(i, j).setStyleSheet('background-color: rgb(224, 255, 255); border: 0px')
+                    self.cellWidget(i, j).setStyleSheet('background-color: rgb(234, 235, 235); border: 0px')
                 else:
                     self.setItem(i, j, QTableWidgetItem())
-                    self.item(i, j).setBackground(QColor(224, 255, 255))
+                    self.item(i, j).setBackground(QColor(234, 235, 235))
 
     def clear(self):
         for i in range(self.rowCount()):
@@ -250,7 +319,7 @@ class Books_Loan_Table(QTableWidget):
             for j in range(self.columnCount()):
                 if(j != 2):
                     self.item(i, j).setText("")
-                    self.item(i, j).setBackground(QColor(224, 255, 255))
+                    self.item(i, j).setBackground(QColor(234, 235, 235))
                 else:
                     self.cellWidget(i, j).setText("")
                     self.cellWidget(i, 2).setEnabled(False)
@@ -273,8 +342,8 @@ class Active_Loan_Table(QTableWidget):
         self.setColumnWidth(0, 120)
         self.setColumnWidth(1, 150)
         self.setColumnWidth(2, 150)
-        self.setColumnWidth(3, 100)
-        self.setColumnWidth(4, 245)
+        self.setColumnWidth(3, 115)
+        self.setColumnWidth(4, 230)
         self.setStyleSheet("background-color:  Silver")
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())
@@ -283,6 +352,18 @@ class Active_Loan_Table(QTableWidget):
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.clear()
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
+
+        #self.fontData = QFont("Helvetica", 12)
+
+        #for i in range(0, 5):
+        #    self.horizontalHeaderItem(i).setTextAlignment(Qt.AlignHCenter)
+        #    self.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        #    self.item(i, 0).setFont(self.fontData)
     
     def getQTableWidgetSize(self):
         w = 0
@@ -294,13 +375,13 @@ class Active_Loan_Table(QTableWidget):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.setItem(i, j, QTableWidgetItem())
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(234, 235, 235))
 
     def clear(self):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(234, 235, 235))
 
 ###################################################
 #           Tabla de Transferencias               #
@@ -329,6 +410,11 @@ class Payments_Table(QTableWidget):
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.clear()
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
     
     def getQTableWidgetSize(self):
         w = 0
@@ -340,13 +426,13 @@ class Payments_Table(QTableWidget):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.setItem(i, j, QTableWidgetItem())
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(234, 235, 235))
 
     def clear(self):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(234, 235, 235))
 
 ###################################################
 #             Tabla de Deudas                     #
@@ -374,6 +460,11 @@ class Debts_Table(QTableWidget):
         self.setFocusPolicy(Qt.NoFocus)
         self.setSelectionMode(QAbstractItemView.NoSelection)
         self.clear()
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
     
     def getQTableWidgetSize(self):
         w = 0
@@ -385,13 +476,13 @@ class Debts_Table(QTableWidget):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.setItem(i, j, QTableWidgetItem())
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(255, 255, 255))
 
     def clear(self):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(234, 235, 235))
 
 ###################################################
 #           Tabla de inventario de libros         #
@@ -408,14 +499,18 @@ class InventarioBooksTable(QTableWidget):
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
     
     def getQTableWidgetSize(self):
-        return QSize(800, 540)
+        return QSize(800, 570)
 
     def setTableColors(self):
         for i in range(self.rowCount()):
-            self.item(i, 0).setBackground(QColor(224, 255, 255))
-            self.item(i, 1).setBackground(QColor(224, 255, 255))
+            self.item(i, 0).setBackground(QColor(235, 235, 235))
+            self.item(i, 1).setBackground(QColor(235, 235, 235))
 
 ###################################################
 #                 Tabla de autores                #
@@ -477,7 +572,7 @@ class AuthorSearchTable(QTableWidget):
     def __init__(self):
         super().__init__()
         self.setColumnCount(2) #Columnas
-        self.setRowCount(12)
+        self.setRowCount(15)
         self.setHorizontalHeaderLabels(["Título", "Código"])
         #self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
@@ -488,6 +583,11 @@ class AuthorSearchTable(QTableWidget):
         self.setTableColors()
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
         #self.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
 
     def getQTableWidgetSize(self):
         w = self.verticalHeader().width() + 4  # +4 seems to be needed
@@ -502,13 +602,13 @@ class AuthorSearchTable(QTableWidget):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.setItem(i, j, QTableWidgetItem())
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(234, 235, 235))
 
     def clearTable(self):
         for i in range(self.rowCount()):
             for j in range(self.columnCount()):
                 self.item(i, j).setText("")
-                self.item(i, j).setBackground(QColor(224, 255, 255))
+                self.item(i, j).setBackground(QColor(234, 235, 235))
 
     def keyPressEvent(self, event):
         clipboard = QApplication.clipboard()

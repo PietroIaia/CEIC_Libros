@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QFont, QPixmap, QColor, QPalette
 from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Books_Loan_Table, Active_Loan_Table
 from validationFunctions import check_pattern, check_title
@@ -20,35 +21,40 @@ class prestamos(QWidget):
         # Inicialización de la ventana
         super().__init__()
         self.setGeometry(200, 0, 600, 600)
-        self.setWindowTitle("Gestión de Estudiantes")
-        self.setStyleSheet('background-color: LightSkyBlue')
+        self.setWindowTitle("Préstamos")
+        self.setStyleSheet('background-color: rgb(236, 240, 241)')
 
         # Creación de fonts para las letras
         self.titleFont = QFont("Serif", 20)
+        self.titleFont.setBold(True)
         self.instFont = QFont("Serif", 12)
         self.subFont = QFont("Serif", 10)
         self.btnFont = QFont("Serif", 9)
         self.smallbtn = QFont("Serif", 7)
 
         # Título
-        self.title = QLabel("Préstamos", self)
-        self.title.setStyleSheet('background-color: DodgerBlue')
-        self.title.setStyleSheet('color: white')
+        self.title = QtWidgets.QLabel(self)
+        self.title.setText("Préstamos")
+        self.title.setStyleSheet('color: rgb(30, 39, 46)')
         self.title.setFont(self.titleFont)
-        self.title.move(30, 10)
+        self.title.setGeometry(10, 15, 350, 50)
+
+        # Línea debajo del título
+        self.line = QtWidgets.QFrame(self)
+        self.line.setGeometry(QtCore.QRect(10, 55, 820, 16))
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
 
         # Frame del form
         self.frame_form_prestamo = QFrame(self)
         self.frame_form_prestamo.setFrameShape(QFrame.StyledPanel)
         self.frame_form_prestamo.setFixedWidth(275)
         self.frame_form_prestamo.setFixedHeight(430)
-        self.frame_form_prestamo.setStyleSheet("QFrame \n"
-        "{\n"
-        "background-color: white;\n"
-        "}")
-        self.frame_form_prestamo.move(30, 60)
+        self.frame_form_prestamo.setStyleSheet('background-color: white')
+        self.frame_form_prestamo.move(30, 80)
 
-        # Informacion de prestamo
+        # Informacion de préstamo
         self.info_prestamo_frame = QFrame(self.frame_form_prestamo)
         self.info_prestamo_frame.setFrameShape(QFrame.NoFrame)
         self.info_prestamo_frame.setFrameShadow(QFrame.Sunken)
@@ -59,7 +65,7 @@ class prestamos(QWidget):
         self.info_prestamo_frame.setFixedWidth(255)
         self.info_prestamo_frame.setFixedHeight(40)
         self.info_prestamo_frame.move(10, 10)
-        self.Info_prestamo = QLabel("Información de préstamo", self.info_prestamo_frame)
+        self.Info_prestamo = QLabel("     Información de préstamo", self.info_prestamo_frame)
         self.Info_prestamo.setStyleSheet('color: black')
         self.Info_prestamo.setFont(self.instFont)
         self.Info_prestamo.move(15, 7)
@@ -138,7 +144,7 @@ class prestamos(QWidget):
         self.button_renovar.move(55, 240)
         self.button_renovar.setFont(self.btnFont)
         self.button_renovar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
-        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+                                          "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_renovar.setEnabled(False)
 
         # Subtitulo estudiante
@@ -186,28 +192,28 @@ class prestamos(QWidget):
         self.button_realizar.move(142, 390)
         self.button_realizar.setFont(self.smallbtn)
         self.button_realizar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
-        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+                                           "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_realizar.setEnabled(False)
 
         # Refrescar tabla prestamo
-        self.button_refrescar = QPushButton("Refrescar Tabla", self)
-        self.button_refrescar.setFixedWidth(150)
-        self.button_refrescar.setFixedHeight(28)
-        self.button_refrescar.move(647, 690)
-        self.button_refrescar.setFont(self.btnFont)
-        self.button_refrescar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
-        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
-        self.button_refrescar.setEnabled(True)
+        #self.button_refrescar = QPushButton("Refrescar Tabla", self)
+        #self.button_refrescar.setFixedWidth(150)
+        #self.button_refrescar.setFixedHeight(28)
+        #self.button_refrescar.move(647, 690)
+        #self.button_refrescar.setFont(self.btnFont)
+        #self.button_refrescar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
+        #"QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        #self.button_refrescar.setEnabled(True)
 
-        # Tabla de prestamos
+        # Tabla de préstamos
         self.Libros_prestamo = {}         # Para saber los libros que se van a prestar
         self.tabla_libros_prestamos = Books_Loan_Table(self)
-        self.tabla_libros_prestamos.move(305, 60)
+        self.tabla_libros_prestamos.move(330, 80)
 
-        # Tabla de prestamos activos
+        # Tabla de préstamos activos
         # NOTA: Para agregar nuevas filas, usamos table.insertRow(rowPosition) donde rowposition es donde la queremos poner (de ultima) https://stackoverflow.com/questions/24044421/how-to-add-a-row-in-a-tablewidget-pyqt
         self.active_loan_table = Active_Loan_Table(self)
-        self.active_loan_table.move(30, 500)
+        self.active_loan_table.move(30, 520)
         self.updateActiveLoanTable()                      # Actualizamos la tabla con los prestamos activos
 
         # Conexiones
@@ -215,7 +221,7 @@ class prestamos(QWidget):
         self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
         self.button_realizar.clicked.connect(lambda: self.realizarPrestamo(Username))
         self.button_devuelto.clicked.connect(lambda: self.finalizarPrestamo())
-        self.button_refrescar.clicked.connect(self.updateActiveLoanTable)
+        #self.button_refrescar.clicked.connect(self.updateActiveLoanTable)
         self.button_renovar.clicked.connect(self.renovarPrestamo)
         # NOTA: Si se agregan mas filas, no van a tener una conexion con los botones. Luego podemos arreglar eso!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.tabla_libros_prestamos.cellWidget(0, 2).clicked.connect(lambda: self.eliminarLibro(0))
