@@ -35,7 +35,7 @@ class Ui_MainWindow(object):
         main_window.setStyleSheet("background-color: rgb(235, 235, 235);\n""")
 
         # Conexion a la base de datos
-        self.db = db
+        #self.db = db
 
         self.centralwidget = QtWidgets.QWidget(main_window)
         self.centralwidget.setObjectName("centralwidget")
