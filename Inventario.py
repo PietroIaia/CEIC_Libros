@@ -18,9 +18,9 @@ class Inventario(QWidget):
 		# Base de datos
 		self.db = QSqlDatabase.database('qt_sql_default_connection')
 		self.db.setHostName("localhost")
-		self.db.setDatabaseName("pruebaCEIC")
+		self.db.setDatabaseName("pruebaceic")
 		self.db.setUserName("postgres")
-		self.db.setPassword("Tranc0nReloj-7aha")
+		self.db.setPassword("postgres")
 		self.db.open()
 
 		# Creación de fonts para las letras
@@ -54,11 +54,11 @@ class Inventario(QWidget):
 		sql = "SELECT book_id, title FROM Book ORDER BY title"
 		queryx = QSqlQuery(sql)
 		while queryx.next():
-		    self.table2.insertRow(row)
+		    self.table.insertRow(row)
 		    IDX = QTableWidgetItem(str(queryx.value(0)))
 		    titulox = QTableWidgetItem(str(queryx.value(1)))
-		    self.table2.setItem(row, 0, IDX)
-		    self.table2.setItem(row, 1, titulox)
+		    self.table.setItem(row, 0, IDX)
+		    self.table.setItem(row, 1, titulox)
 		    row = row + 1
 
 		self.table.setRowCount(row)

@@ -12,7 +12,7 @@ class AuthorSearch(QWidget):
 
         self.db = QSqlDatabase.database('qt_sql_default_connection')
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaCEIC")                         
+        self.db.setDatabaseName("pruebaceic")                         
         self.db.setUserName("postgres")
         self.db.setPassword("postgres")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
