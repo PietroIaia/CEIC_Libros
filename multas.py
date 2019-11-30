@@ -233,10 +233,10 @@ class multas(QWidget):
         self.titulo_deudas.setFixedWidth(535)
         self.titulo_deudas.setFixedHeight(40)
         self.titulo_deudas.move(290, 425)
-        self.deudas = QLabel("Deudas Pendientes", self)
+        self.deudas = QLabel("Estudiantes endeudados", self)
         self.deudas.setStyleSheet('background-color: #79B9E0')
         self.deudas.setFont(self.instFont)
-        self.deudas.move(485, 432)
+        self.deudas.move(455, 432)
 
         # Tabla de Deudas
         self.debts_table = Debts_Table(self)
