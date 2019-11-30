@@ -35,6 +35,7 @@ CREATE TABLE Estudiante(
 	phone VARCHAR(12),
 	email VARCHAR(36),
 	days_blocked INT4 CHECK(days_blocked >= 0) DEFAULT 0,
+	num_books_per_loan INT4 CHECK(num_books_per_loan >= 0 AND num_books_per_loan <=7) DEFAULT 7,
 	current_books INT4 DEFAULT 0,
     book_debt FLOAT8 CHECK(book_debt >= 0.0) DEFAULT 0.00
 );

@@ -4,8 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from Tables import Payments_Table, Debts_Table
-from validationFunctions import check_pattern, check_carnet, check_debt
+from Tables import Debts_Table
+from validationFunctions import check_pattern, check_carnet
 import sys
 import datetime 
 
@@ -127,7 +127,7 @@ class multas(QWidget):
         self.deuda.setTextMargins(5, 0, 0, 0)
         self.deuda.move(85, 175)
 
-        # Subtitulo estudiante
+        # Subtitulo Pago
         self.sub_estudiante = QLabel("Pago", self.frame_form_multas)
         self.sub_estudiante.setStyleSheet('color: #858585')
         self.sub_estudiante.setFont(self.subFont)
@@ -222,8 +222,6 @@ class multas(QWidget):
         self.tabla_transferencias = Payments_Table(self)
         self.tabla_transferencias.move(290, 105)
 
-        # Tabla de Deudas
-
         # Titulo de tabla de Deudas
         self.titulo_deudas = QFrame(self)
         self.titulo_deudas.setFrameShape(QFrame.NoFrame)
@@ -240,6 +238,7 @@ class multas(QWidget):
         self.deudas.setFont(self.instFont)
         self.deudas.move(485, 432)
 
+        # Tabla de Deudas
         self.debts_table = Debts_Table(self)
         self.debts_table.move(290, 460)
 

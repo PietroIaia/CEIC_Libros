@@ -12,6 +12,7 @@ from Inventario import Inventario
 from AgregarEstudiante import AgregarEstudiante
 from AgregarUsuario import AgregarUsuario
 from Prompt import ErrorPrompt
+from sanciones import sanciones
 
 class Ui_MainWindow(object):
 
@@ -344,6 +345,9 @@ class Ui_MainWindow(object):
         # Index : 10
         self.ventana_agregar_autor = verificarAutor()
         self.stacked_widget.addWidget(self.ventana_agregar_autor)
+        # Index : 11
+        self.ventana_sanciones = sanciones(username, perm_mask)
+        self.stacked_widget.addWidget(self.ventana_sanciones)
 
         # Elementos de la pantalla
         self.stacked_widget.raise_()
@@ -400,6 +404,7 @@ class Ui_MainWindow(object):
         self.ventana_agregar_autor.seguir.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(5))
         self.ventana_agregar_autor.cancelar.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(5))
         self.ventana_agregar_libro.agregarAutor.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(10))
+        self.push_button_6.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(11))
         self.ventana_agregar_autor.seguir.clicked.connect(lambda:self.ventana_agregar_libro.authorsInput.clear())
         self.ventana_agregar_autor.seguir.clicked.connect(lambda: self.ventana_agregar_libro.mostrarAutores())
 
