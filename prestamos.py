@@ -291,7 +291,7 @@ class prestamos(QWidget):
         self.Libros_prestamo.clear()
         self.nombre.setText(str(self.query2.value(1)))
         self.apellido.setText(str(self.query2.value(2)))
-        self.deuda.setText(str(self.query2.value(8)))
+        self.deuda.setText(str(self.query2.value(9)))
         self.button_renovar.setEnabled(False)
         self.tabla_libros_prestamos.clear()
 
@@ -361,6 +361,7 @@ class prestamos(QWidget):
 
     # Funcion para realizar el prestamo
     def realizarPrestamo(self, Username):
+
         self.query = QSqlQuery()
         start_date = str(datetime.datetime.now())
         hours = start_date.split()
@@ -389,6 +390,7 @@ class prestamos(QWidget):
             else:
                 break
         InfoPrompt("Éxito", "Se realizó el préstamo!")
+        self.libro.setText("")
         self.updateActiveLoanTable()
         self.buscarEstudiante(self.currentStudent)
     
@@ -404,6 +406,7 @@ class prestamos(QWidget):
             while(i != self.tabla_libros_prestamos.rowCount()):
                 if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
                     self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent - 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
+                    self.query.exec_("UPDATE Estudiante SET current_books = current_books - 1 WHERE carnet='" + str(self.currentStudent) + "';")
                     i += 1
                 else:
                     break
