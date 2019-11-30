@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from Tables import Payments_Table, Debts_Table
+from Tables import Sanciones_Table, Debts_Table
 from validationFunctions import check_pattern, check_carnet, check_debt
 import sys
 import datetime 
@@ -173,15 +173,35 @@ class sanciones(QWidget):
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_aplicar.setEnabled(False)
 
-        # Botón de Aplicar Sanción
+        # Botón de Finalizar Sanción
         self.button_finalizar = QPushButton("Finalizar Sanción", self.frame_form_multas)
         self.button_finalizar.setFixedWidth(200)
         self.button_finalizar.setFixedHeight(28)
-        self.button_finalizar.move(40, 369)
+        self.button_finalizar.move(40, 379)
         self.button_finalizar.setFont(self.btnFont)
         self.button_finalizar.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_finalizar.setEnabled(False)
+
+        # Titulo de tabla de Sanciones
+        self.titulo_Sanciones = QFrame(self)
+        self.titulo_Sanciones.setFrameShape(QFrame.NoFrame)
+        self.titulo_Sanciones.setFrameShadow(QFrame.Sunken)
+        self.titulo_Sanciones.setStyleSheet("QFrame \n"
+        "{\n"
+        "background-color: #79B9E0;\nborder: 1px;\n border-radius: 3px;\n"
+        "}")
+        self.titulo_Sanciones.setFixedWidth(535)
+        self.titulo_Sanciones.setFixedHeight(40)
+        self.titulo_Sanciones.move(290, 70)
+        self.titulo_SancionesLabel = QLabel("Sanciones Activas", self)
+        self.titulo_SancionesLabel.setStyleSheet('background-color: #79B9E0')
+        self.titulo_SancionesLabel.setFont(self.instFont)
+        self.titulo_SancionesLabel.move(485, 77)
+
+        # Tabla sanciones
+        self.tabla_sanciones = Sanciones_Table(self)
+        self.tabla_sanciones.move(290, 105)
 
         # Titulo de tabla de Deudas
         self.titulo_deudas = QFrame(self)
@@ -194,10 +214,10 @@ class sanciones(QWidget):
         self.titulo_deudas.setFixedWidth(535)
         self.titulo_deudas.setFixedHeight(40)
         self.titulo_deudas.move(290, 425)
-        self.deudas = QLabel("Deudas Pendientes", self)
-        self.deudas.setStyleSheet('background-color: #79B9E0')
-        self.deudas.setFont(self.instFont)
-        self.deudas.move(485, 432)
+        self.deudasLabel = QLabel("Deudas Pendientes", self)
+        self.deudasLabel.setStyleSheet('background-color: #79B9E0')
+        self.deudasLabel.setFont(self.instFont)
+        self.deudasLabel.move(485, 432)
 
         # Tabla de Deudas
         self.debts_table = Debts_Table(self)

@@ -617,3 +617,55 @@ class AuthorSearchTable(QTableWidget):
         if event.matches(QKeySequence.Paste):
             print(clipboard.text())
         QTableWidget.keyPressEvent(self, event)
+
+
+###################################################
+#           Tabla de Sanciones actuales           #
+###################################################
+
+class Sanciones_Table(QTableWidget):
+    def __init__(self, place):
+        super().__init__(place)
+        self.setColumnCount(5) #Columnas
+        self.setRowCount(50)
+        self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
+        self.verticalHeader().hide()
+        self.verticalHeader().setDefaultSectionSize(40)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
+        self.setHorizontalHeaderLabels(["Carnet", "Nombre", "Apellido", "Dias sanción", "Libros por prestamo"])
+        self.setColumnWidth(0, 100)
+        self.setColumnWidth(1, 100)
+        self.setColumnWidth(2, 100)
+        self.setColumnWidth(3, 100)
+        self.setColumnWidth(4, 120)
+        self.setStyleSheet("background-color:  Silver")
+        self.setMaximumSize(self.getQTableWidgetSize())
+        self.setMinimumSize(self.getQTableWidgetSize())
+        self.setTableColors()
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.setSelectionMode(QAbstractItemView.NoSelection)
+        self.clear()
+
+        self.fontHeader = QFont("Helvetica", 10)
+        self.fontHeader.setBold(True)
+        self.horizontalHeader().setFont(self.fontHeader)
+        self.verticalHeader().setFont(self.fontHeader)
+    
+    def getQTableWidgetSize(self):
+        w = 0
+        for i in range(self.columnCount()):
+            w += self.columnWidth(i)  # seems to include gridline (on my machine)
+        return QSize(w+16, 300)
+
+    def setTableColors(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.setItem(i, j, QTableWidgetItem())
+                self.item(i, j).setBackground(QColor(234, 235, 235))
+
+    def clear(self):
+        for i in range(self.rowCount()):
+            for j in range(self.columnCount()):
+                self.item(i, j).setText("")
+                self.item(i, j).setBackground(QColor(234, 235, 235))

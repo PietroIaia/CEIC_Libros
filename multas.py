@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
-from Tables import Debts_Table
+from Tables import Debts_Table, Payments_Table
 from validationFunctions import check_pattern, check_carnet
 import sys
 import datetime 
@@ -202,7 +202,6 @@ class multas(QWidget):
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_aplicar.setEnabled(False)
 
-        # Tabla de transferencias
         # Titulo de tabla de Transferencias
         self.titulo_transfer = QFrame(self)
         self.titulo_transfer.setFrameShape(QFrame.NoFrame)
@@ -219,6 +218,7 @@ class multas(QWidget):
         self.transfer.setFont(self.instFont)
         self.transfer.move(485, 77)
 
+        # Tabla de transferencias
         self.tabla_transferencias = Payments_Table(self)
         self.tabla_transferencias.move(290, 105)
 
