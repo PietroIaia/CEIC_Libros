@@ -361,6 +361,10 @@ class prestamos(QWidget):
 
     # Funcion para realizar el prestamo
     def realizarPrestamo(self, Username):
+        
+        if(self.tabla_libros_prestamos.item(0, 0).text() == ""):
+            ErrorPrompt("Error", "Debe agregar libros para realizar un prestamo")
+            return
 
         self.query = QSqlQuery()
         start_date = str(datetime.datetime.now())
