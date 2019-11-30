@@ -340,7 +340,7 @@ class multas(QWidget):
             if self.query.first():
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
-                self.deuda.setText(str(self.query.value(8)))
+                self.deuda.setText(str(self.query.value(9)))
                 if(float(self.deuda.text()) != 0.0):
                     self.tipo.setEnabled(True)
                     self.monto.setReadOnly(False)              

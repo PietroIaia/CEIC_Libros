@@ -257,7 +257,7 @@ class prestamos(QWidget):
             self.Libros_prestamo.clear()
             self.nombre.setText(str(self.query2.value(1)))
             self.apellido.setText(str(self.query2.value(2)))
-            self.deuda.setText(str(self.query2.value(8)))
+            self.deuda.setText(str(self.query2.value(9)))
             self.button_renovar.setEnabled(False)
             self.tabla_libros_prestamos.clear()
 
@@ -378,6 +378,7 @@ class prestamos(QWidget):
                     self.Libros_prestamo[str(self.tabla_libros_prestamos.item(i, 1).text())] -= 1
                     # Se actualiza la cantidad de copias prestadas del libro
                     self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent + 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
+                    self.query.exec_("UPDATE Estudiante SET current_books = current_books + 1 WHERE carnet='" + str(self.currentStudent) + "';")
                     # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
                     self.query.exec_(queryText)
 

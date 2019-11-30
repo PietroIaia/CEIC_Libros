@@ -221,7 +221,7 @@ class gestionEstudiante(QWidget):
         self.consultaAux(inputCarnet)
 
     def consultaAux(self, carnetBuscado):
-        queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
+        queryText = "SELECT carnet, first_name, last_name, CI, phone, email, days_blocked, current_books, book_debt FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
 

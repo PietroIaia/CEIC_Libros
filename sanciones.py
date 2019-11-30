@@ -243,7 +243,7 @@ class sanciones(QWidget):
                 self.apellido.setText(str(self.query.value(2)))
                 self.sancion.setValue(int(self.query.value(6)))
                 self.sancion_books.setValue(int(self.query.value(7)))
-                self.deuda.setText(str(self.query.value(8)))
+                self.deuda.setText(str(self.query.value(9)))
                 self.sancion.setReadOnly(True)
                 self.sancion_books.setReadOnly(True)
                 self.button_aplicar.setEnabled(True)
