@@ -5,7 +5,7 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Debts_Table, Payments_Table
-from validationFunctions import check_pattern, check_carnet
+from validationFunctions import check_pattern, check_carnet, check_debt
 import sys
 import datetime 
 
@@ -320,7 +320,7 @@ class multas(QWidget):
             else:
                 ErrorPrompt("Error", "No se pudo actualizar el monto de deuda agregada por día.")
         else:
-            if(checkDebt(self.act_deuda.text())):
+            if(check_debt(self.act_deuda.text())):
                 success = self.query.exec_("UPDATE Deuda SET monto_deuda = '" + self.act_deuda.text() + "' WHERE id = 0;")
                 if(success):
                     self.montoDeuda = float(self.act_deuda.text())
@@ -363,7 +363,7 @@ class multas(QWidget):
     # Funcion para pagar la deuda y agregar los datos de la transferencia, si el metodo de pago es transferencia.
     def pagarDeuda(self, Username):
 
-        debt = checkDebt(self.monto.text()) # Variable debt permite no hacer el llamado dos veces al remover el nested if
+        debt = check_debt(self.monto.text()) # Variable debt permite no hacer el llamado dos veces al remover el nested if
         if(debt and (float(self.deuda.text()) < float(self.monto.text()))):
             ErrorPrompt("Error", "El monto a pagar sobrepasa el monto de la deuda.")
             return

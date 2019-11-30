@@ -5,7 +5,6 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Books_Loan_Table, Active_Loan_Table
-from validationFunctions import check_pattern, check_title
 import re
 import sys
 import datetime 
