@@ -331,7 +331,7 @@ class multas(QWidget):
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
     def buscarEstudiante(self, carnetBuscado):
-        if(checkCarnet(carnetBuscado)):
+        if(check_carnet(carnetBuscado)):
             self.currentStudent = carnetBuscado
             queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
             self.query = QSqlQuery()
@@ -341,7 +341,7 @@ class multas(QWidget):
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.deuda.setText(str(self.query.value(8)))
-                if(self.deuda.text() != "0.0"):
+                if(float(self.deuda.text()) != 0.0):
                     self.tipo.setEnabled(True)
                     self.monto.setReadOnly(False)              
                     self.banco.setReadOnly(False)

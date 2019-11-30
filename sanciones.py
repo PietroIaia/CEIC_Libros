@@ -222,3 +222,54 @@ class sanciones(QWidget):
         # Tabla de Deudas
         self.debts_table = Debts_Table(self)
         self.debts_table.move(290, 460)
+
+        # Conexiones
+        self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
+
+        # Montar Tabla de Deudores
+        self.updateDebtTabla()
+
+
+    # Funcion que busca al estudiante con su informacion acerca de prestamos
+    def buscarEstudiante(self, carnetBuscado):
+        if(check_carnet(carnetBuscado)):
+            self.currentStudent = carnetBuscado
+            queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
+            self.query = QSqlQuery()
+            self.query.exec_(queryText)
+
+            if self.query.first():
+                self.nombre.setText(str(self.query.value(1)))
+                self.apellido.setText(str(self.query.value(2)))
+                self.sancion.setValue(int(self.query.value(6)))
+                self.sancion_books.setValue(int(self.query.value(7)))
+                self.deuda.setText(str(self.query.value(8)))
+                self.sancion.setReadOnly(True)
+                self.sancion_books.setReadOnly(True)
+                self.button_aplicar.setEnabled(True)
+                if(self.query.value(6) >= 1):
+                    self.button_finalizar.setEnabled(True)
+                else:
+                    self.button_finalizar.setEnabled(False)
+            else:
+                ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
+
+
+    # Funcion que actualiza la tabla de prestamos activos
+    def updateDebtTabla(self):
+        self.debts_table.clear()
+        queryText = "SELECT e.carnet, e.first_name, e.last_name, e.book_debt FROM Estudiante e WHERE e.book_debt > 0.0;"
+        self.query = QSqlQuery()
+        self.query.exec_(queryText)
+        i = 0
+
+        if(self.query.first()):
+            while(True):
+                self.debts_table.item(i, 0).setText(str(self.query.value(0)))
+                self.debts_table.item(i, 1).setText(str(self.query.value(1)))
+                self.debts_table.item(i, 2).setText(str(self.query.value(2)))
+                self.debts_table.item(i, 3).setText(str(self.query.value(3)))
+
+                i+= 1
+                if(not self.query.next()):
+                    break
