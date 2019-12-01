@@ -225,27 +225,35 @@ class sanciones(QWidget):
 
         # Conexiones
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
+        self.button_aplicar.clicked.connect(self.realizarSancion)
+        self.button_finalizar.clicked.connect(lambda: self.finalizarSancion(self.currentStudent, True))
 
         # Montar Tabla de Deudores
         self.updateDebtTabla()
+        # Montar Tabla de Sanciones
+        self.updateSancionTable()
 
 
-    # Funcion que busca al estudiante con su informacion acerca de prestamos
+    # Funcion que busca al estudiante con su informacion acerca de sanciones
     def buscarEstudiante(self, carnetBuscado):
         if(check_carnet(carnetBuscado)):
-            self.currentStudent = carnetBuscado
             queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
             self.query = QSqlQuery()
             self.query.exec_(queryText)
 
             if self.query.first():
+                self.currentStudent = carnetBuscado
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.sancion.setValue(int(self.query.value(6)))
                 self.sancion_books.setValue(int(self.query.value(7)))
                 self.deuda.setText(str(self.query.value(9)))
-                self.sancion.setReadOnly(True)
-                self.sancion_books.setReadOnly(True)
+
+                self.sancion.setReadOnly(False)
+                self.sancion.setStyleSheet("QSpinBox\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+                self.sancion_books.setReadOnly(False)
+                self.sancion_books.setStyleSheet("QSpinBox\n{\n border: 1px solid #C9C9C9;\n border-radius: 3px;\n background-color: white;\n}")
+
                 self.button_aplicar.setEnabled(True)
                 if(self.query.value(6) >= 1):
                     self.button_finalizar.setEnabled(True)
@@ -253,16 +261,64 @@ class sanciones(QWidget):
                     self.button_finalizar.setEnabled(False)
             else:
                 ErrorPrompt("Error", "No se encontró un Estudiante con ese carnet")
+        
+        # Actualizamos las tablas
+        self.updateDebtTabla()
+        self.updateSancionTable()
+
+    
+    # Funcion que aplica la sancion al estudiante
+    def realizarSancion(self):
+
+        if(self.sancion.value() == 0):
+            ErrorPrompt("Error", "Las sanciones deben durar al menos 1 dia!")
+            return
+        if(self.sancion_books.value() == 7):
+            ErrorPrompt("Error", "La cantidad de libro por prestamo durante la sanción debe ser menor a 7!")
+            return
+        
+        self.query = QSqlQuery()
+        queryText = "UPDATE Estudiante SET days_blocked = '" + str(self.sancion.value()) + "', num_books_per_loan = '" + str(self.sancion_books.value()) + "', start_blocked_time = '"+  str(datetime.date.today()) +"' WHERE carnet = '" + str(self.currentStudent) + "';"
+        success = self.query.exec_(queryText)
+
+        if(not success):
+            ErrorPrompt("Error", "No se pudo realizar la sanción.")
+            return
+
+        self.button_finalizar.setEnabled(True)
+        InfoPrompt("Éxito", "La sanción ha sido impuesta con éxito!")
+        # Actualizamos las tablas
+        self.updateDebtTabla()
+        self.updateSancionTable()
+        
+
+    # Funcion que finaliza la sancion, si prompt == True, devuelve un prompt con la informacion.
+    def finalizarSancion(self, carnet, prompt):
+        self.query = QSqlQuery()
+        queryText = "UPDATE Estudiante SET days_blocked = '0', num_books_per_loan = '7', start_blocked_time = NULL WHERE carnet = '" + str(carnet) + "';"
+        success = self.query.exec_(queryText)
+
+        if(not success and prompt):
+            ErrorPrompt("Error", "No se pudo finalizar la sanción.")
+            return
+        elif(success and prompt):
+            self.button_finalizar.setEnabled(False)
+            self.sancion.setValue(0)
+            self.sancion_books.setValue(7)
+            InfoPrompt("Éxito", "La sanción ha sido finalizada con éxito!")
+            # Actualizamos las tablas
+            self.updateDebtTabla()
+            self.updateSancionTable()
 
 
-    # Funcion que actualiza la tabla de prestamos activos
+    # Funcion que actualiza la tabla de Estudiantes endeudados
     def updateDebtTabla(self):
         self.debts_table.clear()
         queryText = "SELECT e.carnet, e.first_name, e.last_name, e.book_debt FROM Estudiante e WHERE e.book_debt > 0.0;"
         self.query = QSqlQuery()
         self.query.exec_(queryText)
-        i = 0
 
+        i = 0
         if(self.query.first()):
             while(True):
                 self.debts_table.item(i, 0).setText(str(self.query.value(0)))
@@ -271,5 +327,45 @@ class sanciones(QWidget):
                 self.debts_table.item(i, 3).setText(str(self.query.value(3)))
 
                 i+= 1
+                if(not self.query.next()):
+                    break
+
+    
+    # Funcion para calcular el tiempo restante de la sancion
+    def calculateTimeLeft(self, current_time, start_time, days):
+        currentTimeAux = QDateTime.toSecsSinceEpoch(current_time)
+        finishTimeAux = QDateTime.toSecsSinceEpoch(start_time) + (days * 86400)  #El tiempo de inicio mas los dias que quedan
+
+        aux = (int(finishTimeAux) - int(currentTimeAux))/86400
+        return aux
+
+
+    # Funcion que actualiza la tabla de Sanciones activas
+    def updateSancionTable(self):
+        self.tabla_sanciones.clear()
+        queryText = "SELECT e.carnet, e.first_name, e.last_name, e.days_blocked, e.num_books_per_loan, e.start_blocked_time FROM Estudiante e WHERE e.days_blocked >= 1;"
+        self.query = QSqlQuery()
+        self.query2 = QSqlQuery()
+        self.query.exec_(queryText)
+
+        i = 0
+        if(self.query.first()):
+            while(True):
+                
+                # Primero actualizamos el tiempo restante de la sancion
+                time_left = int((self.calculateTimeLeft(QDateTime.currentDateTime(), self.query.value(5), self.query.value(3))//1) + 1)
+                self.query2.exec_("UPDATE Estudiante SET days_blocked = '" + str(time_left) + "' WHERE carnet = '" + self.query.value(0) + "';")
+                # Si la duracion de la sancion no se ha cumplido, aparece en la tabla
+                if(int(time_left) >= 1):
+                    self.tabla_sanciones.item(i, 0).setText(str(self.query.value(0)))
+                    self.tabla_sanciones.item(i, 1).setText(str(self.query.value(1)))
+                    self.tabla_sanciones.item(i, 2).setText(str(self.query.value(2)))
+                    self.tabla_sanciones.item(i, 3).setText(str(time_left))
+                    self.tabla_sanciones.item(i, 4).setText(str(self.query.value(4)))
+                    i+= 1
+                # Si la duracion ya se cumplio, no aparece en la tabla y se restaura la cuenta a la normalidad
+                else:
+                    self.finalizarSancion(self.query.value(0), False)
+
                 if(not self.query.next()):
                     break

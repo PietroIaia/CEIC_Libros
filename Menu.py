@@ -16,27 +16,14 @@ from sanciones import sanciones
 
 class Ui_MainWindow(object):
 
-    # Obtenemos el rol del usuario
-    global perm_mask
-    global username
-    global password
-    global db
 
-    def setupUi(self, main_window):
-
-        ############################################################################
-        main_window.setGeometry(150, 30, 0, 0)
-        ############################################################################
+    def setupUi(self, main_window, username, perm_mask, app):
 
         main_window.setObjectName("main_window")
-        main_window.resize(1031, 748)
+        main_window.setFixedSize(1031, 748)
         main_window.setWindowIcon(QtGui.QIcon("static/icono_CEIC.png"))
-        main_window.setMinimumSize(QtCore.QSize(1031, 748))
-        main_window.setMaximumSize(QtCore.QSize(1031, 748))
         main_window.setStyleSheet("background-color: rgb(235, 235, 235);\n""")
 
-        # Conexion a la base de datos
-        #self.db = db
 
         self.centralwidget = QtWidgets.QWidget(main_window)
         self.centralwidget.setObjectName("centralwidget")
@@ -378,7 +365,7 @@ class Ui_MainWindow(object):
         self.hide_users_menu()
 
         main_window.setCentralWidget(self.centralwidget)
-        self.retranslateUi(main_window)
+        self.retranslateUi(main_window, app)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
 
@@ -447,8 +434,8 @@ class Ui_MainWindow(object):
                 "    color: #CAD3C8;\n"
                 "}")
 
-    def retranslateUi(self, main_window):
-        _translate = QtCore.QCoreApplication.translate
+    def retranslateUi(self, main_window, app):
+        _translate = app.translate
         main_window.setWindowTitle(_translate("main_window", "CEIC Libros"))
         self.push_button_2.setToolTip(_translate("main_window", "<html><head/><body><p>Libros</p></body></html>"))
         self.push_button_2.setText(_translate("main_window", "            Libros"))
@@ -550,45 +537,3 @@ class Ui_MainWindow(object):
             self.hide_books_menu()
         if self.verticalFrame_2.isHidden() == False:
             self.hide_students_menu()
-
-if __name__ == '__main__':
-
-    # Base de datos
-    db = QSqlDatabase.addDatabase("QPSQL")
-    db.setHostName("localhost")
-    db.setDatabaseName("pruebaceic")                         
-    db.setUserName("postgres")
-    db.setPassword("postgres")                 # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
-    db.open()
-
-    # Verificacion de que se han pasado los parámetros de entrada
-    if len(sys.argv) < 3:
-        sys.exit()
-    
-    # Datos del usuario
-    username = str(sys.argv[1])
-    password = str(sys.argv[2])
-
-    # Creación de la aplicación
-    app = QtWidgets.QApplication([])
-
-    # Se chequea que el 'username' del usuario coincide con el 'password'
-    condition = "username = \'" + username + "\' AND password_ = crypt(\'" + password + "\', password_);"
-    query = QSqlQuery()
-    query.exec_("SELECT username, permission_mask FROM CEIC_User WHERE " + condition)
-
-    if query.first():
-        if query.value(1) == 1:
-            perm_mask = 1   # El usuario existe, es administrador
-        else:
-            perm_mask = 0   # El usuario existe, es usuario regular
-    else:
-        ErrorPrompt("Error de Login", "Nombre de usuario o contraseña incorrectos!")
-        sys.exit()
-
-    # Inicializamos la main_window
-    main_window = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(main_window)
-    main_window.show()
-    sys.exit(app.exec_())

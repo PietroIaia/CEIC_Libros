@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame, QLabel, QComboBox
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from datetime import datetime
 from Prompt import ErrorPrompt
+from Menu import Ui_MainWindow
 import sys
 import os
 
@@ -23,6 +24,10 @@ class ventanaLogin(QMainWindow):
         paleta = QPalette()
         paleta.setColor(QPalette.Background, QColor(243, 243, 243))
         self.setPalette(paleta)
+
+        self.fuente = QFont()
+        self.fuente.setPointSize(10)
+        self.fuente.setFamily("Bahnschrift Light")
 
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
@@ -68,6 +73,7 @@ class ventanaLogin(QMainWindow):
 
         labelUsuario = QLabel("Usuario", self)
         labelUsuario.move(60, 120)
+        labelUsuario.setFont(self.fuente)
 
         frameUsuario = QFrame(self)
         frameUsuario.setFrameShape(QFrame.StyledPanel)
@@ -85,11 +91,13 @@ class ventanaLogin(QMainWindow):
         self.username.setFixedWidth(238)
         self.username.setFixedHeight(26)
         self.username.move(40, 1)
+        self.username.setFont(self.fuente)
 
         # ========================================================
 
         labelContrasenia = QLabel("Contraseña", self)
         labelContrasenia.move(60, 174)
+        labelContrasenia.setFont(self.fuente)
 
         frameContrasenia = QFrame(self)
         frameContrasenia.setFrameShape(QFrame.StyledPanel)
@@ -108,6 +116,7 @@ class ventanaLogin(QMainWindow):
         self.password.setFixedWidth(238)
         self.password.setFixedHeight(26)
         self.password.move(40, 1)
+        self.password.setFont(self.fuente)
 
       # ================== WIDGETS QPUSHBUTTON ===================
 
@@ -115,11 +124,13 @@ class ventanaLogin(QMainWindow):
         buttonLogin.setFixedWidth(135)
         buttonLogin.setFixedHeight(28)
         buttonLogin.move(60, 256)
+        buttonLogin.setFont(self.fuente)
 
         buttonCancelar = QPushButton("Cancelar", self)
         buttonCancelar.setFixedWidth(135)
         buttonCancelar.setFixedHeight(28)
         buttonCancelar.move(205, 256)
+        buttonCancelar.setFont(self.fuente)
 
       # ==================== SEÑALES BOTONES =====================
 
@@ -140,14 +151,21 @@ class ventanaLogin(QMainWindow):
         self.query.exec_("SELECT permission_mask FROM CEIC_User WHERE " + condition)
 
         if self.query.first():
+
+            perm_mask = self.query.value(0)
             # Hace update del last_login del user
             update_last_login = "UPDATE CEIC_User SET last_login='"+str(datetime.now())+"' WHERE username='"+inputUsername+"';"
             self.query.exec_(update_last_login)
 
             # Cerramos el Login
             self.close()
+
             # Abrimos el MainWindow
-            os.system("py Menu.py " + str(inputUsername) + " " + str(inputPassword))
+            # Inicializamos la main_window
+            self.main_window = QMainWindow()
+            self.ui = Ui_MainWindow()
+            self.ui.setupUi(self.main_window, str(inputUsername), int(perm_mask), aplicacion)
+            self.main_window.show()
 
         else:
             ErrorPrompt("Error de Login", "Nombre de usuario o contraseña incorrectos!")
@@ -158,12 +176,6 @@ class ventanaLogin(QMainWindow):
 if __name__ == '__main__':
     
     aplicacion = QApplication(sys.argv)
-
-    fuente = QFont()
-    fuente.setPointSize(10)
-    fuente.setFamily("Bahnschrift Light")
-
-    aplicacion.setFont(fuente)
     
     ventana = ventanaLogin()
     ventana.show()

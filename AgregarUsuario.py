@@ -218,11 +218,3 @@ class AgregarUsuario(QWidget):
         self.nombreInput.clear()
         self.apellidoInput.clear()
         self.emailInput.clear()
-
-
-#if __name__ == '__main__':
-#    app = QApplication(sys.argv)
-
-#    form = AgregarEstudiante()
-#    form.show()
-#    sys.exit(app.exec_())

@@ -332,12 +332,12 @@ class multas(QWidget):
     # Funcion que busca al estudiante con su informacion acerca de prestamos
     def buscarEstudiante(self, carnetBuscado):
         if(check_carnet(carnetBuscado)):
-            self.currentStudent = carnetBuscado
             queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
             self.query = QSqlQuery()
             self.query.exec_(queryText)
 
             if self.query.first():
+                self.currentStudent = carnetBuscado
                 self.nombre.setText(str(self.query.value(1)))
                 self.apellido.setText(str(self.query.value(2)))
                 self.deuda.setText(str(self.query.value(9)))
@@ -399,16 +399,6 @@ class multas(QWidget):
         # Si se pago la deuda completa, se elimina de los deudores
         if(deuda_restante == 0):
             self.updateDebtTabla()
-
-
-
-    # Funcion para calcular el tiempo restante de el prestamo
-    def calculateTimeLeft(self, start_time, return_time):
-        startTimeAux = QDateTime.toSecsSinceEpoch(start_time)
-        returnTimeAux = QDateTime.toSecsSinceEpoch(return_time)
-
-        aux = (int(returnTimeAux) - int(startTimeAux))/86400
-        return aux
 
     
     # Funcion que actualiza la tabla de prestamos activos

@@ -348,10 +348,3 @@ class gestionUsuarios(QWidget):
             self.search.setEnabled(False)
         else:
             self.search.setEnabled(True)
-                
-#if __name__ == '__main__':
-#    app = QApplication()
-
-#    estudiante = gestionUsuarios()
-#    estudiante.show()
-#    sys.exit(app.exec_())

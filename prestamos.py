@@ -239,7 +239,6 @@ class prestamos(QWidget):
             ErrorPrompt("Error de formato", "Formato de carnet inválido")
             return
 
-        self.currentStudent = carnetBuscado
         queryText = "SELECT * FROM Estudiante WHERE carnet = '" + carnetBuscado + "';"
         self.query = QSqlQuery()
         self.query2 = QSqlQuery()
@@ -253,6 +252,7 @@ class prestamos(QWidget):
             return
         # Si existe estudiante y tiene prestamo activo
         elif(self.query.first()):
+            self.currentStudent = carnetBuscado
             self.tabla_libros_prestamos.clear()
             self.Libros_prestamo.clear()
             self.nombre.setText(str(self.query2.value(1)))
@@ -287,6 +287,7 @@ class prestamos(QWidget):
             return
 
         # Si existe Estudiante pero no tiene prestamo activo
+        self.currentStudent = carnetBuscado
         self.tabla_libros_prestamos.clear()
         self.Libros_prestamo.clear()
         self.nombre.setText(str(self.query2.value(1)))
@@ -317,6 +318,12 @@ class prestamos(QWidget):
         if(not(self.query.first())):
             ErrorPrompt("Error", "No se encontró el libro especificado")
             return
+        
+        self.query2 = QSqlQuery()
+        self.query2.exec_("SELECT num_books_per_loan FROM Estudiante WHERE carnet = '" + str(self.currentStudent) + "';")
+        if(not(self.query2.first())):
+            ErrorPrompt("Error", "Error desconocido")
+            return
 
         i = 0
         while(i != self.tabla_libros_prestamos.rowCount()):
@@ -325,7 +332,11 @@ class prestamos(QWidget):
             elif(i == self.tabla_libros_prestamos.rowCount()):
                 ErrorPrompt("Error", "Todas las casillas están llenas, no puede pedir otro libro.")
                 return
+            elif(i+1 == self.query2.value(0)):
+                ErrorPrompt("Error", "Se alcanzó el número de libros que este estudiante puede tener en un prestamo.")
+                return
             i += 1
+
 
         # Si el libro esta en el diccionario y hay menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
         if(str(Libro) in self.Libros_prestamo.keys() and self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
@@ -335,7 +346,7 @@ class prestamos(QWidget):
             self.tabla_libros_prestamos.cellWidget(i, 2).setEnabled(True)
             self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
         # Si el libro no esta en el diccionario, se agrega
-        elif(str(Libro) not in self.Libros_prestamo.keys()):
+        elif(str(Libro) not in self.Libros_prestamo.keys() and (0 < (self.query.value(4) - self.query.value(5)))):
             self.Libros_prestamo[str(Libro)] = 0
             # Si se estan prestando menos ejemplares que el total disponible de ese libro, se le permite agregarlo al prestamo
             if(self.Libros_prestamo[str(Libro)] < (self.query.value(4) - self.query.value(5))):
@@ -346,6 +357,7 @@ class prestamos(QWidget):
                 self.tabla_libros_prestamos.cellWidget(i, 2).setText("X")
         else:
             ErrorPrompt("Error", "No existen más ejemplares disponibles de este libro")
+            return
 
         self.button_realizar.setEnabled(True)
 
@@ -499,12 +511,11 @@ class prestamos(QWidget):
                 self.query.exec_("SELECT loan_duration FROM Book WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
                 if(self.query.first()):
                     return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
-                    print(return_date)
-                    self.query.exec_("UPDATE Loan SET estimated_return_time = '" + return_date + "' WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
+                    self.query.exec_("UPDATE Loan SET estimated_return_time = '" + return_date + "' WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "' AND carnet = '" + str(self.currentStudent) + "';")
                     i += 1
                 else:
                     ErrorPrompt("Error", "Ocurrió un error renovando el préstamo")
             else:
                 break
         InfoPrompt("Éxito", "El préstamo se renovó con éxito!")
-
+        self.updateActiveLoanTable()

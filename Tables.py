@@ -23,7 +23,7 @@ class StudentTable(QTableWidget):
         self.setColumnCount(1) #Columnas
         self.setRowCount(10)
         self.setHorizontalHeaderLabels(["Información del estudiante"])
-        self.setVerticalHeaderLabels(["Carnet", "Nombre", "Apellido", "CI", "Tlf.", "email", "Días bloqueado", "Libros prestados actualmente", "Deuda Bs.", "Deuda USD."]) #Header
+        self.setVerticalHeaderLabels(["Carnet", "Nombre", "Apellido", "CI", "Tlf.", "email", "Días Sancionado", "Libros prestados actualmente", "Deuda Bs.", "Deuda USD."]) #Header
         self.verticalHeader().setSectionResizeMode(QHeaderView.Stretch) #Ajuste de tamaño
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
