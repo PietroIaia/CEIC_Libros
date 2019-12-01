@@ -566,7 +566,7 @@ class Ui_MainWindow(object):
 
             self.queryStudents = QSqlQuery()
             self.queryStudents.exec_("SELECT carnet FROM Loan GROUP BY Carnet")
-            if self.queryStudents.first() is None:
+            if not self.queryStudents.first():
                 print("------------------------------------")
                 print("No hay préstamos activos")
                 print("------------------------------------")

@@ -219,7 +219,7 @@ class prestamos(QWidget):
         self.carnet.returnPressed.connect(lambda: self.buscarEstudiante(self.carnet.text()))
         self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
         self.button_realizar.clicked.connect(lambda: self.realizarPrestamo(Username))
-        self.button_devuelto.clicked.connect(lambda: self.finalizarPrestamo())
+        self.button_devuelto.clicked.connect(lambda: self.finalizarPrestamo(Username))
         #self.button_refrescar.clicked.connect(self.updateActiveLoanTable)
         self.button_renovar.clicked.connect(self.renovarPrestamo)
         # NOTA: Si se agregan mas filas, no van a tener una conexion con los botones. Luego podemos arreglar eso!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -386,6 +386,7 @@ class prestamos(QWidget):
                     self.query.exec_("UPDATE Estudiante SET current_books = current_books + 1 WHERE carnet='" + str(self.currentStudent) + "';")
                     # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
                     self.query.exec_(queryText)
+                    self.prestamoToLog(self.currentStudent, Username, self.tabla_libros_prestamos.item(i, 0).text(), start_date, return_date)
 
                     i += 1
                 else: 
@@ -400,7 +401,7 @@ class prestamos(QWidget):
     
 
     # Funcion para marcar como finalizado el prestamo
-    def finalizarPrestamo(self):
+    def finalizarPrestamo(self, Username):
         self.query = QSqlQuery()
         success = self.query.exec_("DELETE FROM Loan WHERE carnet='" + str(self.currentStudent) + "';")
 
@@ -411,6 +412,7 @@ class prestamos(QWidget):
                 if(self.tabla_libros_prestamos.item(i, 0).text() != ""):
                     self.query.exec_("UPDATE Book SET quantity_lent = quantity_lent - 1 WHERE book_id='" + str(self.tabla_libros_prestamos.item(i, 0).text()) + "';")
                     self.query.exec_("UPDATE Estudiante SET current_books = current_books - 1 WHERE carnet='" + str(self.currentStudent) + "';")
+                    self.finalizarToLog(self.currentStudent, Username, str(self.tabla_libros_prestamos.item(i, 0).text())) 
                     i += 1
                 else:
                     break
@@ -500,11 +502,28 @@ class prestamos(QWidget):
                 if(self.query.first()):
                     return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
                     print(return_date)
-                    self.query.exec_("UPDATE Loan SET estimated_return_time = '" + return_date + "' WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "';")
+                    self.query.exec_("UPDATE Loan SET estimated_return_time = '" + return_date + "' WHERE carnet = '" + self.currentStudent + "';")
+                    self.renovarToLog(self.currentStudent, self.tabla_libros_prestamos.item(i, 0).text(), return_date)
                     i += 1
                 else:
                     ErrorPrompt("Error", "Ocurrió un error renovando el préstamo")
             else:
                 break
+        
         InfoPrompt("Éxito", "El préstamo se renovó con éxito!")
+
+    def prestamoToLog(self, carnet, username, book_id, start, end):
+        with open("ActividadSesion.log", "a") as f:
+            f.write(str(datetime.datetime.now()).split(".")[0] + ", PRÉSTAMO, " + carnet + ", " + username + ", Libro: " + str(book_id) + ", Inicio: " + start.split(".")[0] + ", Fin: " + end.split(".")[0] + "\n")
+        f.close()
+
+    def renovarToLog(self, carnet, book_id, end):
+        with open("ActividadSesion.log", "a") as f:
+            f.write(str(datetime.datetime.now()).split(".")[0] + ", RENOVACIÓN, " + carnet + ", Libro: " + str(book_id) + ", Fin: " + end.split(".")[0] + "\n")
+        f.close()
+
+    def finalizarToLog(self, carnet, username, book_id):
+        with open("ActividadSesion.log", "a") as f:
+            f.write(str(datetime.datetime.now()).split(".")[0] + ", FINALIZACIÓN, " + carnet + ", " + username + ", Libro: " + str(book_id) + ", Fecha: " + str(datetime.datetime.now()).split(".")[0] + "\n")
+        f.close()
 
