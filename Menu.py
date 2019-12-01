@@ -295,6 +295,8 @@ class Ui_MainWindow(object):
 
         ################# Stacked Widget
 
+        self.generateLog()
+
         self.stacked_widget = QtWidgets.QStackedWidget(self.centralwidget)
         self.stacked_widget.setGeometry(QtCore.QRect(190, -1, 841, 724))
         self.stacked_widget.setObjectName("stacked_widget")
@@ -537,3 +539,73 @@ class Ui_MainWindow(object):
             self.hide_books_menu()
         if self.verticalFrame_2.isHidden() == False:
             self.hide_students_menu()
+
+    def generateLog(self):
+
+        orig_stdout = sys.stdout
+        with open('Estado.log', 'w') as f:
+            sys.stdout = f
+
+            print("------------------------------------")
+            print("ESTADO DEL SISTEMA")
+            print("------------------------------------")
+            print("\n")
+
+            self.queryStudents = QSqlQuery()
+            self.queryStudents.exec_("SELECT carnet FROM Loan GROUP BY Carnet")
+            if not self.queryStudents.first():
+                print("------------------------------------")
+                print("No hay préstamos activos")
+                print("------------------------------------")
+                print("\n")
+            else:
+                while True:
+                    carnet = str(self.queryStudents.value(0))
+                    print("------------------------------------")
+                    print(carnet)
+                    print("------------------------------------")
+                    print("\n")
+
+                    print("INFORMACIÓN DEL ESTUDIANTE")
+                    self.queryStudentInfo = QSqlQuery()
+                    self.queryStudentInfo.exec_("SELECT first_name, last_name, email, phone, days_blocked, book_debt FROM Estudiante WHERE carnet = \'" + carnet + "\'")
+                    self.queryStudentInfo.first()
+                    print("Nombre: " + str(self.queryStudentInfo.value(0)))
+                    print("Apellido: " + str(self.queryStudentInfo.value(1)))
+                    print("Email: " + str(self.queryStudentInfo.value(2)))
+                    print("Tlf: " + str(self.queryStudentInfo.value(3)))
+                    print("Dias de sanción: " + str(self.queryStudentInfo.value(4)))
+                    print("Deuda: " + str(self.queryStudentInfo.value(5)) + "\n")
+
+                    print("INFORMACIÓN DEL PRÉSTAMO\n")
+                    print("LIBROS\n")
+                    self.queryBooksLoaned = QSqlQuery()
+                    self.queryBooksLoaned.exec_("SELECT * FROM Loan WHERE carnet = \'" + carnet + "\'")
+                    while self.queryBooksLoaned.next():
+                        book_id = int(self.queryBooksLoaned.value(1))
+                        print("Código del libro: " + str(book_id))
+                        print("Código del ejemplar: " + str(self.queryBooksLoaned.value(2)))
+                        self.queryBookTitle = QSqlQuery()
+                        self.queryBookTitle.exec_("SELECT title FROM Book WHERE book_id = " + str(book_id))
+                        self.queryBookTitle.first()
+                        print("Título: " + str(self.queryBookTitle.value(0)) + "\n")
+
+                    self.queryBooksLoaned.previous()
+                    print("Usuario que lo(s) prestó: " + str(self.queryBooksLoaned.value(3)))
+                    auxiliar = QDateTime.toString(self.queryBooksLoaned.value(5)).split()
+                    inicio = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
+                    print("Fecha de préstamo: " + inicio)
+                    auxiliar = QDateTime.toString(self.queryBooksLoaned.value(6)).split()
+                    dev_esperada = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
+                    print("Fecha esperada de devolución: " + dev_esperada)
+                    startTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(5))
+                    returnTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(6))
+                    aux = int((int(returnTimeAux) - int(startTimeAux))/86400)
+                    print("Dias restantes: " + str(aux))
+                    print("\n")
+
+                    if not self.queryStudents.next():
+                        break
+            
+            sys.stdout = orig_stdout
+        f.close()
