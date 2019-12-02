@@ -168,13 +168,13 @@ def verification_users(fields, checkUntil):
     correct = True
     for i in range(checkUntil):
         if i == 0:
-            correct = checkUsername(fields[i])
+            correct = check_username(fields[i])
         elif i == 1 or i == 2:
             correct = check_name(fields[i], i)
         elif i == 3:
             correct = check_email(fields[i])
         elif i == 4:
-            correct = checkPermisos(fields[i])
+            correct = check_permisos(fields[i])
 
         if not correct:
             return False

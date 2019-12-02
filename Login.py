@@ -5,6 +5,9 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from datetime import datetime
 from Prompt import ErrorPrompt
 from Menu import Ui_MainWindow
+from formRenovar import form_renovar
+import random
+import string
 import sys
 import os
 
@@ -118,24 +121,31 @@ class ventanaLogin(QMainWindow):
         self.password.move(40, 1)
         self.password.setFont(self.fuente)
 
+        self.renovar_password = QPushButton("¿Olvidaste tu contraseña?" , self)
+        self.renovar_password.setFixedWidth(200)
+        self.renovar_password.setStyleSheet("QPushButton {border: 0px; background-color: rgb(243, 243, 243); color: blue; font-size: 15px;}\n"
+        "QPushButton:hover {color: #00008B}")
+        self.renovar_password.move(105, 230)
+
       # ================== WIDGETS QPUSHBUTTON ===================
 
         buttonLogin = QPushButton("Iniciar sesión", self)
         buttonLogin.setFixedWidth(135)
         buttonLogin.setFixedHeight(28)
-        buttonLogin.move(60, 256)
+        buttonLogin.move(60, 270)
         buttonLogin.setFont(self.fuente)
 
         buttonCancelar = QPushButton("Cancelar", self)
         buttonCancelar.setFixedWidth(135)
         buttonCancelar.setFixedHeight(28)
-        buttonCancelar.move(205, 256)
+        buttonCancelar.move(205, 270)
         buttonCancelar.setFont(self.fuente)
 
       # ==================== SEÑALES BOTONES =====================
 
         buttonLogin.clicked.connect(self.Login)
         buttonCancelar.clicked.connect(self.close)
+        self.renovar_password.clicked.connect(self.renovarPassword)
 
   # ======================= FUNCIONES ============================
 
@@ -169,6 +179,26 @@ class ventanaLogin(QMainWindow):
 
         else:
             ErrorPrompt("Error de Login", "Nombre de usuario o contraseña incorrectos!")
+    
+
+    # Funcion utilizada para llamar al form de Renovacion de contraseña
+    def renovarPassword(self):
+
+      self.query = QSqlQuery()
+      self.query.exec_("SELECT email FROM CEIC_User WHERE username = '" + self.username.text() + "';")
+      if(not self.query.first()):
+        ErrorPrompt("Error", "No existe ese Nombre de usuario!")
+        return
+
+      # Enviamos el codigo
+      code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=13))
+      with open("RenovarContraseña.log", "a") as f:
+          f.write(str(self.query.value(0)) + " | " + code + "\n")
+      f.close()
+
+      # Mostramos el form
+      self.form = form_renovar(self.username.text(), code)
+      self.form.show()
 
 
 # ================================================================
