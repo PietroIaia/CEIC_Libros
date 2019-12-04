@@ -67,7 +67,7 @@ class sanciones(QWidget):
         self.info_prestamo_frame.setFixedWidth(255)
         self.info_prestamo_frame.setFixedHeight(40)
         self.info_prestamo_frame.move(10, 10)
-        self.Info_prestamo = QLabel("     Información de Sación", self.info_prestamo_frame)
+        self.Info_prestamo = QLabel("     Información de Sanción", self.info_prestamo_frame)
         self.Info_prestamo.setStyleSheet('color: black')
         self.Info_prestamo.setFont(self.instFont)
         self.Info_prestamo.move(15, 7)
