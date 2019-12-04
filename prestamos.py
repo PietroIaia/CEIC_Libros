@@ -194,15 +194,15 @@ class prestamos(QWidget):
                                            "QPushButton:hover\n{\n background-color: #93BABF;\n}")
         self.button_realizar.setEnabled(False)
 
-        # Refrescar tabla prestamo
-        #self.button_refrescar = QPushButton("Refrescar Tabla", self)
-        #self.button_refrescar.setFixedWidth(150)
-        #self.button_refrescar.setFixedHeight(28)
-        #self.button_refrescar.move(647, 690)
-        #self.button_refrescar.setFont(self.btnFont)
-        #self.button_refrescar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
-        #"QPushButton:hover\n{\n background-color: #93BABF;\n}")
-        #self.button_refrescar.setEnabled(True)
+        # Agrandar tabla prestamo
+        self.button_ampliar = QPushButton("Ampliar Tabla", self)
+        self.button_ampliar.setFixedWidth(150)
+        self.button_ampliar.setFixedHeight(28)
+        self.button_ampliar.move(647, 690)
+        self.button_ampliar.setFont(self.btnFont)
+        self.button_ampliar.setStyleSheet("QPushButton\n{\n background-color: PowderBlue;\n}"
+        "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+        self.button_ampliar.setEnabled(True)
 
         # Tabla de préstamos
         self.Libros_prestamo = {}         # Para saber los libros que se van a prestar
@@ -213,6 +213,7 @@ class prestamos(QWidget):
         # NOTA: Para agregar nuevas filas, usamos table.insertRow(rowPosition) donde rowposition es donde la queremos poner (de ultima) https://stackoverflow.com/questions/24044421/how-to-add-a-row-in-a-tablewidget-pyqt
         self.active_loan_table = Active_Loan_Table(self)
         self.active_loan_table.move(30, 520)
+        self.expanded = False
         self.updateActiveLoanTable()                      # Actualizamos la tabla con los prestamos activos
 
         # Conexiones
@@ -220,7 +221,7 @@ class prestamos(QWidget):
         self.button_agregar_libro.clicked.connect(lambda: self.buscarLibro(self.libro.text()))
         self.button_realizar.clicked.connect(lambda: self.realizarPrestamo(Username))
         self.button_devuelto.clicked.connect(lambda: self.finalizarPrestamo(Username))
-        #self.button_refrescar.clicked.connect(self.updateActiveLoanTable)
+        self.button_ampliar.clicked.connect(self.expand_loan_table)
         self.button_renovar.clicked.connect(self.renovarPrestamo)
         # NOTA: Si se agregan mas filas, no van a tener una conexion con los botones. Luego podemos arreglar eso!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         self.tabla_libros_prestamos.cellWidget(0, 2).clicked.connect(lambda: self.eliminarLibro(0))
@@ -230,6 +231,32 @@ class prestamos(QWidget):
         self.tabla_libros_prestamos.cellWidget(4, 2).clicked.connect(lambda: self.eliminarLibro(4))
         self.tabla_libros_prestamos.cellWidget(5, 2).clicked.connect(lambda: self.eliminarLibro(5))
         self.tabla_libros_prestamos.cellWidget(6, 2).clicked.connect(lambda: self.eliminarLibro(6))
+
+
+    # Funcion para expandir y regresar a la normalidad a la tabla de prestamos activos
+    def expand_loan_table(self):
+        if(self.expanded):
+            self.active_loan_table.setMaximumHeight(170)
+            self.active_loan_table.setMinimumHeight(170)
+            self.active_loan_table.move(30, 520)
+
+            # Movemos el titulo del modulo para que se vea
+            self.title.move(10, 15)
+            # Movemos la tabla de carrito para que se vea
+            self.tabla_libros_prestamos.move(330, 80)
+            # La tabla no esta expandida
+            self.expanded = False
+        else:
+            self.active_loan_table.setMaximumHeight(670)
+            self.active_loan_table.setMinimumHeight(670)
+            self.active_loan_table.move(30, 20)
+
+            # Movemos el titulo del modulo para que no se vea
+            self.title.move(350, 1050)
+            # Movemos la tabla de carrito para que no se vea
+            self.tabla_libros_prestamos.move(330, 1080)
+            # La tabla esta expandida
+            self.expanded = True
 
 
     # Funcion que busca al estudiante con su informacion acerca de prestamos
@@ -360,6 +387,7 @@ class prestamos(QWidget):
             return
 
         self.button_realizar.setEnabled(True)
+        self.libro.clear()
 
 
     # Funcion para calcular el tiempo restante de el prestamo

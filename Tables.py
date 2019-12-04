@@ -333,7 +333,7 @@ class Active_Loan_Table(QTableWidget):
     def __init__(self, place):
         super().__init__(place)
         self.setColumnCount(5) #Columnas
-        self.setRowCount(5)
+        self.setRowCount(40)
         self.verticalHeader().setSectionResizeMode(QHeaderView.Fixed) #Ajuste de tamaño
         self.verticalHeader().hide()
         self.verticalHeader().setDefaultSectionSize(40)
@@ -357,19 +357,12 @@ class Active_Loan_Table(QTableWidget):
         self.fontHeader.setBold(True)
         self.horizontalHeader().setFont(self.fontHeader)
         self.verticalHeader().setFont(self.fontHeader)
-
-        #self.fontData = QFont("Helvetica", 12)
-
-        #for i in range(0, 5):
-        #    self.horizontalHeaderItem(i).setTextAlignment(Qt.AlignHCenter)
-        #    self.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        #    self.item(i, 0).setFont(self.fontData)
     
     def getQTableWidgetSize(self):
         w = 0
         for i in range(self.columnCount()):
             w += self.columnWidth(i)  # seems to include gridline (on my machine)
-        return QSize(w+23, 190)
+        return QSize(w+23, 170)
 
     def setTableColors(self):
         for i in range(self.rowCount()):
