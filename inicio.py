@@ -116,7 +116,10 @@ class Inicio(QWidget):
         self.act_deuda_label.setFont(self.subFont)
         self.books_per_loan = QSpinBox(self.frame_deuda)
         self.books_per_loan.move(85, 67)
-        self.books_per_loan.setValue(0)
+        self.query = QSqlQuery()
+        self.query.exec_("SELECT monto_libro_per_loan FROM Books_per_loan WHERE id = 0;")
+        self.query.first()
+        self.books_per_loan.setValue(self.query.value(0))
         self.books_per_loan.setMinimum(0) 
         self.books_per_loan.setMaximum(7)
         self.books_per_loan.setSuffix(" Libros")
@@ -125,13 +128,16 @@ class Inicio(QWidget):
         self.books_per_loan.setFixedHeight(25)
 
         # Boton Actualizar Monto deuda
-        self.button_act_deuda = QPushButton("Actualizar", self.frame_deuda)
-        self.button_act_deuda.setFixedWidth(120)
-        self.button_act_deuda.setFixedHeight(28)
-        self.button_act_deuda.move(120, 110)
-        self.button_act_deuda.setFont(self.btnFont)
-        self.button_act_deuda.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
+        self.button_act_monto = QPushButton("Actualizar", self.frame_deuda)
+        self.button_act_monto.setFixedWidth(120)
+        self.button_act_monto.setFixedHeight(28)
+        self.button_act_monto.move(120, 110)
+        self.button_act_monto.setFont(self.btnFont)
+        self.button_act_monto.setStyleSheet("QPushButton\n{\n border: 1px solid #C9C9C9;\n background-color: PowderBlue;\n}"
         "QPushButton:hover\n{\n background-color: #93BABF;\n}")
+
+        # Conexiones
+        self.button_act_monto.clicked.connect(self.updateBooksPerLoan)
 
         # Montar tabla de prestamos activos
         self.updateActiveLoanTable()
@@ -146,6 +152,16 @@ class Inicio(QWidget):
 
         aux = (int(returnTimeAux) - int(startTimeAux))/86400
         return aux
+
+
+    def updateBooksPerLoan(self):
+        self.query = QSqlQuery()
+
+        success = self.query.exec_("UPDATE Books_per_loan SET monto_libro_per_loan = '" + str(self.books_per_loan.value()) + "' WHERE id = 0;")
+        if(success):
+            InfoPrompt("Éxito", "Maximo de libros por prestamo actualizado!")
+        else:
+            ErrorPrompt("Error", "No se pudo actualizar la cantidad maxima de libros por prestamo")
 
 
     # Funcion que actualiza la tabla de prestamos activos
