@@ -246,6 +246,8 @@ class prestamos(QWidget):
 
             # Movemos el titulo del modulo para que se vea
             self.title.move(10, 15)
+            # Movemos la linea devuelta a su posicion
+            self.line.setGeometry(QtCore.QRect(10, 55, 820, 16))
             # Movemos la tabla de carrito para que se vea
             self.tabla_libros_prestamos.move(330, 80)
             # La tabla no esta expandida
@@ -257,6 +259,8 @@ class prestamos(QWidget):
 
             # Movemos el titulo del modulo para que no se vea
             self.title.move(350, 1050)
+            # Movemos la linea devuelta a su posicion
+            self.line.setGeometry(QtCore.QRect(10, 955, 820, 16))
             # Movemos la tabla de carrito para que no se vea
             self.tabla_libros_prestamos.move(330, 1080)
             # La tabla esta expandida
@@ -356,14 +360,22 @@ class prestamos(QWidget):
             ErrorPrompt("Error", "Error desconocido")
             return
 
+        # Cantidad maxima de libros por prestamo del sistema
+        self.query3 = QSqlQuery()
+        self.query3.exec_("SELECT monto_libro_per_loan FROM Books_per_loan WHERE id = 0;")
+        self.query3.first()
+
         i = 0
+        if((self.query3.value(0) == 0) or (self.query2.value(0) == 0)):
+            ErrorPrompt("Error", "Se alcanzó el número de libros que este estudiante puede tener en un prestamo.")
+            return
         while(i != self.tabla_libros_prestamos.rowCount()):
             if((self.tabla_libros_prestamos.item(i, 0).text() == "") and (i != self.tabla_libros_prestamos.rowCount())):
                 break
             elif(i == self.tabla_libros_prestamos.rowCount()):
                 ErrorPrompt("Error", "Todas las casillas están llenas, no puede pedir otro libro.")
                 return
-            elif(i+1 == self.query2.value(0)):
+            elif(i+1 == self.query2.value(0) or (i+1 == self.query3.value(0))):
                 ErrorPrompt("Error", "Se alcanzó el número de libros que este estudiante puede tener en un prestamo.")
                 return
             i += 1

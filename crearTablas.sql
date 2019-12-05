@@ -98,6 +98,12 @@ CREATE TABLE Deuda(
 	monto_deuda FLOAT8 CHECK(monto_deuda >= 0.0) DEFAULT 0.00
 );
 
+CREATE TABLE Books_per_loan(
+	id INT4 PRIMARY KEY,
+	monto_libro_per_loan INT4 CHECK(monto_libro_per_loan >= 0 AND monto_libro_per_loan <=7) DEFAULT 7
+);
+
+
 CREATE INDEX WrittenBy_index ON WrittenBy(book_id, author_id);
 
 CREATE INDEX user_index ON CEIC_User(username, password_);
@@ -121,3 +127,6 @@ VALUES('15-11095', 'Diego', 'Peña', 26122418, 04242486353, 'djpg98@gmail.com');
 
 INSERT INTO Deuda(id, monto_deuda)
 VALUES(0, 0.00);
+
+INSERT INTO Books_per_loan(id, monto_libro_per_loan)
+VALUES(0, 7);
