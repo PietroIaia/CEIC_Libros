@@ -610,7 +610,7 @@ class prestamos(QWidget):
         msg['From'] = sender_email
         msg['To'] = receiver_email
         if subject == "Préstamo":
-            content = "Hola,\n\n     Has pedido prestado(s) el(los) siguinte(s) libro(s): \n\n"
+            content = "Hola,\n\n\tHas pedido prestado(s) el(los) siguinte(s) libro(s): \n\n"
             content += text
             content += "Fecha de devolución: "
             content += return_date.split(".")[0]
@@ -633,7 +633,7 @@ class prestamos(QWidget):
         msg['Subject'] = subject
         msg['From'] = sender_email
         msg['To'] = receiver_email
-        content = "Hola,\n\n     Has finalizado tu préstamo de libros"
+        content = "Hola,\n\n\tHas finalizado tu préstamo de libros"
         content = MIMEText(content)
         msg.attach(content)
 
