@@ -5,9 +5,13 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from Tables import Books_Loan_Table, Active_Loan_Table
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import re
 import sys
 import datetime 
+import smtplib
+import ssl
 
 
 # NOTAS:
@@ -401,12 +405,24 @@ class prestamos(QWidget):
 
     # Funcion para realizar el prestamo
     def realizarPrestamo(self, Username):
+
+        mailText = ""
+        titles = ""
         
         if(self.tabla_libros_prestamos.item(0, 0).text() == ""):
             ErrorPrompt("Error", "Debe agregar libros para realizar un prestamo")
             return
 
         self.query = QSqlQuery()
+        self.queryTitle = QSqlQuery()
+        self.queryMail = QSqlQuery()
+        self.queryMail.exec_("SELECT email FROM Estudiante WHERE carnet = \'" + self.currentStudent + "\'")
+        if self.queryMail.first():
+            address = str(self.queryMail.value(0))
+        else:
+            ErrorPrompt("Error", "No se pudo realizar el préstamo. Estudiante no tiene email")
+            return
+
         start_date = str(datetime.datetime.now())
         hours = start_date.split()
 
@@ -427,6 +443,12 @@ class prestamos(QWidget):
                     # Se realiza la insercion a la tabla Loan, es decir, se realiza el prestamo
                     self.query.exec_(queryText)
                     self.prestamoToLog(self.currentStudent, Username, self.tabla_libros_prestamos.item(i, 0).text(), start_date, return_date)
+                    self.queryTitle.exec_("SELECT title FROM Book WHERE book_id = " + str(self.tabla_libros_prestamos.item(i, 0).text()))
+                    if self.queryTitle.first():
+                        titles += str(self.queryTitle.value(0))
+                    else:
+                        titles += str(self.tabla_libros_prestamos.item(i, 0).text())
+                    titles += "\n"
 
                     i += 1
                 else: 
@@ -434,6 +456,7 @@ class prestamos(QWidget):
                     return
             else:
                 break
+        self.sendConfirmEmail(address, "Préstamo", titles, return_date)
         InfoPrompt("Éxito", "Se realizó el préstamo!")
         self.libro.setText("")
         self.updateActiveLoanTable()
@@ -444,6 +467,14 @@ class prestamos(QWidget):
     def finalizarPrestamo(self, Username):
         self.query = QSqlQuery()
         success = self.query.exec_("DELETE FROM Loan WHERE carnet='" + str(self.currentStudent) + "';")
+
+        self.queryMail = QSqlQuery()
+        self.queryMail.exec_("SELECT email FROM Estudiante WHERE carnet = \'" + self.currentStudent + "\'")
+        if self.queryMail.first():
+            address = str(self.queryMail.value(0))
+        else:
+            ErrorPrompt("Error", "Estudiante no tiene email")
+            return
 
         if(success):
             i = 0
@@ -459,6 +490,7 @@ class prestamos(QWidget):
         else:
             ErrorPrompt("Error", "No se pudo marcar el préstamo como finalizado")
             return
+        self.booksReturnesEmail(address, "Finalización de préstamo")
         InfoPrompt("Éxito", "Se marcó el préstamo como finalizado!")
         self.updateActiveLoanTable()
         self.buscarEstudiante(self.currentStudent)
@@ -566,4 +598,48 @@ class prestamos(QWidget):
         with open("ActividadSesion.log", "a") as f:
             f.write(str(datetime.datetime.now()).split(".")[0] + ", FINALIZACIÓN, " + carnet + ", " + username + ", Libro: " + str(book_id) + ", Fecha: " + str(datetime.datetime.now()).split(".")[0] + "\n")
         f.close()
+
+    def sendConfirmEmail(self, receiver, subject, text, return_date):
+        port = 465  # For SSL
+        smtp_server = "smtp.gmail.com"
+        sender_email = "CEICLibrosPrueba@gmail.com" 
+        receiver_email = receiver
+        password = "the_stepbro"
+        msg = MIMEMultipart()
+        msg['Subject'] = subject
+        msg['From'] = sender_email
+        msg['To'] = receiver_email
+        if subject == "Préstamo":
+            content = "Hola,\n\n     Has pedido prestado(s) el(los) siguinte(s) libro(s): \n\n"
+            content += text
+            content += "Fecha de devolución: "
+            content += return_date.split(".")[0]
+
+        content = MIMEText(content)
+        msg.attach(content)
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, content.as_string().encode("utf8"))
+
+    def booksReturnesEmail(self, receiver, subject):
+        port = 465  # For SSL
+        smtp_server = "smtp.gmail.com"
+        sender_email = "CEICLibrosPrueba@gmail.com" 
+        receiver_email = receiver
+        password = "the_stepbro"
+        msg = MIMEMultipart()
+        msg['Subject'] = subject
+        msg['From'] = sender_email
+        msg['To'] = receiver_email
+        content = "Hola,\n\n     Has finalizado tu préstamo de libros"
+        content = MIMEText(content)
+        msg.attach(content)
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, content.as_string().encode("utf8"))
+
 
