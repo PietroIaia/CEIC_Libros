@@ -343,7 +343,7 @@ class Active_Loan_Table(QTableWidget):
         self.setColumnWidth(1, 150)
         self.setColumnWidth(2, 150)
         self.setColumnWidth(3, 115)
-        self.setColumnWidth(4, 230)
+        self.setColumnWidth(4, 238)
         self.setStyleSheet("background-color:  Silver")
         self.setMaximumSize(self.getQTableWidgetSize())
         self.setMinimumSize(self.getQTableWidgetSize())

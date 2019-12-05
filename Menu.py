@@ -13,6 +13,7 @@ from AgregarEstudiante import AgregarEstudiante
 from AgregarUsuario import AgregarUsuario
 from Prompt import ErrorPrompt
 from sanciones import sanciones
+from inicio import Inicio
 
 class Ui_MainWindow(object):
 
@@ -337,6 +338,9 @@ class Ui_MainWindow(object):
         # Index : 11
         self.ventana_sanciones = sanciones(username, perm_mask)
         self.stacked_widget.addWidget(self.ventana_sanciones)
+        # Index : 12
+        self.ventana_inicio = Inicio()
+        self.stacked_widget.addWidget(self.ventana_inicio)
 
         # Elementos de la pantalla
         self.stacked_widget.raise_()
@@ -396,6 +400,7 @@ class Ui_MainWindow(object):
         self.push_button_6.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(11))
         self.ventana_agregar_autor.seguir.clicked.connect(lambda:self.ventana_agregar_libro.authorsInput.clear())
         self.ventana_agregar_autor.seguir.clicked.connect(lambda: self.ventana_agregar_libro.mostrarAutores())
+        self.push_button_1.clicked.connect(self.actInicio)
 
         ##################### Esconde los menú
         for i in range(16):
@@ -414,6 +419,12 @@ class Ui_MainWindow(object):
                                             "{\n"
                                             "    color: #B5B5B5\n"
                                             "}")
+    
+    # Actualiza ventana de inicio
+    def actInicio(self):
+        self.stacked_widget.setCurrentIndex(12)
+        self.ventana_inicio.updateActiveLoanTable()
+        self.ventana_inicio.updateDebtTabla()
 
     # StyleSheet para los botones del menú
     def setButtonStyleSheet(self, button_id, hex1, hex2):
