@@ -159,9 +159,9 @@ class Inicio(QWidget):
 
         success = self.query.exec_("UPDATE Books_per_loan SET monto_libro_per_loan = '" + str(self.books_per_loan.value()) + "' WHERE id = 0;")
         if(success):
-            InfoPrompt("Éxito", "Maximo de libros por prestamo actualizado!")
+            InfoPrompt("Éxito", "Máximo de libros por prestamo actualizado!")
         else:
-            ErrorPrompt("Error", "No se pudo actualizar la cantidad maxima de libros por prestamo")
+            ErrorPrompt("Error", "No se pudo actualizar la cantidad máxima de libros por prestamo")
 
 
     # Funcion que actualiza la tabla de prestamos activos

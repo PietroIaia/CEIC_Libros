@@ -578,4 +578,3 @@ class prestamos(QWidget):
         with open("ActividadSesion.log", "a") as f:
             f.write(str(datetime.datetime.now()).split(".")[0] + ", FINALIZACIÓN, " + carnet + ", " + username + ", Libro: " + str(book_id) + ", Fecha: " + str(datetime.datetime.now()).split(".")[0] + "\n")
         f.close()
-
