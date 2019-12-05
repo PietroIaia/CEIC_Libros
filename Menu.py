@@ -342,6 +342,9 @@ class Ui_MainWindow(object):
         self.ventana_inicio = Inicio()
         self.stacked_widget.addWidget(self.ventana_inicio)
 
+        # La aplicacion inicia en el Modulod de Inicio
+        self.stacked_widget.setCurrentIndex(12)
+
         # Elementos de la pantalla
         self.stacked_widget.raise_()
         self.verticalFrame_1.raise_()
