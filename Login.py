@@ -34,9 +34,9 @@ class ventanaLogin(QMainWindow):
 
         self.db = QSqlDatabase.addDatabase("QPSQL")
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaceic")                         
+        self.db.setDatabaseName("pruebaCEIC")                         
         self.db.setUserName("postgres")
-        self.db.setPassword("postgres")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("Tranc0nReloj-7aha")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
         self.initUI()
@@ -191,7 +191,8 @@ class ventanaLogin(QMainWindow):
         return
 
       # Enviamos el codigo
-      code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=13))
+      # code = ''.join(choices(string.ascii_uppercase + string.digits, k=13))
+      code = "bc1hjk57899il"
       with open("RenovarContraseña.log", "a") as f:
           f.write(str(self.query.value(0)) + " | " + code + "\n")
       f.close()

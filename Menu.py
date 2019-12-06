@@ -675,34 +675,36 @@ class Ui_MainWindow(object):
                         message = message + "Título: " + str(self.queryBookTitle.value(0)) + "\n"
 
                     message += "\n"
-                    self.queryBooksLoaned.previous()
-                    message = message + "Usuario que lo(s) prestó: " + str(self.queryBooksLoaned.value(3)) + "\n"
-                    auxiliar = QDateTime.toString(self.queryBooksLoaned.value(5)).split()
-                    inicio = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
-                    message = message + "Fecha de préstamo: " + inicio + "\n"
-                    auxiliar = QDateTime.toString(self.queryBooksLoaned.value(6)).split()
-                    dev_esperada = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
-                    message = message + "Fecha esperada de devolución: " + dev_esperada + "\n"
+                    if self.queryBooksLoaned.previous():
+                        message = message + "Usuario que lo(s) prestó: " + str(self.queryBooksLoaned.value(3)) + "\n"
+                        auxiliar = QDateTime.toString(self.queryBooksLoaned.value(5)).split()
+                        inicio = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
+                        message = message + "Fecha de préstamo: " + inicio + "\n"
+                        auxiliar = QDateTime.toString(self.queryBooksLoaned.value(6)).split()
+                        dev_esperada = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
+                        message = message + "Fecha esperada de devolución: " + dev_esperada + "\n"
 
-                    message = message + "Dias de sanción: " + str(self.queryStudentInfo.value(3)) + "\n"
-                    message = message + "Deuda: " + str(self.queryStudentInfo.value(4)) + "\n"
+                        message = message + "Dias de sanción: " + str(self.queryStudentInfo.value(3)) + "\n"
+                        message = message + "Deuda: " + str(self.queryStudentInfo.value(4)) + "\n"
 
-                    message += "Si estás a un día de la fecha de devolución o en la fecha de devolución, puedes pasar a renovar tu préstamo\n\n"
-                    message += "Atentamente,\n"
-                    message += "Junta directiva del CEIC"
+                        message += "Si estás a un día de la fecha de devolución o en la fecha de devolución, puedes pasar a renovar tu préstamo\n\n"
+                        message += "Atentamente,\n"
+                        message += "Junta directiva del CEIC"
 
-                    startTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(5))
-                    returnTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(6))
-                    aux = int((int(returnTimeAux) - int(startTimeAux))/86400)
+                        startTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(5))
+                        returnTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(6))
+                        aux = int((int(returnTimeAux) - int(startTimeAux))/86400)
 
                     if aux <= 1:
+                        mail_sent = True
                         self.emailStudent(address, message)
 
                     if not self.queryStudents.next():
                         break
 
-        self.updateQuery = QSqlQuery()
-        self.updateQuery.exec_("UPDATE Last_notification SET last_sent = current_date")
+        if mail_sent:
+            self.updateQuery = QSqlQuery()
+            self.updateQuery.exec_("UPDATE Last_notification SET last_sent = current_date")
 
     def emailStudent(self, receiver, text):
         port = 465  # For SSL
