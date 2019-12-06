@@ -647,7 +647,7 @@ class Ui_MainWindow(object):
         self.queryDay = QSqlQuery()
         self.queryDay.exec_("SELECT last_sent FROM Last_notification")
         self.queryDay.first()
-        mailSent = False
+        mail_sent = False
         if QDate.currentDate() != self.queryDay.value(0):
             self.queryStudents = QSqlQuery()
             self.queryStudents.exec_("SELECT carnet FROM Loan GROUP BY Carnet")
@@ -668,18 +668,17 @@ class Ui_MainWindow(object):
 
                     self.queryBooksLoaned = QSqlQuery()
                     self.queryBooksLoaned.exec_("SELECT * FROM Loan WHERE carnet = \'" + carnet + "\'")
-                    if(self.queryBooksLoaned.first()):
-                        while self.queryBooksLoaned.next():
-                            book_id = int(self.queryBooksLoaned.value(1))
-                            message = message + "Código del libro: " + str(book_id) + "\n"
-                            message = message + "Código del ejemplar: " + str(self.queryBooksLoaned.value(2)) + "\n"
-                            self.queryBookTitle = QSqlQuery()
-                            self.queryBookTitle.exec_("SELECT title FROM Book WHERE book_id = " + str(book_id))
-                            self.queryBookTitle.first()
-                            message = message + "Título: " + str(self.queryBookTitle.value(0)) + "\n"
+                    while self.queryBooksLoaned.next():
+                        book_id = int(self.queryBooksLoaned.value(1))
+                        message = message + "Código del libro: " + str(book_id) + "\n"
+                        message = message + "Código del ejemplar: " + str(self.queryBooksLoaned.value(2)) + "\n"
+                        self.queryBookTitle = QSqlQuery()
+                        self.queryBookTitle.exec_("SELECT title FROM Book WHERE book_id = " + str(book_id))
+                        self.queryBookTitle.first()
+                        message = message + "Título: " + str(self.queryBookTitle.value(0)) + "\n"
 
-                        message += "\n"
-                        self.queryBooksLoaned.previous()
+                    message += "\n"
+                    if self.queryBooksLoaned.previous():
                         message = message + "Usuario que lo(s) prestó: " + str(self.queryBooksLoaned.value(3)) + "\n"
                         auxiliar = QDateTime.toString(self.queryBooksLoaned.value(5)).split()
                         inicio = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
@@ -698,13 +697,15 @@ class Ui_MainWindow(object):
                         startTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(5))
                         returnTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(6))
                         aux = int((int(returnTimeAux) - int(startTimeAux))/86400)
-                        if aux <= 1:
-                            mailSent = True
-                            self.emailStudent(address, message)
-                        if not self.queryStudents.next():
-                            break
-        
-        if(mailSent):
+
+                    if aux <= 1:
+                        mail_sent = True
+                        self.emailStudent(address, message)
+
+                    if not self.queryStudents.next():
+                        break
+
+        if mail_sent:
             self.updateQuery = QSqlQuery()
             self.updateQuery.exec_("UPDATE Last_notification SET last_sent = current_date")
 

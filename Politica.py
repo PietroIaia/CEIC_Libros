@@ -285,7 +285,7 @@ class Politica(QWidget):
 		try:
 			########################################
 			#self.cur.execute(query_text)
-			#self.con.commit()
+			#elf.con.commit()
 			self.query = QSqlQuery()
 			self.query.exec_(query_text)
 			self.query.first()
