@@ -647,6 +647,7 @@ class Ui_MainWindow(object):
         self.queryDay = QSqlQuery()
         self.queryDay.exec_("SELECT last_sent FROM Last_notification")
         self.queryDay.first()
+        mailSent = False
         if QDate.currentDate() != self.queryDay.value(0):
             self.queryStudents = QSqlQuery()
             self.queryStudents.exec_("SELECT carnet FROM Loan GROUP BY Carnet")
@@ -659,50 +660,53 @@ class Ui_MainWindow(object):
                     self.queryStudentInfo = QSqlQuery()
                     self.queryStudentInfo.exec_("SELECT first_name, last_name, email, days_blocked, book_debt FROM Estudiante WHERE carnet = \'" + carnet + "\'")
                     self.queryStudentInfo.first()
+                    if(not self.queryStudentInfo.first()):
+                        break
                     message = "Hola " + str(self.queryStudentInfo.value(0)) + " " + str(self.queryStudentInfo.value(1)) + "\n\n"
                     address = str(self.queryStudentInfo.value(2))
                     message += "Se te recuerda que posees un préstamo de libros del CEIC. Estos son: \n\n"
 
                     self.queryBooksLoaned = QSqlQuery()
                     self.queryBooksLoaned.exec_("SELECT * FROM Loan WHERE carnet = \'" + carnet + "\'")
-                    while self.queryBooksLoaned.next():
-                        book_id = int(self.queryBooksLoaned.value(1))
-                        message = message + "Código del libro: " + str(book_id) + "\n"
-                        message = message + "Código del ejemplar: " + str(self.queryBooksLoaned.value(2)) + "\n"
-                        self.queryBookTitle = QSqlQuery()
-                        self.queryBookTitle.exec_("SELECT title FROM Book WHERE book_id = " + str(book_id))
-                        self.queryBookTitle.first()
-                        message = message + "Título: " + str(self.queryBookTitle.value(0)) + "\n"
+                    if(self.queryBooksLoaned.first()):
+                        while self.queryBooksLoaned.next():
+                            book_id = int(self.queryBooksLoaned.value(1))
+                            message = message + "Código del libro: " + str(book_id) + "\n"
+                            message = message + "Código del ejemplar: " + str(self.queryBooksLoaned.value(2)) + "\n"
+                            self.queryBookTitle = QSqlQuery()
+                            self.queryBookTitle.exec_("SELECT title FROM Book WHERE book_id = " + str(book_id))
+                            self.queryBookTitle.first()
+                            message = message + "Título: " + str(self.queryBookTitle.value(0)) + "\n"
 
-                    message += "\n"
-                    self.queryBooksLoaned.previous()
-                    message = message + "Usuario que lo(s) prestó: " + str(self.queryBooksLoaned.value(3)) + "\n"
-                    auxiliar = QDateTime.toString(self.queryBooksLoaned.value(5)).split()
-                    inicio = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
-                    message = message + "Fecha de préstamo: " + inicio + "\n"
-                    auxiliar = QDateTime.toString(self.queryBooksLoaned.value(6)).split()
-                    dev_esperada = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
-                    message = message + "Fecha esperada de devolución: " + dev_esperada + "\n"
+                        message += "\n"
+                        self.queryBooksLoaned.previous()
+                        message = message + "Usuario que lo(s) prestó: " + str(self.queryBooksLoaned.value(3)) + "\n"
+                        auxiliar = QDateTime.toString(self.queryBooksLoaned.value(5)).split()
+                        inicio = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
+                        message = message + "Fecha de préstamo: " + inicio + "\n"
+                        auxiliar = QDateTime.toString(self.queryBooksLoaned.value(6)).split()
+                        dev_esperada = str(auxiliar[0]+' '+auxiliar[2]+' '+auxiliar[1]+' '+auxiliar[4]+' '+auxiliar[3])
+                        message = message + "Fecha esperada de devolución: " + dev_esperada + "\n"
 
-                    message = message + "Dias de sanción: " + str(self.queryStudentInfo.value(3)) + "\n"
-                    message = message + "Deuda: " + str(self.queryStudentInfo.value(4)) + "\n"
+                        message = message + "Dias de sanción: " + str(self.queryStudentInfo.value(3)) + "\n"
+                        message = message + "Deuda: " + str(self.queryStudentInfo.value(4)) + "\n"
 
-                    message += "Si estás a un día de la fecha de devolución o en la fecha de devolución, puedes pasar a renovar tu préstamo\n\n"
-                    message += "Atentamente,\n"
-                    message += "Junta directiva del CEIC"
+                        message += "Si estás a un día de la fecha de devolución o en la fecha de devolución, puedes pasar a renovar tu préstamo\n\n"
+                        message += "Atentamente,\n"
+                        message += "Junta directiva del CEIC"
 
-                    startTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(5))
-                    returnTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(6))
-                    aux = int((int(returnTimeAux) - int(startTimeAux))/86400)
-
-                    if aux <= 1:
-                        self.emailStudent(address, message)
-
-                    if not self.queryStudents.next():
-                        break
-
-        self.updateQuery = QSqlQuery()
-        self.updateQuery.exec_("UPDATE Last_notification SET last_sent = current_date")
+                        startTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(5))
+                        returnTimeAux = QDateTime.toSecsSinceEpoch(self.queryBooksLoaned.value(6))
+                        aux = int((int(returnTimeAux) - int(startTimeAux))/86400)
+                        if aux <= 1:
+                            mailSent = True
+                            self.emailStudent(address, message)
+                        if not self.queryStudents.next():
+                            break
+        
+        if(mailSent):
+            self.updateQuery = QSqlQuery()
+            self.updateQuery.exec_("UPDATE Last_notification SET last_sent = current_date")
 
     def emailStudent(self, receiver, text):
         port = 465  # For SSL

@@ -12,6 +12,7 @@ from Prompt import ErrorPrompt, InfoPrompt, ConfirmPrompt
 from validationFunctions import verification_users, check_username
 from AgregarUsuario import AgregarUsuario
 from PyQt5.QtCore import *
+from passlib.hash import bcrypt
 import sys
 import re
 

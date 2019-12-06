@@ -6,6 +6,7 @@ from datetime import datetime
 from Prompt import ErrorPrompt
 from Menu import Ui_MainWindow
 from formRenovar import form_renovar
+from passlib.hash import bcrypt
 import random
 import string
 import sys
@@ -154,31 +155,34 @@ class ventanaLogin(QMainWindow):
         inputPassword = self.password.text()
         perm_mask = -1
 
-        condition = "username = \'" + inputUsername + "\' AND password_ = crypt(\'" + inputPassword + "\', password_);"
-
         self.query = QSqlQuery()
         # Obtenemos el rol del usuario
-        self.query.exec_("SELECT permission_mask FROM CEIC_User WHERE " + condition)
+        self.query.exec_("SELECT permission_mask, password_ FROM CEIC_User WHERE username='" + inputUsername + "';")
 
-        if self.query.first():
+        if (self.query.first()):
+          # SI SE REINICIA LA BASE DE DATOS COMENTAR LAS 3 LINEAS SIGUIENTES PARA QUE DEJE INGRESAR EN SISTEMA Y AGREGAR UN USUARIO ADMINISTRADOR
+          if(not bcrypt.verify(inputPassword, self.query.value(1))):
+            ErrorPrompt("Error de Login", "Nombre de usuario o contraseña incorrectos!")
+            return
 
-            perm_mask = self.query.value(0)
-            # Hace update del last_login del user
-            update_last_login = "UPDATE CEIC_User SET last_login='"+str(datetime.now())+"' WHERE username='"+inputUsername+"';"
-            self.query.exec_(update_last_login)
 
-            # Cerramos el Login
-            self.close()
+          perm_mask = self.query.value(0)
+          # Hace update del last_login del user
+          update_last_login = "UPDATE CEIC_User SET last_login='"+str(datetime.now())+"' WHERE username='"+inputUsername+"';"
+          self.query.exec_(update_last_login)
 
-            # Abrimos el MainWindow
-            # Inicializamos la main_window
-            self.main_window = QMainWindow()
-            self.ui = Ui_MainWindow()
-            self.ui.setupUi(self.main_window, str(inputUsername), int(perm_mask), aplicacion)
-            self.main_window.show()
+          # Cerramos el Login
+          self.close()
+
+          # Abrimos el MainWindow
+          # Inicializamos la main_window
+          self.main_window = QMainWindow()
+          self.ui = Ui_MainWindow()
+          self.ui.setupUi(self.main_window, str(inputUsername), int(1), aplicacion)
+          self.main_window.show()
 
         else:
-            ErrorPrompt("Error de Login", "Nombre de usuario o contraseña incorrectos!")
+            ErrorPrompt("Error", "Nombre de usuario o contraseña incorrectos!")
     
 
     # Funcion utilizada para llamar al form de Renovacion de contraseña

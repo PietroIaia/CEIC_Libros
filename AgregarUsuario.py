@@ -10,6 +10,7 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5 import QtCore, QtGui, QtWidgets
 from validationFunctions import verification_users
 from Prompt import InfoPrompt, ErrorPrompt
+from passlib.hash import bcrypt
 import sys
 import datetime 
 
@@ -187,10 +188,10 @@ class AgregarUsuario(QWidget):
 
             if puede == 1:
                 self.query = QSqlQuery()
-                self.query.prepare("INSERT INTO CEIC_User (username, password_, first_name, last_name, email, permission_mask, last_login, creation_date) VALUES(:username, crypt(:password, gen_salt('bf', 8)), \
+                self.query.prepare("INSERT INTO CEIC_User (username, password_, first_name, last_name, email, permission_mask, last_login, creation_date) VALUES(:username, :password, \
                     :fname, :lname, :email, :permisos, :last_login, :creation_date ) RETURNING username")
                 self.query.bindValue(0, fields[0])
-                self.query.bindValue(1, self.contraseñaInput.text())
+                self.query.bindValue(1, bcrypt.hash(self.contraseñaInput.text()))
                 self.query.bindValue(2, fields[1])
                 self.query.bindValue(3, fields[2])
                 self.query.bindValue(4, fields[3])
