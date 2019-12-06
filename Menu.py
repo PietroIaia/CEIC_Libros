@@ -647,6 +647,7 @@ class Ui_MainWindow(object):
         self.queryDay = QSqlQuery()
         self.queryDay.exec_("SELECT last_sent FROM Last_notification")
         self.queryDay.first()
+        mail_sent = False
         if QDate.currentDate() != self.queryDay.value(0):
             self.queryStudents = QSqlQuery()
             self.queryStudents.exec_("SELECT carnet FROM Loan GROUP BY Carnet")

@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 
-import psycopg2
+#import psycopg2
 
 class Politica(QWidget):
 
@@ -17,14 +17,14 @@ class Politica(QWidget):
 		self.setStyleSheet('background-color: rgb(236, 240, 241)')
 
 		# Base de datos
-		self.con = psycopg2.connect("dbname=pruebaceic user=postgres host=localhost password=12345 port=5433")
-		self.cur = self.con.cursor()
-		#self.db = QSqlDatabase.database('qt_sql_default_connection')
-        #self.db.setHostName("localhost")
-        #self.db.setDatabaseName("pruebaceic")
-        #self.db.setUserName("postgres")
-        #self.db.setPassword("postgres")
-        #self.db.open()
+		#self.con = psycopg2.connect("dbname=pruebaceic user=postgres host=localhost password=12345 port=5433")
+		#self.cur = self.con.cursor()
+		self.db = QSqlDatabase.database('qt_sql_default_connection')
+		self.db.setHostName("localhost")
+		self.db.setDatabaseName("pruebaCEIC")
+		self.db.setUserName("postgres")
+		self.db.setPassword("Tranc0nReloj-7aha")
+		self.db.open()
 
 		# Frame para la información de la política de préstamo
 		self.frame_politica = QFrame(self)
@@ -284,10 +284,11 @@ class Politica(QWidget):
 					 "' WHERE id_ = 1;"
 		try:
 			########################################
-			self.cur.execute(query_text)
-			self.con.commit()
-			#self.query = QSqlQuery()
-        	#self.query.exec_(query_text)
+			#self.cur.execute(query_text)
+			#elf.con.commit()
+			self.query = QSqlQuery()
+			self.query.exec_(query_text)
+			self.query.first()
 			########################################
 
 			self.prestamos_text = update_prestamos_text
@@ -332,34 +333,37 @@ class Politica(QWidget):
 		# Obtenemos la regla para los préstamos
 		query_text_prestamos = "SELECT prestamos FROM Politica_prestamo"
 		#############################################
-		self.cur.execute(query_text_prestamos)
-		prestamos_result = self.cur.fetchall()
-		prestamos_result = prestamos_result[0][0]
-		#self.query = QSqlQuery()
-        #self.query.exec_(query_text_prestamos)
-        #prestamos_result = self.query.value(0)
+		#self.cur.execute(query_text_prestamos)
+		#prestamos_result = self.cur.fetchall()
+		#prestamos_result = prestamos_result[0][0]
+		self.query = QSqlQuery()
+		self.query.exec_(query_text_prestamos)
+		self.query.first()
+		prestamos_result = self.query.value(0)
 		#############################################
 
 		# Obtenemos la regla para las multas
 		query_text_multas = "SELECT multas FROM Politica_prestamo"
 		#############################################
-		self.cur.execute(query_text_multas)
-		multas_result = self.cur.fetchall()
-		multas_result = multas_result[0][0]
-		#self.query = QSqlQuery()
-		#self.query.exec_(query_text_multas)
-		#multas_result = self.query.value(0)
+		#self.cur.execute(query_text_multas)
+		#multas_result = self.cur.fetchall()
+		#multas_result = multas_result[0][0]
+		self.query = QSqlQuery()
+		self.query.exec_(query_text_multas)
+		self.query.first()
+		multas_result = self.query.value(0)
 		#############################################
 
 		# Obtenemos la regla para las sanciones
 		query_text_sanciones = "SELECT sanciones FROM Politica_prestamo"
 		#############################################
-		self.cur.execute(query_text_sanciones)
-		sanciones_result = self.cur.fetchall()
-		sanciones_result = sanciones_result[0][0]
-		#self.query = QSqlQuery()
-		#self.query.exec_(query_text_sanciones)
-		#sanciones_result = self.query.value(0)
+		#self.cur.execute(query_text_sanciones)
+		#sanciones_result = self.cur.fetchall()
+		#sanciones_result = sanciones_result[0][0]
+		self.query = QSqlQuery()
+		self.query.exec_(query_text_sanciones)
+		self.query.first()
+		sanciones_result = self.query.value(0)
 		#############################################
 
 		# Mostramos las reglas en pantalla
