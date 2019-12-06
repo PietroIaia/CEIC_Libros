@@ -564,9 +564,9 @@ class autoresTable(QTableWidget):
 class AuthorSearchTable(QTableWidget):
     def __init__(self):
         super().__init__()
-        self.setColumnCount(2) #Columnas
+        self.setColumnCount(4) #Columnas
         self.setRowCount(15)
-        self.setHorizontalHeaderLabels(["Título", "Código"])
+        self.setHorizontalHeaderLabels(["Título", "Código", "Cant. Disp", "Duración"])
         #self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.setStyleSheet("background-color:  Silver")
         self.setColumnWidth(0, 500)

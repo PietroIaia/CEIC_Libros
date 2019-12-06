@@ -103,6 +103,11 @@ CREATE TABLE Books_per_loan(
 	monto_libro_per_loan INT4 CHECK(monto_libro_per_loan >= 0 AND monto_libro_per_loan <=7) DEFAULT 7
 );
 
+CREATE TABLE Last_notification(
+    id INT4 PRIMARY KEY,
+    last_sent date
+);
+
 
 CREATE INDEX WrittenBy_index ON WrittenBy(book_id, author_id);
 
@@ -127,6 +132,9 @@ VALUES('15-11095', 'Diego', 'Peña', 26122418, 04242486353, 'djpg98@gmail.com');
 
 INSERT INTO Deuda(id, monto_deuda)
 VALUES(0, 0.00);
+
+INSERT INTO Last_notification(id, last_sent)
+VALUES(0, current_date - interval '1 day')
 
 INSERT INTO Books_per_loan(id, monto_libro_per_loan)
 VALUES(0, 7);

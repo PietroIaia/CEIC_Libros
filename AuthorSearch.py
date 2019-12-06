@@ -12,9 +12,9 @@ class AuthorSearch(QWidget):
 
         self.db = QSqlDatabase.database('qt_sql_default_connection')
         self.db.setHostName("localhost")
-        self.db.setDatabaseName("pruebaceic")                         
+        self.db.setDatabaseName("pruebaCEIC")                         
         self.db.setUserName("postgres")
-        self.db.setPassword("postgres")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
+        self.db.setPassword("Tranc0nReloj-7aha")                               # RECUERDEN CAMBIAR CONTRASEÑA DEPENDIENDO DE LA SUYA!
         self.db.open()
 
         # Inicialización de la ventana
@@ -150,7 +150,7 @@ class AuthorSearch(QWidget):
     def consulta(self):
         self.table.clearTable()
         names = self.authorList.currentText().split(", ")
-        queryText = "SELECT b.title, b.book_id \
+        queryText = "SELECT b.title, b.book_id, b.quantity, b.quantity_lent, b.loan_duration \
                      FROM Book as b\
                      JOIN WrittenBy as w ON w.book_id = b.book_id\
                      WHERE w.author_id = (SELECT author_id\
@@ -164,8 +164,14 @@ class AuthorSearch(QWidget):
         self.query.exec_(queryText)
 
         i = 0
-
         while self.query.next():
-            self.table.item(i, 0).setText(str(self.query.value(0)))
-            self.table.item(i, 1).setText(str(self.query.value(1)))
+            for j in range(4):
+                if j < 2:
+                    self.table.item(i, j).setText(str(self.query.value(j)))
+                elif j == 2:
+                    remain = str(int(self.query.value(2)) - int(self.query.value(3)))
+                    self.table.item(i, j).setText(remain)
+                else:
+                    self.table.item(i, j).setText(str(self.query.value(4))) 
+                
             i += 1

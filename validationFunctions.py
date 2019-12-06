@@ -53,7 +53,7 @@ def check_days(days):
     return check_pattern(days, pattern, "Número de días inválidos", "Número de días inválidos")
 
 def check_books(bookNo):
-    pattern = re.compile(r"^[0-9]{2}$")
+    pattern = re.compile(r"\d{1,2}$")
     return check_pattern(bookNo, pattern, "Número de libros inválido", "Número de libros inválido")
 
 def check_debt(debt):

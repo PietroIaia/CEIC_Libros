@@ -262,15 +262,17 @@ class gestionEstudiante(QWidget):
     @pyqtSlot()
     def saveUpdate(self):
         fields = self.table.getFields()
-        correct = verification_estudiantes(fields, 10)
+        correct = verification_estudiantes(fields, 9)
 
         if not correct:
             return
 
-        values = self.table.getValues()
-        queryText = "UPDATE Estudiante SET " + values + " WHERE carnet = \'" + self.table.item(0, 0).text() + "\' returning carnet"
         self.query = QSqlQuery()
-        self.query.exec_(queryText)
+        self.query.prepare("UPDATE Estudiante SET carnet = :ncarnet, first_name = :fn, last_name = :ln, CI = :nCI, phone = :nphone,\
+            email = :nemail, days_blocked = :days, current_books = :cb, book_debt = :bookD WHERE carnet = \'" + self.table.item(0, 0).text() + "\' returning carnet") 
+        for i in range(9):
+            self.query.bindValue(i, self.table.item(i, 0).text())
+        self.query.exec_()
 
         if self.query.first():
             InfoPrompt("Actualización completada", "La información del estudiante ha sido actualizada exitosamente")

@@ -418,7 +418,6 @@ class prestamos(QWidget):
     # Funcion para realizar el prestamo
     def realizarPrestamo(self, Username):
 
-        mailText = ""
         titles = ""
         
         if(self.tabla_libros_prestamos.item(0, 0).text() == ""):
@@ -575,9 +574,20 @@ class prestamos(QWidget):
 
 
     def renovarPrestamo(self):
+        titles = ""
         self.query = QSqlQuery()
         start_date = str(datetime.datetime.now())
         hours = start_date.split()
+        
+        self.query = QSqlQuery()
+        self.queryTitle = QSqlQuery()
+        self.queryMail = QSqlQuery()
+        self.queryMail.exec_("SELECT email FROM Estudiante WHERE carnet = \'" + self.currentStudent + "\'")
+        if self.queryMail.first():
+            address = str(self.queryMail.value(0))
+        else:
+            ErrorPrompt("Error", "No se pudo realizar la renovación. Estudiante no tiene email")
+            return
 
         i = 0
         while(i != self.tabla_libros_prestamos.rowCount()):
@@ -587,12 +597,20 @@ class prestamos(QWidget):
                     return_date = str(datetime.date.today() + datetime.timedelta(days=(self.query.value(0)))) + " " + str(hours[1])
                     self.query.exec_("UPDATE Loan SET estimated_return_time = '" + return_date + "' WHERE book_id = '" + self.tabla_libros_prestamos.item(i, 0).text() + "' AND carnet = '" + str(self.currentStudent) + "';")
                     self.renovarToLog(self.currentStudent, self.tabla_libros_prestamos.item(i, 0).text(), return_date)
+                    self.queryTitle.exec_("SELECT title FROM Book WHERE book_id = " + str(self.tabla_libros_prestamos.item(i, 0).text()))
+                    if self.queryTitle.first():
+                        titles += str(self.queryTitle.value(0))
+                    else:
+                        titles += str(self.tabla_libros_prestamos.item(i, 0).text())
+                    titles += "\n"
                     i += 1
                 else:
                     ErrorPrompt("Error", "Ocurrió un error renovando el préstamo")
             else:
                 break
-        
+
+
+        self.sendConfirmEmail(address, "Renovación", titles, return_date)
         InfoPrompt("Éxito", "El préstamo se renovó con éxito!")
         self.updateActiveLoanTable()
 
@@ -622,7 +640,12 @@ class prestamos(QWidget):
         msg['From'] = sender_email
         msg['To'] = receiver_email
         if subject == "Préstamo":
-            content = "Hola,\n\n\tHas pedido prestado(s) el(los) siguinte(s) libro(s): \n\n"
+            content = "Hola:\n\nHas pedido prestado(s) el(los) siguinte(s) libro(s): \n\n"
+            content += text
+            content += "Fecha de devolución: "
+            content += return_date.split(".")[0]
+        else:
+            content = "Hola:\n\nHas renovado el préstamo de: \n\n"
             content += text
             content += "Fecha de devolución: "
             content += return_date.split(".")[0]
@@ -630,10 +653,13 @@ class prestamos(QWidget):
         content = MIMEText(content)
         msg.attach(content)
 
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, content.as_string().encode("utf8"))
+        try:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+                server.login(sender_email, password)
+                server.sendmail(sender_email, receiver_email, content.as_string().encode("utf8"))
+        except:
+            ErrorPrompt("Error", "No se pudo enviar el correo de confimación")
 
     def booksReturnesEmail(self, receiver, subject):
         port = 465  # For SSL
@@ -645,13 +671,16 @@ class prestamos(QWidget):
         msg['Subject'] = subject
         msg['From'] = sender_email
         msg['To'] = receiver_email
-        content = "Hola,\n\n\tHas finalizado tu préstamo de libros"
+        content = "Hola:\n\nHas finalizado tu préstamo de libros"
         content = MIMEText(content)
         msg.attach(content)
 
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, content.as_string().encode("utf8"))
+        try:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+                server.login(sender_email, password)
+                server.sendmail(sender_email, receiver_email, content.as_string().encode("utf8"))
+        except:
+            ErrorPrompt("Error", "No se pudo mandar email de confirmación")
 
 
