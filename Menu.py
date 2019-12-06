@@ -11,6 +11,8 @@ from AgregarLibro import AgregarLibro
 from Inventario import Inventario
 from AgregarEstudiante import AgregarEstudiante
 from AgregarUsuario import AgregarUsuario
+from About import About
+from Politica import Politica
 from Prompt import ErrorPrompt
 from sanciones import sanciones
 from inicio import Inicio
@@ -347,6 +349,12 @@ class Ui_MainWindow(object):
         # Index : 12
         self.ventana_inicio = Inicio()
         self.stacked_widget.addWidget(self.ventana_inicio)
+        # Index : 13
+        self.ventana_about = About()
+        self.stacked_widget.addWidget(self.ventana_about)
+        # Index : 14
+        self.ventana_politica = Politica()
+        self.stacked_widget.addWidget(self.ventana_politica)
 
         # La aplicacion inicia en el Modulod de Inicio
         self.stacked_widget.setCurrentIndex(12)
@@ -410,6 +418,10 @@ class Ui_MainWindow(object):
         self.ventana_agregar_autor.seguir.clicked.connect(lambda:self.ventana_agregar_libro.authorsInput.clear())
         self.ventana_agregar_autor.seguir.clicked.connect(lambda: self.ventana_agregar_libro.mostrarAutores())
         self.push_button_1.clicked.connect(self.actInicio)
+        
+        self.push_button_8.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(13))
+        self.ventana_about.politica_prestamos.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(14))
+        self.ventana_politica.entendido.clicked.connect(lambda: self.stacked_widget.setCurrentIndex(13))
 
         ##################### Esconde los menú
         for i in range(16):
