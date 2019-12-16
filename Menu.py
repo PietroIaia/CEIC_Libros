@@ -651,7 +651,7 @@ class Ui_MainWindow(object):
         if QDate.currentDate() != self.queryDay.value(0):
             self.queryStudents = QSqlQuery()
             self.queryStudents.exec_("SELECT carnet FROM Loan GROUP BY Carnet")
-            if self.queryStudents.first() is None:
+            if not self.queryStudents.first():
                 return
             else:
                 while True:

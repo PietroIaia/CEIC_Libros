@@ -195,8 +195,7 @@ class ventanaLogin(QMainWindow):
         return
 
       # Enviamos el codigo
-      # code = ''.join(choices(string.ascii_uppercase + string.digits, k=13))
-      code = "bc1hjk57899il"
+      code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=13))
       with open("RenovarContraseña.log", "a") as f:
           f.write(str(self.query.value(0)) + " | " + code + "\n")
       f.close()
