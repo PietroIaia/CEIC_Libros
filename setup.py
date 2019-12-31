@@ -11,7 +11,8 @@ if sys.platform == 'win32':
     base = 'Win32GUI'
 
 build_exe_options = {
-    "includes": ["passlib.handlers.bcrypt"] # <-- Include easy_gui
+    "includes": ["passlib.handlers.bcrypt"],
+    "packages": ["os", "cffi", "bcrypt", "six", "pycparser"]  # <- Nota: actualizar bcrypt: pip install bcrypt
 }
 
 setup( name = "CEIC Libros", version = "1.0", 
